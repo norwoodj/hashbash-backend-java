@@ -12,7 +12,6 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 
 /**
  * The Site object, representing a website on the internet, which has a set of login pages that can be injected
@@ -24,7 +23,6 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "rainbow_chain")
 public class RainbowChain implements Comparable<RainbowChain> {
 
     @Id

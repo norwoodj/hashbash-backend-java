@@ -18,8 +18,8 @@ import javax.persistence.Table;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 @Table(name = "BATCH_STEP_EXECUTION")
+@Entity
 public class BatchStepExecution {
 
     @Id

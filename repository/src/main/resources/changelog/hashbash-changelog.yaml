@@ -1,4 +1,4 @@
 databaseChangeLog:
   - include:
-      file: classpath:changelog/includes/changelog-0.0.0.sql
+      file: classpath:changelog/includes/changelog-1.0.0.sql
 
