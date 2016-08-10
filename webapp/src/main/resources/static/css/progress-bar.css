@@ -1,0 +1,14 @@
+.progress-text {
+    text-align: center;
+    color: black;
+    z-index: 100;
+    position: absolute;
+}
+
+.progress-bar-outer {
+    padding: 3px;
+}
+
+.progress-bar-inner {
+    width: 0;
+}

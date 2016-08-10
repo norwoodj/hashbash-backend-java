@@ -2,9 +2,11 @@ package com.johnmalcolmnorwood.hashbash.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.johnmalcolmnorwood.hashbash.model.HashFunctionName;
-import lombok.Value;
+import lombok.Getter;
+import lombok.Setter;
 
-@Value
+@Getter
+@Setter
 public class GenerateRainbowTableRequest {
     @JsonProperty(required = true)
     private String name;

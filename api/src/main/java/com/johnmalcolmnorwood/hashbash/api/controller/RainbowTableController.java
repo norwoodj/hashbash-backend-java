@@ -1,6 +1,7 @@
 package com.johnmalcolmnorwood.hashbash.api.controller;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.hash.HashCode;
 import com.johnmalcolmnorwood.hashbash.api.model.GenerateRainbowTableRequest;
@@ -101,17 +102,27 @@ public class RainbowTableController {
                 .build();
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Void> generate(@RequestBody GenerateRainbowTableRequest generateRainbowTableRequest) throws
-            JobParametersInvalidException,
-            JobExecutionAlreadyRunningException,
-            JobRestartException,
-            JobInstanceAlreadyCompleteException {
+    private void handleGenerate(RainbowTable rainbowTable) {
+        try {
+            JobParameters jobParameters = new JobParameters(ImmutableMap.of("rainbowTableId", new JobParameter(Long.valueOf(rainbowTable.getId()))));
+            jobLauncher.run(rainbowTableGenerateJob, jobParameters);
+        } catch (JobInstanceAlreadyCompleteException | JobExecutionAlreadyRunningException | JobParametersInvalidException | JobRestartException e) {
+            Throwables.propagate(e);
+        }
+    }
 
+    @RequestMapping(method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
+    public String generateFromForm(
+            GenerateRainbowTableRequest generateRainbowTableRequest
+    ) {
         RainbowTable rainbowTable = createRainbowTable(generateRainbowTableRequest);
-        JobParameters jobParameters = new JobParameters(ImmutableMap.of("rainbowTableId", new JobParameter(Long.valueOf(rainbowTable.getId()))));
-        jobLauncher.run(rainbowTableGenerateJob, jobParameters);
+        handleGenerate(rainbowTable);
+        return "redirect:/tables.html";
+    }
 
+    @RequestMapping(method = RequestMethod.POST, headers = "content-type=application/json")
+    public ResponseEntity<Void> generateFromJson(@RequestBody GenerateRainbowTableRequest generateRainbowTableRequest) {
+        RainbowTable rainbowTable = createRainbowTable(generateRainbowTableRequest);
         URI rainbowTableUri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("{id}")
                 .buildAndExpand(rainbowTable.getId())
