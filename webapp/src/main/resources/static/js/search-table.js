@@ -1,8 +1,23 @@
 jQuery(function ($) {
     var rainbowTableMap = new Map();
+    var currentRainbowTable;
+
+    function addResultRow(rainbowTableName, hash, password) {
+        var tableBody = $('#rainbow-search-results').find('tbody');
+
+        var rowHtml = [
+            '<tr>',
+            '<td>' + rainbowTableName + '</td>',
+            '<td>' + hash + '</td>',
+            '<td>' + password + '</td>',
+            '</tr>'
+        ].join('\n');
+
+        tableBody.append(rowHtml);
+    }
 
     function updateSelectedRainbowTable(rainbowTable) {
-        var tableBody = $('tbody');
+        var tableBody = $('#selected-rainbow-table').find('tbody');
         tableBody.find('tr').remove();
 
         var rowHtml = [
@@ -36,14 +51,46 @@ jQuery(function ($) {
         $('#rainbow-table-select').html(optionsHtml);
 
         if (completedRainbowTables.length > 0) {
-            updateSelectedRainbowTable(rainbowTables[0]);
+            currentRainbowTable = rainbowTables[0];
+            updateSelectedRainbowTable(currentRainbowTable);
         }
+    });
+
+    function startSearch() {
+        $('#search-button').attr('disabled', 'disabled');
+        $('.search-in-progress').css('visibility', 'visible');
+    }
+
+    function stopSearch() {
+        $('#search-button').removeAttr('disabled');
+        $('.search-in-progress').css('visibility', 'hidden');
+    }
+
+    $('#search-form').submit(function () {
+        var hashValue = $('#hash-input').val();
+        var rainbowTable = currentRainbowTable;
+        startSearch();
+
+        $.ajax({
+            type: 'GET',
+            url: '/api/rainbow-table/' + rainbowTable.id + '/search?hash=' + hashValue,
+            success: function (searchResult) {
+                addResultRow(rainbowTable.name, hashValue, searchResult.password);
+                stopSearch();
+            },
+            error: function failure() {
+                addResultRow(rainbowTable.name, hashValue, 'NULL');
+                stopSearch();
+            }
+        });
+
+        return false;
     });
 
     $('#rainbow-table-select').change(function () {
         var optionId = $('#rainbow-table-select').find('option:selected')[0].id;
         var rainbowTableId = parseInt(optionId.replace('rt-option-', ''));
-        var selectedRainbowTable = rainbowTableMap.get(rainbowTableId);
-        updateSelectedRainbowTable(selectedRainbowTable);
+        currentRainbowTable = rainbowTableMap.get(rainbowTableId);
+        updateSelectedRainbowTable(currentRainbowTable);
     });
 });

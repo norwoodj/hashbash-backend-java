@@ -42,7 +42,7 @@
         <br>
         <div class="mui-panel">
             <br>
-            <h1>Searching Table</h1>
+            <h2>Currently Searching Rainbow Table</h2>
             <br>
             <table class="mui-table mui-table--bordered" id="selected-rainbow-table">
                 <thead>
@@ -59,17 +59,37 @@
                 <tbody>
                 </tbody>
             </table>
+            <br>
+            <h2>Rainbow Table Search Results</h2>
+            <br>
+            <table class="mui-table mui-table--bordered" id="rainbow-search-results">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Hash</th>
+                    <th>Password</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
 
-            <div class="mui-select">
-                <select id="rainbow-table-select"></select>
-                <label>Select Rainbow Table To search</label>
-            </div>
+            <br>
+            <h2>Submit Another Search</h2>
+            <br>
+            <form id="search-form">
+                <div class="mui-select">
+                    <select id="rainbow-table-select"></select>
+                    <label>Select Rainbow Table To search</label>
+                </div>
+                <div class="mui-textfield">
+                    <input id="hash-input" type="text" name="hash" required>
+                    <label>Hash</label>
+                </div>
+                <button id="search-button" type="submit" class="mui-btn mui-btn--raised color-change">Search</button>
+                <div class="search-in-progress" style="visibility: hidden;">Searching...</div>
+            </form>
         </div>
-    </div>
-    <div class="mui-container button-container">
-        <a href="/generate-table.html">
-            <button class="mui-btn mui-btn--fab color-change">+</button>
-        </a>
     </div>
 </div>
 <footer id="footer" class="color-change">

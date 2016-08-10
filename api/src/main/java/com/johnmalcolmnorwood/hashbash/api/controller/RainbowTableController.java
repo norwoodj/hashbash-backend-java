@@ -117,18 +117,10 @@ public class RainbowTableController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
-    public String generateFromForm(
-            GenerateRainbowTableRequest generateRainbowTableRequest
-    ) {
-        RainbowTable rainbowTable = createRainbowTable(generateRainbowTableRequest);
-        handleGenerate(rainbowTable);
-        return "redirect:/tables.html";
-    }
-
-    @RequestMapping(method = RequestMethod.POST, headers = "content-type=application/json")
+    @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Void> generateFromJson(@RequestBody GenerateRainbowTableRequest generateRainbowTableRequest) {
         RainbowTable rainbowTable = createRainbowTable(generateRainbowTableRequest);
+        handleGenerate(rainbowTable);
         URI rainbowTableUri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("{id}")
                 .buildAndExpand(rainbowTable.getId())

@@ -25,7 +25,7 @@ jQuery(function ($) {
             '<tr>',
             '<td>' + rainbowTable.id + '</td>',
             '<td>' + rainbowTable.name + '</td>',
-            '<td>' + rainbowTable.status + '</td>',
+            '<td id="status-rt-' + rainbowTable.id + '">' + rainbowTable.status + '</td>',
             '<td>' + rainbowTable.hashFunction + '</td>',
             '<td>' + rainbowTable.numChains + '</td>',
             '<td id="chains-rt-' + rainbowTable.id + '">' + rainbowTable.chainsGenerated + '</td>',
@@ -42,6 +42,7 @@ jQuery(function ($) {
     function updateGenerationProgress(rainbowTable) {
         $('#progress-rt-' + rainbowTable.id).css({'width': getProgress(rainbowTable)});
         $('#chains-rt-' + rainbowTable.id).html(rainbowTable.chainsGenerated);
+        $('#status-rt-' + rainbowTable.id).html(rainbowTable.status);
     }
 
     function pollRainbowTables() {
@@ -50,7 +51,7 @@ jQuery(function ($) {
                 if (!rainbowTableSet.has(rainbowTable.id)) {
                     addRow(rainbowTable);
                     rainbowTableSet.add(rainbowTable.id);
-                } else if (rainbowTable.status != 'COMPLETED') {
+                } else {
                     updateGenerationProgress(rainbowTable);
                 }
             });
