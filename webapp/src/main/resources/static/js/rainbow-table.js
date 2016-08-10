@@ -14,7 +14,7 @@ jQuery(function ($) {
         return [
             '<td>',
             '<div class="progress-bar-outer">',
-            '<div id="progress-rt-' + rainbowTable.id + '" class="progress-bar-inner color-change" style="text-align: center; width: ' + progress + '">' + progress + '</div>',
+            '<div id="progress-rt-' + rainbowTable.id + '" class="progress-bar-inner color-change" style="width: ' + progress + ';"></div>',
             '</div>',
             '</td>'
         ].join('\n')
@@ -28,7 +28,7 @@ jQuery(function ($) {
             '<td>' + rainbowTable.status + '</td>',
             '<td>' + rainbowTable.hashFunction + '</td>',
             '<td>' + rainbowTable.numChains + '</td>',
-            '<td>' + rainbowTable.chainsGenerated + '</td>',
+            '<td id="chains-rt-' + rainbowTable.id + '">' + rainbowTable.chainsGenerated + '</td>',
             '<td>' + rainbowTable.chainLength + '</td>',
             '<td>' + rainbowTable.characterSet + '</td>',
             '<td>' + rainbowTable.passwordLength + '</td>',
@@ -39,20 +39,21 @@ jQuery(function ($) {
         tableBody.append(rowHtml);
     }
 
-    function updateProgressBar(rainbowTable) {
-        $('#progres-rt-' + rainbowTable.id).css('width', getProgress(rainbowTable));
+    function updateGenerationProgress(rainbowTable) {
+        $('#progress-rt-' + rainbowTable.id).css({'width': getProgress(rainbowTable)});
+        $('#chains-rt-' + rainbowTable.id).html(rainbowTable.chainsGenerated);
     }
 
     function pollRainbowTables() {
         $.get('/api/rainbow-table/', function (rainbowTables) {
-            for (var i = 0; i < rainbowTables.length; ++i) {
-                if (!rainbowTableSet.has(rainbowTables[i].id)) {
-                    addRow(rainbowTables[i]);
-                    rainbowTableSet.add(rainbowTables[i].id);
-                } else if (rainbowTables[i].status != 'COMPLETED') {
-                    updateProgressBar(rainbowTables[i]);
+            rainbowTables.forEach(function (rainbowTable) {
+                if (!rainbowTableSet.has(rainbowTable.id)) {
+                    addRow(rainbowTable);
+                    rainbowTableSet.add(rainbowTable.id);
+                } else if (rainbowTable.status != 'COMPLETED') {
+                    updateGenerationProgress(rainbowTable);
                 }
-            }
+            });
 
             setTimeout(pollRainbowTables, 2000);
         });

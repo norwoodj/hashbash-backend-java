@@ -1,14 +1,11 @@
-.progress-text {
-    text-align: center;
-    color: black;
-    z-index: 100;
-    position: absolute;
-}
-
 .progress-bar-outer {
-    padding: 3px;
+    text-align: center;
+    background-color: #000000;
+    overflow: hidden;
+    padding: 1px;
 }
 
 .progress-bar-inner {
     width: 0;
+    height: 20px;
 }

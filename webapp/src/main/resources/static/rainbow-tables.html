@@ -14,7 +14,8 @@
     <script src="//cdn.muicss.com/mui-0.6.8/js/mui.min.js"></script>
     <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="/js/main.js"></script>
-    <script src="/js/generate-form.js"></script>
+    <script src="/js/rainbow-table.js"></script>
+
 </head>
 <body>
 <div id="sidedrawer" class="mui--no-user-select">
@@ -41,36 +42,32 @@
         <br>
         <div class="mui-panel">
             <br>
-            <h1>Generate Rainbow Table</h1>
+            <h1>Rainbow Tables</h1>
             <br>
-            <form action="/api/rainbow-table" method="POST">
-                <div class="mui-textfield">
-                    <input type="text" name="name" placeholder="hashbash" required>
-                    <label>Name</label>
-                </div>
-                <div class="mui-select">
-                    <select id="hash-function-select" name="hashFunction"></select>
-                    <label>Hash Function</label>
-                </div>
-                <div class="mui-textfield">
-                    <input type="number" name="numChains" min="100" max="100000000" value="100000" required>
-                    <label>Number of Chains</label>
-                </div>
-                <div class="mui-textfield">
-                    <input type="number" name="chainLength" min="100" max="100000000" value="10000" required>
-                    <label>Chain Length</label>
-                </div>
-                <div class="mui-textfield">
-                    <input type="text" name="charset" value="abcdefghijklmnopqrstuvwxyz" required>
-                    <label>Character Set</label>
-                </div>
-                <div class="mui-textfield">
-                    <input type="number" name="passwordLength" min="4" max="16" value="8" required>
-                    <label>Password Length</label>
-                </div>
-                <button type="submit" class="mui-btn mui-btn--raised color-change">Submit</button>
-            </form>
+            <table class="mui-table mui-table--bordered">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Hash Function</th>
+                    <th>Chains</th>
+                    <th>Chains Generated</th>
+                    <th>Chain Length</th>
+                    <th>Character Set</th>
+                    <th>Password Length</th>
+                    <th>Progress</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
         </div>
+    </div>
+    <div class="mui-container button-container">
+        <a href="/generate-table.html">
+            <button class="mui-btn mui-btn--fab color-change">+</button>
+        </a>
     </div>
 </div>
 <footer id="footer" class="color-change">

@@ -14,7 +14,7 @@
     <script src="//cdn.muicss.com/mui-0.6.8/js/mui.min.js"></script>
     <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="/js/main.js"></script>
-    <script src="/js/rainbow-table.js"></script>
+    <script src="/js/search-table.js"></script>
 
 </head>
 <body>
@@ -22,8 +22,9 @@
     <div id="sidedrawer-brand" class="mui--appbar-line-height mui--text-title">Hashbash</div>
     <div class="mui-divider"></div>
     <ul>
-        <li><a href="/tables.html"><strong>View Existing Tables</strong></a></li>
+        <li><a href="/rainbow-tables.html"><strong>View Existing Tables</strong></a></li>
         <li><a href="/generate-table.html"><strong>Generate New Table</strong></a></li>
+        <li><a href="/search-table.html"><strong>Search Tables</strong></a></li>
     </ul>
 </div>
 <header id="header">
@@ -41,26 +42,28 @@
         <br>
         <div class="mui-panel">
             <br>
-            <h1>Rainbow Tables</h1>
+            <h1>Searching Table</h1>
             <br>
-            <table class="mui-table mui-table--bordered">
+            <table class="mui-table mui-table--bordered" id="selected-rainbow-table">
                 <thead>
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
-                    <th>Status</th>
                     <th>Hash Function</th>
                     <th>Chains</th>
-                    <th>Chains Generated</th>
                     <th>Chain Length</th>
                     <th>Character Set</th>
                     <th>Password Length</th>
-                    <th>Progress</th>
                 </tr>
                 </thead>
                 <tbody>
                 </tbody>
             </table>
+
+            <div class="mui-select">
+                <select id="rainbow-table-select"></select>
+                <label>Select Rainbow Table To search</label>
+            </div>
         </div>
     </div>
     <div class="mui-container button-container">

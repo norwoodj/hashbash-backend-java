@@ -37,6 +37,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.annotation.Resource;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -73,6 +74,11 @@ public class RainbowTableController {
     @Resource(name = "org.springframework.batch.core.Job-generate")
     private Job rainbowTableGenerateJob;
 
+
+    @RequestMapping(value = "/hash-functions")
+    public List<HashFunctionName> getHashFunctions() {
+        return Arrays.asList(HashFunctionName.values());
+    }
 
     @RequestMapping(method = RequestMethod.GET)
     public List<RainbowTable> getAll() {
@@ -189,5 +195,4 @@ public class RainbowTableController {
 
         return rainbowTableRepository.save(rainbowTable);
     }
-
 }
