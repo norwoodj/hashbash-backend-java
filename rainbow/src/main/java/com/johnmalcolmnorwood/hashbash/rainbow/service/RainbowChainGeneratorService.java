@@ -6,6 +6,8 @@ import com.johnmalcolmnorwood.hashbash.rainbow.function.HashFunction;
 import com.johnmalcolmnorwood.hashbash.rainbow.function.ReductionFunctionFamily;
 import com.johnmalcolmnorwood.hashbash.rainbow.model.RainbowChainLink;
 
+import java.util.function.Consumer;
+
 
 public class RainbowChainGeneratorService {
     private final HashFunction hashFunction;
@@ -26,7 +28,7 @@ public class RainbowChainGeneratorService {
     ) {
         if (numLinks > 0) {
             String plaintext = reductionFunctionFamily.apply(hash, nextChainIndex);
-            return generateRainbowChainLinkFromPlaintext(plaintext, nextChainIndex + 1, numLinks);
+            return generateRainbowChainLinkFromPlaintext(plaintext, nextChainIndex + 1, numLinks, null);
         }
 
         return RainbowChainLink.builder()
@@ -39,11 +41,29 @@ public class RainbowChainGeneratorService {
             int nextChainIndex,
             int numLinks
     ) {
+        return generateRainbowChainLinkFromPlaintext(
+                plaintext,
+                nextChainIndex,
+                numLinks,
+                null
+        );
+    }
+
+    public RainbowChainLink generateRainbowChainLinkFromPlaintext(
+            String plaintext,
+            int nextChainIndex,
+            int numLinks,
+            Consumer<RainbowChainLink> rainbowChainLinkConsumer
+    ) {
         // Hash the plaintext, generating the first link
         RainbowChainLink rainbowChainLink = RainbowChainLink.builder()
                 .plaintext(plaintext)
                 .hashedPlaintext(hashFunction.apply(plaintext))
                 .build();
+
+        if (rainbowChainLinkConsumer != null) {
+            rainbowChainLinkConsumer.accept(rainbowChainLink);
+        }
 
         // From this link to the end of the chain
         for (int i = 0; i < numLinks - 1; ++i) {
@@ -53,17 +73,25 @@ public class RainbowChainGeneratorService {
 
             rainbowChainLink.setPlaintext(reducedPlaintext);
             rainbowChainLink.setHashedPlaintext(hash);
-       }
+
+            if (rainbowChainLinkConsumer != null) {
+                rainbowChainLinkConsumer.accept(rainbowChainLink);
+            }
+        }
 
         return rainbowChainLink;
     }
 
     public RainbowChain generateRainbowChain(String startPoint, int chainLength) {
+        return generateRainbowChain(startPoint, chainLength, null);
+    }
+
+    public RainbowChain generateRainbowChain(String startPoint, int chainLength, Consumer<RainbowChainLink> hashPasswordConsumer) {
         if (chainLength < 1) {
             throw new IllegalArgumentException("Rainbow chain length must be greater than 0");
         }
 
-        RainbowChainLink endingLink = generateRainbowChainLinkFromPlaintext(startPoint, 0, chainLength);
+        RainbowChainLink endingLink = generateRainbowChainLinkFromPlaintext(startPoint, 0, chainLength, hashPasswordConsumer);
         return RainbowChain.builder()
                 .startPlaintext(startPoint)
                 .endHash(endingLink.getHashedPlaintext().toString())

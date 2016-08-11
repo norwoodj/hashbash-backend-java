@@ -1,7 +1,7 @@
-package com.johnmalcolmnorwood.hashbash.job.generate.config;
+package com.johnmalcolmnorwood.hashbash.job.uniquePassword.config;
 
-import com.johnmalcolmnorwood.hashbash.job.generate.processor.RainbowChainGenerateProcessor;
-import com.johnmalcolmnorwood.hashbash.model.RainbowChain;
+import com.johnmalcolmnorwood.hashbash.job.uniquePassword.processor.RainbowChainLinkGenerateProcessor;
+import com.johnmalcolmnorwood.hashbash.rainbow.model.RainbowChainLink;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.StepExecutionListener;
@@ -16,9 +16,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
-@Configuration("com.johnmalcolmnorwood.hashbash.job.generate.config.JobConfig")
+@Configuration("com.johnmalcolmnorwood.hashbash.job.uniquePassword.config.JobConfig")
 public class JobConfig {
 
     @Value("${job.batchSize}")
@@ -39,36 +40,36 @@ public class JobConfig {
     private TaskExecutor batchTaskExecutor;
 
     @Resource(name = "org.springframework.batch.core.StepExecutionListener-rainbowTable")
-    private StepExecutionListener rainbowChainGenerateProgressListener;
+    private StepExecutionListener rainbowChainUniquePasswordProgressListener;
 
     @Resource(name = "org.springframework.batch.item.ItemReader-rainbowTable")
     private ItemReader<String> rainbowChainGenerateReader;
 
     @Autowired
-    private RainbowChainGenerateProcessor rainbowChainGenerateProcessor;
+    private RainbowChainLinkGenerateProcessor rainbowChainLinkGenerateProcessor;
 
-    @Resource(name = "org.springframework.batch.item.ItemWriter-generate")
-    private ItemWriter<RainbowChain> rainbowChainGenerateItemWriter;
+    @Resource(name = "org.springframework.batch.item.ItemWriter-uniquePassword")
+    public ItemWriter<List<RainbowChainLink>> rainbowUniquePasswordItemWriter;
 
 
-    @Bean(name = "org.springframework.batch.core.Step-generate")
-    public Step rainbowTableGenerateStep() {
-        return stepBuilderFactory.get("rainbowTableGenerateStep")
-                .listener(rainbowChainGenerateProgressListener)
-                .<String, RainbowChain>chunk(chunkSize)
+    @Bean(name = "org.springframework.batch.core.Step-uniquePassword")
+    public Step rainbowTableUniquePasswordStep() {
+        return stepBuilderFactory.get("rainbowTableUniquePassword")
+                .listener(rainbowChainUniquePasswordProgressListener)
+                .<String, List<RainbowChainLink>>chunk(10)
                 .reader(rainbowChainGenerateReader)
-                .processor(rainbowChainGenerateProcessor)
-                .writer(rainbowChainGenerateItemWriter)
+                .processor(rainbowChainLinkGenerateProcessor)
+                .writer(rainbowUniquePasswordItemWriter)
                 .taskExecutor(batchTaskExecutor)
                 .throttleLimit(numThreads)
                 .build();
     }
 
-    @Bean(name = "org.springframework.batch.core.Job-generate")
-    public Job rainbowTableGenerateJob() {
-        return jobBuilderFactory.get("rainbowTableGenerate")
+    @Bean(name = "org.springframework.batch.core.Job-uniquePassword")
+    public Job rainbowTableUniquePasswordJob() {
+        return jobBuilderFactory.get("rainbowTableUniquePassword")
                 .preventRestart()
-                .start(rainbowTableGenerateStep())
+                .start(rainbowTableUniquePasswordStep())
                 .build();
     }
 }

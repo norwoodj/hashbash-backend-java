@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.core.task.SyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
@@ -31,8 +32,16 @@ public class BatchConfig {
         return taskExecutor;
     }
 
+    @Bean(name = "org.springframework.core.launch.JobLauncher-sync")
+    public JobLauncher syncBatchJobLauncher() {
+        SimpleJobLauncher jobLauncher = new SimpleJobLauncher();
+        jobLauncher.setTaskExecutor(new SyncTaskExecutor());
+        jobLauncher.setJobRepository(jobRepository);
+        return jobLauncher;
+    }
+
     @Bean(name = "org.springframework.core.launch.JobLauncher-async")
-    public JobLauncher batchJobLauncher() {
+    public JobLauncher asyncBatchJobLauncher() {
         SimpleJobLauncher jobLauncher = new SimpleJobLauncher();
         jobLauncher.setTaskExecutor(new SimpleAsyncTaskExecutor());
         jobLauncher.setJobRepository(jobRepository);

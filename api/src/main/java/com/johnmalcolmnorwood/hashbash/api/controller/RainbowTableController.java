@@ -118,7 +118,7 @@ public class RainbowTableController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Void> generateFromJson(@RequestBody GenerateRainbowTableRequest generateRainbowTableRequest) {
+    public ResponseEntity<Void> generate(@RequestBody GenerateRainbowTableRequest generateRainbowTableRequest) {
         RainbowTable rainbowTable = createRainbowTable(generateRainbowTableRequest);
         handleGenerate(rainbowTable);
         URI rainbowTableUri = ServletUriComponentsBuilder.fromCurrentRequest()

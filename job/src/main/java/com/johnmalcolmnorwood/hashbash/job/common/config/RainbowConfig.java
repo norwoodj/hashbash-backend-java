@@ -1,6 +1,6 @@
-package com.johnmalcolmnorwood.hashbash.job.generate.config;
+package com.johnmalcolmnorwood.hashbash.job.common.config;
 
-import com.johnmalcolmnorwood.hashbash.job.generate.utils.RainbowTableWrapper;
+import com.johnmalcolmnorwood.hashbash.job.common.utils.RainbowTableWrapper;
 import com.johnmalcolmnorwood.hashbash.model.RainbowTable;
 import com.johnmalcolmnorwood.hashbash.repository.RainbowTableRepository;
 import org.springframework.batch.core.configuration.annotation.StepScope;

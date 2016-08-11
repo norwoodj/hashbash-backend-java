@@ -1,4 +1,4 @@
-package com.johnmalcolmnorwood.hashbash.job.generate.listener;
+package com.johnmalcolmnorwood.hashbash.job.common.listener;
 
 
 import com.johnmalcolmnorwood.hashbash.model.RainbowTable;

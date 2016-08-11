@@ -31,6 +31,7 @@ def search_for_strings(rainbow_table_id, password_file, hashbash):
         for line in password_stream:
             line_count += 1
             if search_for_password(line.rstrip('\n'), hashbash, rainbow_table_id):
+                print 'FOUND'
                 cracked_count += 1
 
         print 'Successfully cracked {} / {} passwords: {}%'.format(

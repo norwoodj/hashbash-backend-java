@@ -19,24 +19,13 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "rainbow_chain")
-public class RainbowChain implements Comparable<RainbowChain> {
+@Table(name = "rainbow_table_unique_password")
+public class RainbowTableUniquePassword {
 
     @Id
-    private String endHash;
-
-    private String startPlaintext;
+    private String password;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rainbowTableId")
     private RainbowTable rainbowTable;
-
-    @Override
-    public int compareTo(RainbowChain other) {
-        if (other == null) {
-            return -1;
-        }
-
-        return endHash.compareTo(other.endHash);
-    }
 }

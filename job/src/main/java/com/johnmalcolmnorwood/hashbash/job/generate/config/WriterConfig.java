@@ -19,12 +19,12 @@ import java.util.Map;
 import java.util.function.Function;
 
 
-@Configuration
+@Configuration("com.johnmalcolmnorwood.hashbash.job.generate.config.WriterConfig")
 public class WriterConfig {
 
     private static final String RAINBOW_CHAIN_INSERT_SQL =
             "INSERT IGNORE INTO `rainbow_chain` (`startPlaintext`, `endHash`, `rainbowTableId`) " +
-            "VALUES (:startPlaintext, :endHash, :rainbowTableId)";
+                    "VALUES (:startPlaintext, :endHash, :rainbowTableId)";
 
     private static final Map<String, Function<RainbowChain, Object>> RAINBOW_CHAIN_PROPERTY_MAPPERS = ImmutableMap.of(
             "startPlaintext", RainbowChain::getStartPlaintext,
@@ -44,7 +44,7 @@ public class WriterConfig {
         return mapSqlParameterSource;
     }
 
-    @Bean(name = "org.springframework.batch.item.ItemWriter-jdbc")
+    @Bean(name = "org.springframework.batch.item.ItemWriter-jdbcGenerate")
     public ItemWriter<RainbowChain> jdbcBatchItemWriter() {
         JdbcBatchItemWriter<RainbowChain> itemWriter = new JdbcBatchItemWriter<>();
         itemWriter.setDataSource(hashbashDatasource);
@@ -56,13 +56,12 @@ public class WriterConfig {
     }
 
     @Bean(name = "org.springframework.batch.item.ItemWriter-generate")
-    public ItemWriter<RainbowChain> rainbowChainItemWriter() {
-        Function<List<? extends RainbowChain>, List<? extends RainbowChain>> rainbowChainSorter =
-                rainbowChainList -> {
-                    List<? extends RainbowChain> sortedList = Lists.newArrayList(rainbowChainList);
-                    Collections.sort(sortedList);
-                    return sortedList;
-                };
+    public ItemWriter<RainbowChain> rainbowUniquePasswordItemWriter() {
+        Function<List<? extends RainbowChain>, List<? extends RainbowChain>> rainbowChainSorter = rainbowChainList -> {
+            List<? extends RainbowChain> sortedRainbowChains = Lists.newArrayList(rainbowChainList);
+            Collections.sort(sortedRainbowChains);
+            return sortedRainbowChains;
+        };
 
         return new MappingItemWriter<>(rainbowChainSorter, jdbcBatchItemWriter());
     }

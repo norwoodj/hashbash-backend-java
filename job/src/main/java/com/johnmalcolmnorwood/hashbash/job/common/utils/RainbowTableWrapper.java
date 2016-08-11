@@ -1,4 +1,4 @@
-package com.johnmalcolmnorwood.hashbash.job.generate.utils;
+package com.johnmalcolmnorwood.hashbash.job.common.utils;
 
 import com.johnmalcolmnorwood.hashbash.model.RainbowTable;
 import lombok.Builder;

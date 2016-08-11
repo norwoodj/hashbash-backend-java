@@ -2,6 +2,7 @@ package com.johnmalcolmnorwood.hashbash.rainbow.util;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
 /**
@@ -12,7 +13,7 @@ public class RandomStringSupplier implements Supplier<String> {
     private final String charset;
     private final int stringLength;
     private final int numToSupply;
-    private int numSupplied;
+    private AtomicInteger numSupplied;
 
     /**
      * @param charset      The character set from which strings will be generated
@@ -23,12 +24,12 @@ public class RandomStringSupplier implements Supplier<String> {
         this.charset = charset;
         this.stringLength = stringLength;
         this.numToSupply = numToSupply;
-        numSupplied = 0;
+        numSupplied = new AtomicInteger();
     }
 
     @Override
     public String get() {
-        if (numToSupply < 0 || numSupplied++ < numToSupply) {
+        if (numToSupply < 0 || numSupplied.incrementAndGet() < numToSupply) {
             return RandomStringUtils.random(stringLength, charset);
         }
 

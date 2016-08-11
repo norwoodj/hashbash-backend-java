@@ -126,3 +126,12 @@ CREATE TABLE `rainbow_chain` (
   FOREIGN KEY (`rainbowTableId`) REFERENCES `rainbow_table` (`id`)
     ON DELETE CASCADE
 );
+
+--changeset jnorwood:HB-1
+CREATE TABLE `rainbow_table_unique_password` (
+  `password`       VARCHAR(16)  NOT NULL,
+  `rainbowTableId` SMALLINT     NOT NULL,
+  PRIMARY KEY (`password`, `rainbowTableId`),
+  FOREIGN KEY (`rainbowTableId`) REFERENCES `rainbow_table` (`id`)
+    ON DELETE CASCADE
+);
