@@ -7,7 +7,7 @@ import com.johnmalcolmnorwood.hashbash.model.RainbowTable;
 import com.johnmalcolmnorwood.hashbash.repository.RainbowTableRepository;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.Option;
+import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.springframework.batch.core.Job;
@@ -18,26 +18,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 
-@Component
+
 public class RainbowTableUniquePasswordJobRunner implements CommandLineRunner {
 
-    @Value("${job.generate.chainLength}")
+    @Value("${hashbash.rainbow.default.chainLength}")
     private Integer defaultChainLength;
 
-    @Value("${job.generate.charset}")
+    @Value("${hashbash.rainbow.default.charset}")
     private String defaultCharset;
 
-    @Value("${job.generate.hashFunction}")
+    @Value("${hashbash.rainbow.default.hashFunction}")
     private HashFunctionName defaultHashFunctionName;
 
-    @Value("${job.generate.numChains}")
+    @Value("${hashbash.rainbow.default.numChains}")
     private Integer defaultNumChains;
 
-    @Value("${job.generate.passwordLength}")
+    @Value("${hashbash.rainbow.default.passwordLength}")
     private Integer defaultPasswordLength;
 
     @Autowired
@@ -49,15 +48,14 @@ public class RainbowTableUniquePasswordJobRunner implements CommandLineRunner {
     @Resource(name = "org.springframework.core.launch.JobLauncher-sync")
     private JobLauncher jobLauncher;
 
+
     private int integerValueFromOption(CommandLine commandLine, String option, int defaultValue) {
         return commandLine.getOptionValue(option) != null
                 ? Integer.valueOf(commandLine.getOptionValue(option))
                 : defaultValue;
     }
 
-    private RainbowTable createRainbowTable(Options options, String[] args) throws ParseException {
-        CommandLine commandLine = new DefaultParser().parse(options, args);
-
+    private RainbowTable createRainbowTable(CommandLine commandLine) throws ParseException {
         int rainbowChainLength = integerValueFromOption(commandLine, "length", defaultChainLength);
         String rainbowCharset = MoreObjects.firstNonNull(commandLine.getOptionValue("charset"), defaultCharset);
         HashFunctionName rainbowHashFunction = commandLine.getOptionValue("function") != null
@@ -88,15 +86,26 @@ public class RainbowTableUniquePasswordJobRunner implements CommandLineRunner {
         options.addOption("f", "function", true, "Hash Function to use");
         options.addOption("n", "num-chains", true, "Number of Chains to generate");
         options.addOption("p", "password-len", true, "Length of Password to use");
+        options.addOption("h", "help", false, "Print this help message and exit");
 
         return options;
     }
 
     @Override
     public void run(String... args) throws Exception {
-        RainbowTable rainbowTable = createRainbowTable(getOptions(), args);
+        Options options = getOptions();
+        CommandLine commandLine = new DefaultParser().parse(options, args);
+
+        if (commandLine.hasOption("help")) {
+            HelpFormatter formatter = new HelpFormatter();
+            formatter.printHelp("rainbow-table-unique-password-job", options);
+            return;
+        }
+
+        RainbowTable rainbowTable = createRainbowTable(commandLine);
         JobParameters jobParameters = new JobParameters(ImmutableMap.of("rainbowTableId", new JobParameter(Long.valueOf(rainbowTable.getId()))));
         jobLauncher.run(rainbowTableUniquePasswordJob, jobParameters);
+        System.exit(0);
     }
 
     public static void main(String... args) {

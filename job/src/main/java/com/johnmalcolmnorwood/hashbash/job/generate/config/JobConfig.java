@@ -21,10 +21,10 @@ import javax.annotation.Resource;
 @Configuration("com.johnmalcolmnorwood.hashbash.job.generate.config.JobConfig")
 public class JobConfig {
 
-    @Value("${job.batchSize}")
+    @Value("${job.generate.batchSize}")
     private int chunkSize;
 
-    @Value("${job.numThreads}")
+    @Value("${job.generate.numThreads}")
     private int numThreads;
 
 

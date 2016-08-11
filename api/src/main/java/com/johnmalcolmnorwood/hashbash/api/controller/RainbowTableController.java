@@ -39,25 +39,26 @@ import javax.annotation.Resource;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 
 @RestController
 @RequestMapping("/api/rainbow-table")
 public class RainbowTableController {
 
-    @Value("${job.generate.chainLength}")
+    @Value("${hashbash.rainbow.default.chainLength}")
     private Integer defaultChainLength;
 
-    @Value("${job.generate.charset}")
+    @Value("${hashbash.rainbow.default.charset}")
     private String defaultCharset;
 
-    @Value("${job.generate.hashFunction}")
+    @Value("${hashbash.rainbow.default.hashFunction}")
     private HashFunctionName defaultHashFunctionName;
 
-    @Value("${job.generate.numChains}")
+    @Value("${hashbash.rainbow.default.numChains}")
     private Integer defaultNumChains;
 
-    @Value("${job.generate.passwordLength}")
+    @Value("${hashbash.rainbow.default.passwordLength}")
     private Integer defaultPasswordLength;
 
 
@@ -97,7 +98,11 @@ public class RainbowTableController {
 
     @RequestMapping(value = "/{rainbowTableId}", method = RequestMethod.DELETE)
     public ResponseEntity<Void> delete(@PathVariable short rainbowTableId) {
-        rainbowTableRepository.delete(rainbowTableId);
+        if (rainbowTableRepository.findOne(rainbowTableId) == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        CompletableFuture.runAsync(() -> rainbowTableRepository.delete(rainbowTableId));
         URI rainbowTableUri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/api/rainbow-table/{id}")
                 .buildAndExpand(rainbowTableId)

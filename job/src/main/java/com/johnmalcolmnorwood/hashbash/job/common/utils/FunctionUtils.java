@@ -14,6 +14,14 @@ public class FunctionUtils {
         void accept(T input) throws Exception;
     }
 
+    /**
+     * This function wraps consumers that throw an exception and returns a Consumer that will perform the same action as
+     * the input consumer, but propagate any exceptions produced as RuntimeExceptions
+     *
+     * @param throwingConsumer The input consumer that may throw an exception
+     * @param <T>              The type of item that the consumer consumes
+     * @return a Consumer that will perform the same action as the input consumer, but propagate any exceptions produced as RuntimeExceptions
+     */
     public static <T> Consumer<T> propagateExceptions(ThrowingConsumer<T> throwingConsumer) {
         return input -> {
             try {

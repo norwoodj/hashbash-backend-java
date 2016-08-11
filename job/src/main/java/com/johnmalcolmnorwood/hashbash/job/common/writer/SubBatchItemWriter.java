@@ -7,6 +7,13 @@ import java.util.List;
 import java.util.function.Function;
 
 
+/**
+ * This ItemWriter receives a list of items of type T, and then splits each of these items into a list of items of type S
+ * and passes each of these lists to the delegate item writer
+ *
+ * @param <T> The type of item that are passed to this item writer
+ * @param <S> The type of item that each item of type T is split into a list of, and then delegated to the delegate item writer
+ */
 public class SubBatchItemWriter<T, S> implements ItemWriter<T> {
 
     private final Function<T, List<S>> subBatchMapper;

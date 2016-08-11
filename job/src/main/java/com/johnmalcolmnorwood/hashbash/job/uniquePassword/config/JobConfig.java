@@ -22,10 +22,10 @@ import java.util.List;
 @Configuration("com.johnmalcolmnorwood.hashbash.job.uniquePassword.config.JobConfig")
 public class JobConfig {
 
-    @Value("${job.batchSize}")
+    @Value("${job.uniquePassword.batchSize}")
     private int chunkSize;
 
-    @Value("${job.numThreads}")
+    @Value("${job.uniquePassword.numThreads}")
     private int numThreads;
 
 
@@ -56,7 +56,7 @@ public class JobConfig {
     public Step rainbowTableUniquePasswordStep() {
         return stepBuilderFactory.get("rainbowTableUniquePassword")
                 .listener(rainbowChainUniquePasswordProgressListener)
-                .<String, List<RainbowChainLink>>chunk(10)
+                .<String, List<RainbowChainLink>>chunk(1)
                 .reader(rainbowChainGenerateReader)
                 .processor(rainbowChainLinkGenerateProcessor)
                 .writer(rainbowUniquePasswordItemWriter)

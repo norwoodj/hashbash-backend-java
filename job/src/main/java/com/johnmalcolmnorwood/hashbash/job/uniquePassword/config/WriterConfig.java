@@ -1,9 +1,11 @@
 package com.johnmalcolmnorwood.hashbash.job.uniquePassword.config;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.johnmalcolmnorwood.hashbash.job.common.utils.RainbowTableWrapper;
 import com.johnmalcolmnorwood.hashbash.job.common.writer.MappingItemWriter;
 import com.johnmalcolmnorwood.hashbash.job.common.writer.SubBatchItemWriter;
+import com.johnmalcolmnorwood.hashbash.model.RainbowChain;
 import com.johnmalcolmnorwood.hashbash.model.RainbowTableUniquePassword;
 import com.johnmalcolmnorwood.hashbash.rainbow.model.RainbowChainLink;
 import org.apache.tomcat.jdbc.pool.DataSource;
@@ -16,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -74,14 +77,26 @@ public class WriterConfig {
                         )
                         .collect(Collectors.toList());
 
+        // This ItemWriter receives a list of chain links and maps it to a database object, sorts them by the passwords
+        // to avoid deadlocks, and delegates the list of sorted database objects to the jdbcBatchItemWriter
         ItemWriter<RainbowChainLink> chainLinkToPasswordMappingItemWriter = new MappingItemWriter<>(
                 rainbowPasswordSorter,
                 jdbcBatchItemWriter()
         );
 
-        return new SubBatchItemWriter<>(
+        // This ItemWriter takes a list of lists of chain links and for each list of chain links, delegates
+        // it to the writer above
+        ItemWriter<List<RainbowChainLink>> chainLinkSubBatchWriter = new SubBatchItemWriter<>(
                 Function.identity(),
                 chainLinkToPasswordMappingItemWriter
+        );
+
+        // This ItemWriter takes a list of lists of chain links and for each list of chain links, partitions that
+        // list into a list of lists of chain links of length 1000, and delegates each of those lists of smaller lists
+        // to the writer above
+        return new SubBatchItemWriter<>(
+                rainbowChainLinkLists -> Lists.partition(rainbowChainLinkLists, 1000),
+                chainLinkSubBatchWriter
         );
     }
 }

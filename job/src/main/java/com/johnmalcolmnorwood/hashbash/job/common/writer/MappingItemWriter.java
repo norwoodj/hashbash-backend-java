@@ -7,6 +7,9 @@ import java.util.function.Function;
 
 /**
  * This class will apply a mapping function to the list of items before delegating to another item writer
+ *
+ * @param <T> The type of items passed to this item writer
+ * @param <R> The type the items are transformed into before being passed into the delegate item writer
  */
 public class MappingItemWriter<T, R> implements ItemWriter<T> {
 
