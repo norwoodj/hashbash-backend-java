@@ -1,5 +1,6 @@
 package com.johnmalcolmnorwood.hashbash.rainbow.service;
 
+import com.google.common.collect.Lists;
 import com.google.common.hash.HashCode;
 import com.johnmalcolmnorwood.hashbash.model.RainbowChain;
 import com.johnmalcolmnorwood.hashbash.rainbow.model.RainbowChainLink;
@@ -8,7 +9,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class RainbowTableSearchService {
@@ -56,35 +63,26 @@ public class RainbowTableSearchService {
                 .build();
     }
 
-    /**
-     * This method retrieves the chain from the database given the endpoint contained in the input index pair
-     *
-     * @param rainbowChainIndexPair The pair of index of the chain that we started generating from and the endpoint that resulted
-     * @return The ending link of the chain, given the index started generating from and the endpoint of the chain
-     */
-    private RainbowChainLink getEndingLinkForEndpointIndexPair(RainbowChainIndexPair rainbowChainIndexPair) {
-        RainbowChain rainbowChain = rainbowChainRepository.findByEndHashAndRainbowTableId(
-                rainbowChainIndexPair.getEndpoint(),
-                rainbowTableId
-        );
-
-        if (rainbowChain == null) {
-            return null;
-        }
-
-        return rainbowChainGeneratorService.generateRainbowChainLinkFromPlaintext(
-                rainbowChain.getStartPlaintext(),
-                0,
-                rainbowChainIndexPair.getChainIndex() + 1
-        );
-    }
-
     public String reverseHash(HashCode hash) {
-        return IntStream.range(0, chainLength).parallel()
+        Map<String, RainbowChainIndexPair> endpointRainbowChainIndexMap = IntStream.range(0, chainLength).parallel()
                 .boxed()
                 .map(chainIndex -> getChainIndexPairForHash(hash, chainIndex))
-                .map(this::getEndingLinkForEndpointIndexPair)
-                .filter(Objects::nonNull)
+                .collect(Collectors.toMap(RainbowChainIndexPair::getEndpoint, Function.identity(), (k, v) -> k));
+
+
+        List<List<String>> endpointBatches = Lists.partition(
+                new ArrayList<>(endpointRainbowChainIndexMap.keySet()),
+                1000
+        );
+
+        return endpointBatches.stream().parallel()
+                .map(endpointBatch -> rainbowChainRepository.findByRainbowTableIdAndEndHashIn(rainbowTableId, endpointBatch))
+                .flatMap(Collection::stream)
+                .map(rainbowChain -> rainbowChainGeneratorService.generateRainbowChainLinkFromPlaintext(
+                        rainbowChain.getStartPlaintext(),
+                        0,
+                        endpointRainbowChainIndexMap.get(rainbowChain.getEndHash()).getChainIndex() + 1
+                ))
                 .filter(rainbowChainEndingLink -> rainbowChainEndingLink.getHashedPlaintext().equals(hash))
                 .map(RainbowChainLink::getPlaintext)
                 .findFirst()
