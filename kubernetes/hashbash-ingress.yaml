@@ -1,0 +1,15 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: hashbash-ingress
+  namespace: hashbash
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - host: hashbash.johnmalcolmnorwood.com
+      http:
+        paths:
+          - backend:
+              serviceName: hashbash-web-service
+              servicePort: http

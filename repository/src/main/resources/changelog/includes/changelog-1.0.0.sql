@@ -112,8 +112,8 @@ CREATE TABLE `rainbow_table` (
   `characterSet`     VARCHAR(256) NOT NULL,
   `hashFunction`     VARCHAR(16)  NOT NULL,
   `batchExecutionId` BIGINT,
-  `created`          DATETIME     NOT NULL DEFAULT NOW(),
-  `lastUpdated`      DATETIME     NOT NULL DEFAULT NOW() ON UPDATE NOW(),
+  `created`          DATETIME     NOT NULL,
+  `lastUpdated`      TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (`batchExecutionId`) REFERENCES `BATCH_STEP_EXECUTION` (`STEP_EXECUTION_ID`),
   PRIMARY KEY (`id`)
 );

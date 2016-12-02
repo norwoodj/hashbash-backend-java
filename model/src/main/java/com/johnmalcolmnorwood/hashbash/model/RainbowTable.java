@@ -8,16 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Date;
 
 
 @Getter
@@ -59,6 +51,14 @@ public class RainbowTable {
     @JoinColumn(name = "batchexecutionid", insertable = false, updatable = false)
     @Getter(onMethod = @__(@JsonIgnore))
     private BatchStepExecution batchStepExecution;
+
+    @Column(name = "created")
+    private Date created;
+
+    @PrePersist
+    public void setCreated() {
+        created = new Date();
+    }
 
     @JsonGetter
     public int getChainsGenerated() {
