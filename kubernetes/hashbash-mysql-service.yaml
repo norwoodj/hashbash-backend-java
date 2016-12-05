@@ -1,24 +1,3 @@
-kind: Deployment
-apiVersion: extensions/v1beta1
-metadata:
-  name: hashbash-mysql-deployment
-  namespace: hashbash
-spec:
-  template:
-    metadata:
-      labels:
-        role: mysql
-    spec:
-      containers:
-        - name: mysql
-          image: hypriot/rpi-mysql:5.5
-          ports:
-            - name: mysql
-              containerPort: 3306
-          env:
-            - name: MYSQL_ROOT_PASSWORD
-              value: root
----
 kind: Service
 apiVersion: v1
 metadata:
@@ -31,3 +10,4 @@ spec:
     - name: mysql
       port: 3306
       targetPort: mysql
+
