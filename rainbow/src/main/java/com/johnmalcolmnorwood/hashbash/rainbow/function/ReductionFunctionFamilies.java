@@ -22,18 +22,12 @@ public class ReductionFunctionFamilies {
      */
     public static ReductionFunctionFamily defaultReductionFunctionFamily(int passwordLength, String charset) {
         return (hash, chainIndex) -> {
-            byte[] hashBytes = hash.asBytes();
             StringBuilder plainTextBuilder = new StringBuilder();
+            byte[] hashBytes = hash.asBytes();
 
-            for (byte i = 0; i < passwordLength; ++i) {
-                byte value = 0;
-                for (byte j = i; j < hashBytes.length; j += passwordLength) {
-                    value ^= bitwiseOrChainIndex(hashBytes[j], chainIndex);
-                }
-
-                int index = Byte.toUnsignedInt(value) % charset.length();
-                char keyChar = charset.charAt(index);
-                plainTextBuilder.append(keyChar);
+            for (int i = 0; i < passwordLength; ++i) {
+                int value = Math.abs((hashBytes[i] ^ chainIndex) % charset.length());
+                plainTextBuilder.append(charset.charAt(value));
             }
 
             return plainTextBuilder.toString();
