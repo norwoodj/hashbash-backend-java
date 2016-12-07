@@ -83,7 +83,7 @@ public class RainbowTableSearchService {
     }
 
     public String reverseHash(HashCode hash) {
-        return IntStream.range(0, chainLength + 1).parallel()
+        return IntStream.range(0, chainLength).parallel()
                 .boxed()
                 .map(chainIndex -> getChainIndexPairForHash(hash, chainIndex))
                 .map(this::getEndingLinkForEndpointIndexPair)
