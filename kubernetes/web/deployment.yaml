@@ -4,6 +4,7 @@ metadata:
   name: hashbash-web-deployment
   namespace: hashbash
 spec:
+  replicas: 2
   template:
     metadata:
       labels:
