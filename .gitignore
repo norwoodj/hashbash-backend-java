@@ -1,2 +1,5 @@
-*.o
-hashbash
+application-OVR.properties
+.idea/
+*.iml
+*/target/
+*.tgz

@@ -1,0 +1,18 @@
+version: '2'
+services:
+  mysql:
+    image: mysql:5.5
+    ports:
+      - '3306:3306'
+    environment:
+      - 'MYSQL_ROOT_PASSWORD=root'
+  hashbash:
+    image: hashbash-web:current
+    volumes_from:
+      - mysql
+    links:
+      - mysql
+    environment:
+      - 'SPRING_PROFILES_ACTIVE=LCL,DCK'
+    ports:
+      - '8080:8080'

@@ -1,0 +1,199 @@
+/**
+ * Body CSS
+ */
+html,
+body {
+    height: 100%;
+    background-color: #eee;
+}
+
+html,
+body,
+input,
+textarea,
+buttons {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
+}
+
+/**
+ * Layout CSS
+ */
+#header {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 2;
+    transition: left 0.2s;
+}
+
+#sidedrawer {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 200px;
+    left: -200px;
+    overflow: auto;
+    z-index: 2;
+    background-color: #fff;
+    transition: transform 0.2s;
+}
+
+#content-wrapper {
+    min-height: 100%;
+    overflow-x: hidden;
+    margin-left: 0px;
+    transition: margin-left 0.2s;
+
+    /* sticky bottom */
+    margin-bottom: -160px;
+    padding-bottom: 160px;
+}
+
+#footer {
+    height: 160px;
+    margin-left: 0px;
+    transition: margin-left 0.2s;
+}
+
+@media (min-width: 768px) {
+    #header {
+        left: 200px;
+    }
+
+    #sidedrawer {
+        transform: translate(200px);
+    }
+
+    #content-wrapper {
+        margin-left: 200px;
+    }
+
+    #footer {
+        margin-left: 200px;
+    }
+
+    body.hide-sidedrawer #header {
+        left: 0;
+    }
+
+    body.hide-sidedrawer #sidedrawer {
+        transform: translate(0px);
+    }
+
+    body.hide-sidedrawer #content-wrapper {
+        margin-left: 0;
+    }
+
+    body.hide-sidedrawer #footer {
+        margin-left: 0;
+    }
+}
+
+/**
+ * Toggle Side drawer
+ */
+#sidedrawer.active {
+    transform: translate(200px);
+}
+
+/**
+ * Header CSS
+ */
+.sidedrawer-toggle {
+    color: #fff;
+    cursor: pointer;
+    font-size: 20px;
+    line-height: 20px;
+    margin-right: 10px;
+}
+
+.sidedrawer-toggle:hover {
+    color: #fff;
+    text-decoration: none;
+}
+
+.color-change {
+    animation: colorRotate 30s linear 0s infinite;
+}
+
+.mui-btn {
+    color: #ffffff
+}
+
+@keyframes colorRotate {
+    from  {background-color: #ff3333}
+    4.1%  {background-color: #ff6633}
+    8.2%  {background-color: #ff9933}
+    12.3% {background-color: #ffcc33}
+    16.4% {background-color: #ffff33}
+    20.5% {background-color: #ccff33}
+    24.6% {background-color: #99ff33}
+    28.7% {background-color: #66ff33}
+    32.8% {background-color: #33ff33}
+    36.9% {background-color: #33ff66}
+    41.0% {background-color: #33ff99}
+    45.1% {background-color: #33ffcc}
+    49.2% {background-color: #33ffff}
+    53.3% {background-color: #33ccff}
+    57.4% {background-color: #3399ff}
+    61.5% {background-color: #3366ff}
+    65.6% {background-color: #3333ff}
+    69.7% {background-color: #6633ff}
+    73.8% {background-color: #9933ff}
+    77.9% {background-color: #cc33ff}
+    82.0% {background-color: #ff33ff}
+    86.1% {background-color: #ff33cc}
+    90.2% {background-color: #ff3399}
+    94.3% {background-color: #ff3366}
+    98.4% {background-color: #ff3333}
+    to    {background-color: #ff3333}
+}
+
+/**
+ * Footer CSS
+ */
+#footer {
+    background-color: #0288D1;
+    color: #fff;
+}
+
+#footer a {
+    color: #fff;
+    text-decoration: underline;
+}
+
+/**
+ * Side drawer CSS
+ */
+#sidedrawer-brand {
+    padding-left: 20px;
+}
+
+#sidedrawer ul {
+    list-style: none;
+}
+
+#sidedrawer > ul {
+    padding-left: 0px;
+}
+
+#sidedrawer > ul > li:first-child {
+    padding-top: 15px;
+}
+
+#sidedrawer strong {
+    display: block;
+    padding: 15px 22px;
+    cursor: pointer;
+}
+
+#sidedrawer strong:hover {
+    background-color: #E0E0E0;
+}
+
+#sidedrawer strong + ul > li {
+    padding: 6px 0px;
+}

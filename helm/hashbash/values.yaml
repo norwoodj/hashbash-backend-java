@@ -1,0 +1,31 @@
+
+##
+# MySQL settings
+##
+mysql:
+  mysqlRootPasswordSecretName: hashbash-secrets
+  mysqlRootPasswordSecretKey: hashbash.database.password
+
+  nfs_volume:
+    persistentVolumeStorageCapacity: 4Gi
+    persistentVolumeNfsServer: rp3-smi-kbw-nfs-000
+    persistentVolumeNfsPath: /nfs/hashbash
+
+    persistentVolumeClaimStorageRequest: 4Gi
+
+##
+# Web Service settings
+##
+web_service:
+  ingressName: hashbash-ingress
+  ingressHostname: hashbash.johnmalcolmnorwood.com
+  simple_service:
+    serviceName: hashbash-web-service
+
+##
+# Hashbash settings
+##
+deploymentName: hashbash-web-deployment
+deploymentReplicas: 2
+hashbashImage: jnorwood/hashbash-rpi_web
+hashbashHealthCheckEndpoint: /health

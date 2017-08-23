@@ -1,0 +1,7 @@
+FROM jnorwood/rpi-java:1.8
+
+ARG VERSION
+COPY webapp/target/hashbash-webapp-${VERSION}.jar /var/lib/johnmalcolmnorwood/hashbash/hashbash-webapp.jar
+WORKDIR /var/lib/johnmalcolmnorwood/hashbash
+
+ENTRYPOINT ["java", "-jar", "hashbash-webapp.jar"]
