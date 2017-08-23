@@ -7,7 +7,7 @@
 
     <groupId>com.johnmalcolmnorwood.hashbash</groupId>
     <artifactId>hashbash</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>17.0823-dev</version>
     <packaging>pom</packaging>
 
     <name>hashbash</name>
@@ -58,6 +58,11 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-web</artifactId>
+                <version>${org.springframework.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-actuator</artifactId>
                 <version>${org.springframework.boot.version}</version>
             </dependency>
             <dependency>

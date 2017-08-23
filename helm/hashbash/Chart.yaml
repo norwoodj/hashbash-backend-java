@@ -1,0 +1,7 @@
+name: hashbash
+description: The hashbash helm chart
+version: 17.0823-dev
+tillerVersion: >2
+maintainers:
+  - email: norwood.john.m@gmail.com
+    name: John Norwood
