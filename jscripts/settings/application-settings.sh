@@ -13,7 +13,7 @@ readonly HASHBASH_APP_NAME="${PROJECT_NAME}"
 
 readonly _APPLICATION_CONFIG=$(cat <<EOF
 {
-    "applications": ["${STUPIDCHESS_APP_NAME}"],
+    "applications": ["${HASHBASH_APP_NAME}"],
     "imagesToRunApp": {
         "${HASHBASH_APP_NAME}": ["${WEB_IMAGE_NAME}"]
     }

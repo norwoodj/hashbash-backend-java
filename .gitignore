@@ -3,3 +3,5 @@ application-OVR.properties
 *.iml
 */target/
 *.tgz
+jscripts/*.sh
+jscripts/utilities/*.sh
