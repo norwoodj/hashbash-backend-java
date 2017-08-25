@@ -34,3 +34,7 @@ function get_images_necessary_to_run_app {
     local app=${1}
     jq -r ".imagesToRunApp.${app}[]" <<< "${_APPLICATION_CONFIG}"
 }
+
+function get_current_application_version {
+    get_image_version "any"
+}
