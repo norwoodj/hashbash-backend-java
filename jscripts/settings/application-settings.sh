@@ -13,7 +13,7 @@ readonly HASHBASH_APP_NAME="${PROJECT_NAME}"
 
 readonly _APPLICATION_CONFIG=$(cat <<EOF
 {
-    "applications": ["${STUPIDCHESS_APP_NAME}"],
+    "applications": ["${HASHBASH_APP_NAME}"],
     "imagesToRunApp": {
         "${HASHBASH_APP_NAME}": ["${WEB_IMAGE_NAME}"]
     }
@@ -33,4 +33,8 @@ function print_app_usage_list {
 function get_images_necessary_to_run_app {
     local app=${1}
     jq -r ".imagesToRunApp.${app}[]" <<< "${_APPLICATION_CONFIG}"
+}
+
+function get_current_application_version {
+    get_image_version "any"
 }

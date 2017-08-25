@@ -78,6 +78,11 @@ function get_docker_build_context_path_for_image {
     echo "."
 }
 
+function get_additional_docker_build_args {
+    local image=${1}
+    echo "--build-arg VERSION=$(get_image_version ${image})"
+}
+
 function _get_maven_version {
     grep -A2 '<groupId>com.johnmalcolmnorwood.hashbash</groupId>' pom.xml \
         | grep 'version' \
