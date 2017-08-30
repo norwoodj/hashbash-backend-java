@@ -1,15 +1,15 @@
 version: "2"
 services:
   mysql:
-    image: mysql:5.5
+    image: hypriot/rpi-mysql:5.5
     environment:
       - "MYSQL_ROOT_PASSWORD=root"
     ports:
       - "3306:3306"
 
   hashbash:
-    image: hashbash-web:current
+    image: hashbash-rpi_web:current
     environment:
-      - "SPRING_PROFILES_ACTIVE=LCL,DCK"
+      - "SPRING_PROFILES_ACTIVE=RPI"
     ports:
       - "8080:8080"
