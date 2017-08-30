@@ -1,0 +1,7 @@
+dependencies:
+  - name: mysql
+    version: "17.0830"
+    repository: https://norwoodj.github.io/jchart-repository
+  - name: web_service
+    version: "17.0830"
+    repository: https://norwoodj.github.io/jchart-repository

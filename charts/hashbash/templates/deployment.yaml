@@ -21,7 +21,7 @@ spec:
           image: {{ .Values.hashbashImage }}:{{ .Chart.Version }}
           imagePullPolicy: Always
           livenessProbe: &probe
-            initialDelaySeconds: 120
+            initialDelaySeconds: {{ .Values.hashbashInitialProbeDelaySeconds }}
             httpGet:
               port: http
               path: {{ .Values.hashbashHealthCheckEndpoint }}
