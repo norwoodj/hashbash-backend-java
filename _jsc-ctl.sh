@@ -39,7 +39,7 @@ function jsc_install {
 
     if [[ ! -d "${JSCRIPTS_LOCAL_PATH}/settings" ]]; then
         echo "Copying base settings files over..."
-        cp -R "${JSCRIPTS_PATH}/settings" "${JSCRIPTS_LOCAL_PATH}/settings"
+        cp -R "${jscripts_script_path}/settings" "${JSCRIPTS_LOCAL_PATH}/settings"
     else
         echo "Settings directory already exists, not copying settings"
     fi

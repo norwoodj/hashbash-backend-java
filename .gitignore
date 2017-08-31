@@ -5,3 +5,4 @@ application-OVR.properties
 *.tgz
 jscripts/*.sh
 jscripts/utilities/*.sh
+requirements.lock

@@ -7,21 +7,23 @@ source ${SCRIPT_DIR}/utilities/command-line-utilities.sh
 source ${SCRIPT_DIR}/utilities/git-utilities.sh
 
 
-function print_additional_options_usage_list {
-    print_release_options_usage_list
-}
-
 function handle_release_options {
     local flag=${1}
 
     case "${flag}" in
-        --hotfix | -f)  HOTFIX_NUMBER=${2}; return 2 ;;
-        -*)             return 1 ;;
+        --hotfix | -f)   HOTFIX_NUMBER=${2}; return 2 ;;
+        --version | -v)  OVERRIDE_VERSION=${2}; return 2 ;;
+        -*)              return 1 ;;
     esac
 }
 
 function print_release_options_usage_list {
     echo "  --hotfix, -f <number>        Supply the hotfix number for this release"
+    echo "  --version, -v <version>      Supply the complete version, overriding the default"
+}
+
+function print_additional_options_usage_list {
+    print_release_options_usage_list
     print_git_options_usage_list
 }
 
@@ -32,7 +34,9 @@ function handle_additional_options {
 function get_release_version {
     local release_version=$(date "+%y.%m%d")
 
-    if [[ -n "${HOTFIX_NUMBER:-""}" ]]; then
+    if [[ -n "${OVERRIDE_VERSION:+_}" ]]; then
+        echo "${OVERRIDE_VERSION}"
+    elif [[ -n "${HOTFIX_NUMBER:+_}" ]]; then
         echo "${release_version}.${HOTFIX_NUMBER}"
     else
         echo "${release_version}"
@@ -45,7 +49,7 @@ function get_next_dev_version {
 }
 
 function get_versioned_files {
-    echo helm/hashbash/Chart.yaml pom.xml */pom.xml
+    echo charts/hashbash/Chart.yaml pom.xml */pom.xml
 }
 
 function get_release_version_commit_message {

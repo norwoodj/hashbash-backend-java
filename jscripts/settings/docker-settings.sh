@@ -36,19 +36,18 @@ readonly _DOCKER_CONFIG=$(cat <<EOF
 EOF
 )
 
-function print_build_images_usage_list {
-    echo -n "  "
-    join "\n  " $(get_images_to_build)
-    echo
-}
-
-function print_deploy_images_usage_list {
-    echo "  $(join "\n  " `get_images_to_deploy`)"
-}
 
 ##
 # Settings for which images should be built/deployed by these scripts, as well as how to build and deploy them
 ##
+function print_build_images_usage_list {
+    echo "  $(join "\n  " $(get_images_to_build))"
+}
+
+function print_deploy_images_usage_list {
+    echo "  $(join "\n  " $(get_images_to_deploy))"
+}
+
 function get_images_to_build {
     jq -r ".buildImages[]" <<< "${_DOCKER_CONFIG}"
 }
