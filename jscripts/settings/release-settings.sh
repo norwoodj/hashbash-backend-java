@@ -32,7 +32,7 @@ function handle_additional_options {
 }
 
 function get_release_version {
-    local release_version=$(date "+%y.%m%d")
+    local release_version=$(date -u "+%y.%m%d")
 
     if [[ -n "${OVERRIDE_VERSION:+_}" ]]; then
         echo "${OVERRIDE_VERSION}"
@@ -44,7 +44,7 @@ function get_release_version {
 }
 
 function get_next_dev_version {
-    local release_version=$(date -v+1d "+%y.%m%d")
+    local release_version=$(date -u -v+1d "+%y.%m%d")
     echo "${release_version}-dev"
 }
 
