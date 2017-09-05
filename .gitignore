@@ -6,3 +6,4 @@ application-OVR.properties
 jscripts/*.sh
 jscripts/utilities/*.sh
 requirements.lock
+_version.json
