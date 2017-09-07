@@ -4,6 +4,7 @@
 
 source ${SCRIPT_DIR}/settings/common.sh
 source ${SCRIPT_DIR}/utilities/rpi-utilities.sh
+source ${SCRIPT_DIR}/utilities/version-file-utilities.sh
 
 ##
 # Environment variables that control how images are named/deployed/built etc.
@@ -107,6 +108,8 @@ function get_docker_registry_name {
 function pre_build_image_hook {
     local image=${1}
     log_debug "Pre Build Image Hook for image '${image}'"
+
+    generate_version_info_json > "webapp/src/main/resources/static/_version.json"
 }
 
 function post_build_image_hook {
