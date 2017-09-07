@@ -20,12 +20,13 @@ spec:
         - name: hashbash-web
           image: {{ .Values.hashbashImage }}:{{ .Chart.Version }}
           imagePullPolicy: Always
-          livenessProbe: &probe
-            initialDelaySeconds: {{ .Values.hashbashInitialProbeDelaySeconds }}
+          livenessProbe:
+            initialDelaySeconds: {{ .Values.hashbashProbeInitialDelaySeconds }}
+            periodSeconds: {{ .Values.hashbashProbePeriodSeconds }}
+            timeoutSeconds: {{ .Values.hashbashProbeTimeoutSeconds }}
             httpGet:
               port: http
               path: {{ .Values.hashbashHealthCheckEndpoint }}
-          readinessProbe: *probe
           ports:
             - name: http
               containerPort: 8080
