@@ -1,6 +1,6 @@
 dependencies:
   - name: mysql
-    version: "17.0830"
+    version: "17.0907"
     repository: https://norwoodj.github.io/jchart-repository
   - name: web_service
     version: "17.0905"

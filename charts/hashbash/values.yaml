@@ -29,4 +29,6 @@ deploymentName: hashbash-web-deployment
 deploymentReplicas: 2
 hashbashImage: jnorwood/hashbash-rpi_web
 hashbashHealthCheckEndpoint: /health
-hashbashInitialProbeDelaySeconds: 120
+hashbashProbeInitialDelaySeconds: 300
+hashbashProbePeriodSeconds: 300
+hashbashProbeTimeoutSeconds: 10
