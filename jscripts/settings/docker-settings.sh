@@ -3,6 +3,7 @@
 [[ -n "${_DOCKER_SETTINGS_SH:+_}" ]] && return || readonly _DOCKER_SETTINGS_SH=1
 
 source ${SCRIPT_DIR}/settings/common.sh
+source ${SCRIPT_DIR}/settings/application-settings.sh
 source ${SCRIPT_DIR}/utilities/rpi-utilities.sh
 source ${SCRIPT_DIR}/utilities/version-file-utilities.sh
 
@@ -83,15 +84,9 @@ function get_additional_docker_build_args {
     echo "--build-arg VERSION=$(get_image_version ${image})"
 }
 
-function _get_maven_version {
-    grep -A2 '<groupId>com.johnmalcolmnorwood.hashbash</groupId>' pom.xml \
-        | grep 'version' \
-        | sed 's|.*<version>\(.*\)</version>|\1|'
-}
-
 function get_image_version {
     local image=${1}
-    _get_maven_version
+    get_current_application_version
 }
 
 function get_docker_registry_name {

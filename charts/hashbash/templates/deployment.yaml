@@ -33,3 +33,8 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: RPI
+            - name: HASHBASH_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.mysql.mysqlRootPasswordSecretName }}
+                  key: {{ .Values.mysql.mysqlRootPasswordSecretKey }}
