@@ -1,0 +1,43 @@
+/**
+ * Body CSS
+ */
+
+table, body {
+    border-collapse: collapse;
+}
+
+.game-win {
+    background: green;
+    color: white;
+}
+
+.game-loss {
+    background: red;
+    color: white;
+}
+
+.game-tie {
+    background: navy;
+    color: white;
+}
+
+.game-my-turn {
+    background: yellow;
+    color: black;
+}
+
+.game-win .color-label-black {
+    color: black;
+}
+
+.game-loss .color-label-black {
+    color: black;
+}
+
+.game-win .color-label-white {
+    color: white;
+}
+
+.game-loss .color-label-white {
+    color: white;
+}

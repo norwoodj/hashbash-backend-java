@@ -8,13 +8,13 @@ source ${SCRIPT_DIR}/utilities/logging-utilities.sh
 # The name of the project these scripts are installed to. This name is used in a number of places throughout these scripts,
 # for instance in the naming of docker images. By default they are prefixed with the Project name
 ##
-readonly PROJECT_NAME='hashbash'
+readonly PROJECT_NAME="hashbash"
 
 
 ##
-# Various other environment variables that control output levels and other important aspects of scripts' execution
+# Various other environment variables that control output levels and other important aspects of scripts" execution
 ##
-: ${IMAGE_DEPS:=''}
+: ${IMAGE_DEPS:=""}
 : ${LOG_LEVEL:=INFO}
 
 
@@ -44,7 +44,7 @@ function _assert_installed {
     local command=${1}
 
     if ! hash "${command}" &> /dev/null; then
-        log_error "'${command}' is required to run these scripts, please install."
+        log_error "${command} is required to run these scripts, please install."
         exit 1
     fi
 }
@@ -54,8 +54,8 @@ function _assert_installed {
 ##
 function pre_handle_options_hook {
     set_log_level "${LOG_LEVEL}"
-    _assert_installed 'docker'
-    _assert_installed 'jq'
+    _assert_installed "docker"
+    _assert_installed "jq"
 }
 
 function post_handle_options_hook {
