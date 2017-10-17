@@ -7,6 +7,8 @@ const CompressionPlugin = require("compression-webpack-plugin");
 module.exports = {
     entry: {
         index: "./src/js/render-index-page.jsx",
+        rainbowTablePage: "./src/js/render-rainbow-table-page.jsx",
+        generateRainbowTable: "./src/js/render-generate-table-page.jsx"
     },
     resolve: {
         extensions: [".js", ".jsx"]

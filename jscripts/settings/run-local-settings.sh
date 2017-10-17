@@ -43,10 +43,30 @@ function get_local_docker_compose_path_for_app {
 ##
 # Hooks
 ##
+
+function _find_local_ip_address {
+    for x in {0..15}; do
+        local host_ip_address=$(ifconfig en$x | grep "inet " | cut -f2 -d' ')
+
+        if [[ -n "${host_ip_address}" ]]; then
+            echo "${host_ip_address}"
+            return
+        fi
+    done
+}
+
 function pre_run_local_hook {
     local app=${1}
     log_debug "Pre Run Local hook for application ${app}"
-    export HASHBASH_HOST_IP_ADDRESS=$(ifconfig | grep 'inet 192' | awk '{ print $2 }')
+    local hashbash_host_ip_address=$(_find_local_ip_address)
+
+    if [[ -z "${hashbash_host_ip_address}" ]]; then
+        log_error "No local IP address found, cannot start nginx dependency"
+        exit 1
+    fi
+
+    log_debug "Exporting HASHBASH_HOST_IP_ADDRESS=${hashbash_host_ip_address}"
+    export HASHBASH_HOST_IP_ADDRESS=${hashbash_host_ip_address}
 }
 
 function post_run_local_hook {

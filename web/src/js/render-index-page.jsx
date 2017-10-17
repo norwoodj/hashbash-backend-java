@@ -4,7 +4,7 @@ import ReactDOM from "react-dom";
 
 import Container from "muicss/lib/react/container";
 import Panel from "muicss/lib/react/panel";
-import ScAppBar from "./components/app-bar";
+import AppBar from "./components/app-bar";
 import SideDrawer from "./components/side-drawer";
 import Footer from "./components/footer";
 
@@ -16,7 +16,7 @@ $(() => {
     ReactDOM.render(
         <div id="react-root">
             <SideDrawer pageName={APP_NAME} menuCategories={MENU_CATEGORIES}/>
-            <ScAppBar appName={APP_NAME} httpService={$}/>
+            <AppBar appName={APP_NAME}/>
             <div id="content-wrapper">
                 <div className="mui--appbar-height"></div>
                 <Container className="main-container">
@@ -35,9 +35,27 @@ $(() => {
                         <p>
                             You might also visit my other project <a href="https://stupidchess.johnmalcolmnorwood.com">Stupid Chess</a>.
                         </p>
+                        <h3>Implementation</h3>
+                        <p>
+                            A rainbow table is a data structure that supports the space and time efficient reversal of cryptographic
+                            hash functions. For details on how this works visit <a href="https://en.wikipedia.org/wiki/Rainbow_table">this article</a>
+                        </p>
+                        <p>
+                            This implementation uses java, spring-batch, and mysql to generate and store the rainbow table. You can then
+                            use the API or web interface to search existing rainbow tables. This is certainly not the most efficient implementation
+                            of rainbow tables possible or available. This was simply a fun way to implement the algorithm in a user-friendly way.
+                        </p>
+                        <p>
+                            What you can do from here:
+                        </p>
+                        <ul>
+                            <li><a href="/generate-rainbow-table.html">Generate a new Rainbow Table</a></li>
+                            <li><a href="/rainbow-tables.html">View Existing Rainbow Tables</a></li>
+                        </ul>
                     </Panel>
                 </Container>
             </div>
+            <div className="footer-height"></div>
             <Footer/>
         </div>,
         document.getElementById("content-root")

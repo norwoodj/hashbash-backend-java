@@ -39,6 +39,7 @@ import javax.annotation.Resource;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 
@@ -81,9 +82,14 @@ public class RainbowTableController {
         return Arrays.asList(HashFunctionName.values());
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping
     public List<RainbowTable> getAll() {
         return rainbowTableRepository.findAll();
+    }
+
+    @RequestMapping(value = "/count")
+    public ResponseEntity<Map<String, Long>> count() {
+        return ResponseEntity.ok(ImmutableMap.of("rainbowTableCount", rainbowTableRepository.count()));
     }
 
     @RequestMapping(value = "/{rainbowTableId}", method = RequestMethod.GET)

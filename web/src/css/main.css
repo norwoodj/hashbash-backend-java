@@ -29,6 +29,15 @@ buttons {
     transition: left 0.2s;
 }
 
+#react-root {
+    height: 100%;
+}
+
+#content-root {
+    height: 100%;
+}
+
+
 #sidedrawer {
     position: fixed;
     top: 0;
@@ -42,20 +51,39 @@ buttons {
 }
 
 #content-wrapper {
-    min-height: 100%;
+    height: 100%;
     overflow-x: hidden;
-    margin-left: 0px;
+    margin-left: 0;
     transition: margin-left 0.2s;
-
-    /* sticky bottom */
-    margin-bottom: -160px;
-    padding-bottom: 160px;
+    margin-bottom: -120px;
 }
 
 #footer {
-    height: 160px;
-    margin-left: 0px;
+    height: 120px;
+    margin-left: 0;
     transition: margin-left 0.2s;
+}
+
+.error-bar {
+    background: red;
+    text-align: center;
+    display: table;
+    width: 100%;
+}
+
+.error-bar > div {
+    background: red;
+    vertical-align: middle;
+    display: table-cell;
+    color: white;
+}
+
+.main-container {
+    padding-top: 15px;
+}
+
+.footer-height {
+    height: 120px;
 }
 
 @media (min-width: 768px) {
@@ -150,19 +178,6 @@ buttons {
     94.3% {background-color: #ff3366}
     98.4% {background-color: #ff3333}
     to    {background-color: #ff3333}
-}
-
-/**
- * Footer CSS
- */
-#footer {
-    background-color: #0288D1;
-    color: #fff;
-}
-
-#footer a {
-    color: #fff;
-    text-decoration: underline;
 }
 
 /**

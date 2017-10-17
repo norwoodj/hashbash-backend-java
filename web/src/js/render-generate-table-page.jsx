@@ -1,0 +1,33 @@
+import $ from "jquery";
+import React from "react";
+import ReactDOM from "react-dom";
+
+import Container from "muicss/lib/react/container";
+import AppBar from "./components/app-bar";
+import SideDrawer from "./components/side-drawer";
+import Footer from "./components/footer";
+import GenerateRainbowTableForm from "./components/generate-rainbow-table-form";
+
+import {setupSideDrawerTransition} from "./side-drawer-transition";
+import {MENU_CATEGORIES, APP_NAME} from "./constants";
+
+
+$(() => {
+    ReactDOM.render(
+        <div id="react-root">
+            <SideDrawer pageName={APP_NAME} menuCategories={MENU_CATEGORIES}/>
+            <AppBar appName={APP_NAME}/>
+            <div id="content-wrapper">
+                <div className="mui--appbar-height"></div>
+                <Container className="main-container">
+                    <GenerateRainbowTableForm httpService={$}/>
+                </Container>
+            </div>
+            <div className="footer-height"></div>
+            <Footer/>
+        </div>,
+        document.getElementById("content-root")
+    );
+
+    setupSideDrawerTransition();
+});

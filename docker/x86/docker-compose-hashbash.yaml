@@ -19,8 +19,8 @@ services:
       - --devtool
       - source-map
     volumes:
-      - ../../web/src:/var/lib/johnmalcolmnorwood/stupidchess/src:ro
-      - frontend-public-volume:/var/lib/johnmalcolmnorwood/stupidchess/dist
+      - ../../web/src:/var/lib/johnmalcolmnorwood/hashbash/src:ro
+      - frontend-public-volume:/var/lib/johnmalcolmnorwood/hashbash/dist
 
   nginx:
     image: hashbash-nginx:current
@@ -33,13 +33,11 @@ services:
     volumes:
       - ../../etc/nginx:/etc/nginx/local:ro
       - frontend-public-volume:/var/lib/johnmalcolmnorwood/hashbash/dist:ro
-    extra_hosts:
-      - hashbash:${HASHBASH_HOST_IP_ADDRESS}
     ports:
       - 80:80
 
   hashbash:
-    image: hashbash-web:current
+    image: hashbash-server:current
     environment:
       - SPRING_PROFILES_ACTIVE=LCL,DCK,OVR
 
