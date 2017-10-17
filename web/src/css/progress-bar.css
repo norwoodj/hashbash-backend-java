@@ -6,6 +6,7 @@
 }
 
 .progress-bar-inner {
+    color: white;
     width: 0;
     height: 20px;
 }

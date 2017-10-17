@@ -18,7 +18,7 @@ export default class GenerateRainbowTableForm extends React.Component {
 
     componentDidMount() {
         this.setState(
-            {rainbowTableService: new RainbowTableService(this.props.httpService, this.props.errorHandler)},
+            {rainbowTableService: new RainbowTableService(this.props.httpService, this.handleError.bind(this))},
             () => this.state.rainbowTableService.getSupportedHashFunctions().then(hashFunctions => this.setState({hashFunctions: hashFunctions}))
         );
     }
@@ -29,7 +29,7 @@ export default class GenerateRainbowTableForm extends React.Component {
 
 
     render() {
-        if (this.state.rainbowTableService == null) {
+        if (this.state.rainbowTableService === null) {
             return null;
         }
 
@@ -37,7 +37,7 @@ export default class GenerateRainbowTableForm extends React.Component {
             <Panel>
                 <ErrorElement error={this.state.error}/>
                 <h2>Generate Rainbow Table</h2>
-                <form action="/api/rainbow-table">
+                <form method="POST" action="/api/rainbow-table">
                     <div className="mui-textfield">
                         <input type="text" name="name" placeholder="hashbash" required/>
                         <label>Name</label>
@@ -49,19 +49,19 @@ export default class GenerateRainbowTableForm extends React.Component {
                         <label>Hash Function</label>
                     </div>
                     <div className="mui-textfield">
-                        <input type="number" name="numChains" min="100" max="100000000" placeholder="100000" required/>
+                        <input defaultValue="1000000" type="number" name="numChains" min="100" max="100000000" required/>
                         <label>Number of Chains</label>
                     </div>
                     <div className="mui-textfield">
-                        <input type="number" name="chainLength" min="100" max="100000000" placeholder="10000" required/>
+                        <input defaultValue="10000" type="number" name="chainLength" min="100" max="100000" required/>
                         <label>Chain Length</label>
                     </div>
                     <div className="mui-textfield">
-                        <input type="text" name="charset" placeholder="abcdefghijklmnopqrstuvwxyz" required/>
+                        <input defaultValue="abcdefghijklmnopqrstuvwxyz" type="text" name="charset" required/>
                         <label>Character Set</label>
                     </div>
                     <div className="mui-textfield">
-                        <input type="number" name="passwordLength" min="4" max="16" placeholder="8" required/>
+                        <input defaultValue="8" type="number" name="passwordLength" min="4" max="16" required/>
                         <label>Password Length</label>
                     </div>
                     <button type="submit" className="mui-btn mui-btn--raised color-change">Submit</button>

@@ -31,7 +31,7 @@ export default class RainbowTablePage extends React.Component {
     }
 
     render() {
-        if (this.state.rainbowTableService == null) {
+        if (this.state.rainbowTableService === null) {
             return null;
         }
 
@@ -41,10 +41,10 @@ export default class RainbowTablePage extends React.Component {
                 <h2>Rainbow Tables</h2>
 
                 <div className="mui-divider"></div>
-                <RainbowTableList rainbowTableService={this.state.rainbowTableService}/>
+                <RainbowTableList rainbowTableService={this.state.rainbowTableService} refreshRateSeconds={5}/>
 
-                <a href="/create-game">
-                    <Button className="button" variant="fab">+</Button>
+                <a href="/generate-table.html">
+                    <Button className="button color-change" variant="fab">+</Button>
                 </a>
             </Panel>
         );

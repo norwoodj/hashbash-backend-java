@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.annotation.Resource;
@@ -119,7 +120,7 @@ public class RainbowTableController {
                 .build();
     }
 
-    private void handleGenerate(RainbowTable rainbowTable) {
+    private void startGenerateTableJob(RainbowTable rainbowTable) {
         try {
             JobParameters jobParameters = new JobParameters(ImmutableMap.of("rainbowTableId", new JobParameter(Long.valueOf(rainbowTable.getId()))));
             jobLauncher.run(rainbowTableGenerateJob, jobParameters);
@@ -128,10 +129,26 @@ public class RainbowTableController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Void> generate(@RequestBody GenerateRainbowTableRequest generateRainbowTableRequest) {
+    private RainbowTable handleGenerateRainbowTable(GenerateRainbowTableRequest generateRainbowTableRequest) {
         RainbowTable rainbowTable = createRainbowTable(generateRainbowTableRequest);
-        handleGenerate(rainbowTable);
+        startGenerateTableJob(rainbowTable);
+        return rainbowTable;
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity<Void> generateJson(@RequestBody GenerateRainbowTableRequest generateRainbowTableRequest) {
+        RainbowTable rainbowTable = handleGenerateRainbowTable(generateRainbowTableRequest);
+        URI rainbowTableUri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("{id}")
+                .buildAndExpand(rainbowTable.getId())
+                .toUri();
+
+        return ResponseEntity.created(rainbowTableUri).build();
+    }
+
+    @RequestMapping(method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
+    public ResponseEntity<Void> generateForm(GenerateRainbowTableRequest generateRainbowTableRequest) {
+        RainbowTable rainbowTable = handleGenerateRainbowTable(generateRainbowTableRequest);
         URI rainbowTableUri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("{id}")
                 .buildAndExpand(rainbowTable.getId())

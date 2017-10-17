@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import ReactTable from "react-table";
 import PagedListState from "../models/paged-list-state";
 
@@ -6,15 +7,28 @@ import PagedListState from "../models/paged-list-state";
 export default class EntityList extends React.Component {
     constructor() {
         super();
-
         this.pagedListState = new PagedListState();
         this.state = {pagedListState: this.pagedListState};
     }
 
     componentDidMount() {
-        this.setState({pagedListState: this.pagedListState});
-        this.retrieveEntities(this.state.pagedListState.pageStartOffset, this.state.pagedListState.pageSizeLimit);
+        this.setState(
+            {pagedListState: this.pagedListState},
+            this.start.bind(this)
+        );
+    }
+
+    start() {
+        this.pollEntityInfo();
+    }
+
+    pollEntityInfo() {
+        this.retrieveEntities();
         this.retrieveEntityCount();
+
+        if (this.props.refreshRateSeconds) {
+            setTimeout(this.pollEntityInfo.bind(this), this.props.refreshRateSeconds * 1000);
+        }
     }
 
     retrieveEntityCount() {
@@ -26,6 +40,7 @@ export default class EntityList extends React.Component {
 
     retrieveEntities() {
         this.doRetrieveEntities(this.state.pagedListState.pageStartOffset, this.state.pagedListState.pageSizeLimit).then(entities => {
+            console.log(entities);
             this.pagedListState.updateForObjects(entities);
             this.setState(this.pagedListState);
         });
@@ -58,3 +73,7 @@ export default class EntityList extends React.Component {
         );
     }
 }
+
+EntityList.propTypes = {
+    refreshRateSeconds: PropTypes.number
+};
