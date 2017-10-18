@@ -27,7 +27,7 @@ module.exports = {
             {from: "src/img", to: "img/"},
             {from: "node_modules/react-table/react-table.css", to: "css/"}
         ]),
-        new CompressionPlugin({deleteOriginalAssets: true})
+        new CompressionPlugin({deleteOriginalAssets: true, test: /^(?!.*index\.html$).*/})
     ],
     module: {
         rules: [

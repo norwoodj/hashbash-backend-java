@@ -17,16 +17,18 @@ export default class GenerateRainbowTableForm extends React.Component {
     }
 
     componentDidMount() {
-        this.setState(
-            {rainbowTableService: new RainbowTableService(this.props.httpService, this.handleError.bind(this))},
-            () => this.state.rainbowTableService.getSupportedHashFunctions().then(hashFunctions => this.setState({hashFunctions: hashFunctions}))
+        this.setState({
+            rainbowTableService: new RainbowTableService(this.props.httpService, this.handleError.bind(this)),
+            error: this.props.error ? this.props.error : null
+        }, () => this.state.rainbowTableService.getSupportedHashFunctions().then(
+                hashFunctions => this.setState({hashFunctions: hashFunctions})
+            )
         );
     }
 
     handleError(error) {
         this.setState({error: getErrorMessage(error)});
     }
-
 
     render() {
         if (this.state.rainbowTableService === null) {
@@ -49,7 +51,7 @@ export default class GenerateRainbowTableForm extends React.Component {
                         <label>Hash Function</label>
                     </div>
                     <div className="mui-textfield">
-                        <input defaultValue="1000000" type="number" name="numChains" min="100" max="100000000" required/>
+                        <input defaultValue="1000000" type="number" name="numChains" min="1000" max="100000000" required/>
                         <label>Number of Chains</label>
                     </div>
                     <div className="mui-textfield">
@@ -64,7 +66,12 @@ export default class GenerateRainbowTableForm extends React.Component {
                         <input defaultValue="8" type="number" name="passwordLength" min="4" max="16" required/>
                         <label>Password Length</label>
                     </div>
-                    <button type="submit" className="mui-btn mui-btn--raised color-change">Submit</button>
+                    <button
+                        type="submit"
+                        className="mui-btn mui-btn--raised color-change"
+                    >
+                        Submit
+                    </button>
                 </form>
             </Panel>
         );
@@ -72,5 +79,6 @@ export default class GenerateRainbowTableForm extends React.Component {
 }
 
 GenerateRainbowTableForm.propTypes = {
-    httpService: PropTypes.func.isRequired
+    httpService: PropTypes.func.isRequired,
+    error: PropTypes.string
 };

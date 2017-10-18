@@ -5,15 +5,18 @@ export default class RainbowTableService {
         this.errorHandler = errorHandler;
     }
 
-    static getRainbowTableListQueryString(offset, limit) {
-        return `?offset=${offset}&limit=${limit}`;
+    static getRainbowTableListQueryString(offset, limit, sortKey) {
+        return [
+            `?pageNumber=${offset / limit}&pageSize=${limit}`,
+            sortKey !== null ? `&sortKey=${sortKey.id}&sortOrder=${sortKey.desc ? "DESC" : "ASC"}` : ""
+        ].join("");
     }
 
-    getRainbowTables(offset, limit) {
+    getRainbowTables(offset, limit, sortKey) {
         return new Promise(resolve => {
             this.http.ajax({
                 type: "GET",
-                url: `/api/rainbow-table${RainbowTableService.getRainbowTableListQueryString(offset, limit)}`,
+                url: `/api/rainbow-table${RainbowTableService.getRainbowTableListQueryString(offset, limit, sortKey)}`,
                 success: rainbowTables => resolve(rainbowTables),
                 error: this.errorHandler
             });

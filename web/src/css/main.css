@@ -78,6 +78,19 @@ buttons {
     color: white;
 }
 
+.skin-element a {
+    color: white;
+}
+
+.skin-element a {
+    color: white;
+    text-decoration: none;
+}
+
+.skin-element a:hover {
+    color: black;
+}
+
 .main-container {
     padding-top: 15px;
 }

@@ -44,9 +44,11 @@ function get_local_docker_compose_path_for_app {
 # Hooks
 ##
 
-function _find_local_ip_address {
-    for x in {0..15}; do
-        local host_ip_address=$(ifconfig en$x | grep "inet " | cut -f2 -d' ')
+# This queries your various network interfaces to find one that has LAN IP assigned, as our docker containers can reach
+# localhost on that interface, but not through the 127.0.0.1 interface
+function _find_local_network_private_ip_address {
+    for i in {0..15}; do
+        local host_ip_address=$(ifconfig "en${i}" 2> /dev/null | grep "inet " | cut -f2 -d' ')
 
         if [[ -n "${host_ip_address}" ]]; then
             echo "${host_ip_address}"
@@ -58,7 +60,14 @@ function _find_local_ip_address {
 function pre_run_local_hook {
     local app=${1}
     log_debug "Pre Run Local hook for application ${app}"
-    local hashbash_host_ip_address=$(_find_local_ip_address)
+
+    # Only care about assigning the extra IP for localhost if we're running the dependencies image and we need the
+    # nginx docker container to be able to reach our java server running on localhost
+    if [[ "${app}" != "${HASHBASH_DEPENDENCIES}" ]]; then
+        return
+    fi
+
+    local hashbash_host_ip_address=$(_find_local_network_private_ip_address)
 
     if [[ -z "${hashbash_host_ip_address}" ]]; then
         log_error "No local IP address found, cannot start nginx dependency"

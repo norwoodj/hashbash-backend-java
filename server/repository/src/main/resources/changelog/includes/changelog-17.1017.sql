@@ -114,8 +114,13 @@ CREATE TABLE `rainbow_table` (
   `batchExecutionId` BIGINT,
   `created`          DATETIME     NOT NULL,
   `lastUpdated`      TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
   FOREIGN KEY (`batchExecutionId`) REFERENCES `BATCH_STEP_EXECUTION` (`STEP_EXECUTION_ID`),
-  PRIMARY KEY (`id`)
+  UNIQUE INDEX (`name`),
+  INDEX (`numChains`),
+  INDEX (`chainLength`),
+  INDEX (`passwordLength`),
+  INDEX (`hashFunction`)
 );
 
 CREATE TABLE `rainbow_chain` (
@@ -124,7 +129,7 @@ CREATE TABLE `rainbow_chain` (
   `rainbowTableId` SMALLINT     NOT NULL,
   PRIMARY KEY (`endHash`, `rainbowTableId`),
   FOREIGN KEY (`rainbowTableId`) REFERENCES `rainbow_table` (`id`)
-    ON DELETE CASCADE
+  ON DELETE CASCADE
 );
 
 --changeset jnorwood:HB-1
@@ -133,5 +138,5 @@ CREATE TABLE `rainbow_table_unique_password` (
   `rainbowTableId` SMALLINT     NOT NULL,
   PRIMARY KEY (`password`, `rainbowTableId`),
   FOREIGN KEY (`rainbowTableId`) REFERENCES `rainbow_table` (`id`)
-    ON DELETE CASCADE
+  ON DELETE CASCADE
 );

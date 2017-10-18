@@ -29,7 +29,7 @@ public class WriterConfig {
     private static final Map<String, Function<RainbowChain, Object>> RAINBOW_CHAIN_PROPERTY_MAPPERS = ImmutableMap.of(
             "startPlaintext", RainbowChain::getStartPlaintext,
             "endHash", RainbowChain::getEndHash,
-            "rainbowTableId", rainbowChain -> rainbowChain.getRainbowTable().getId()
+            "rainbowTableId", RainbowChain::getRainbowTableId
     );
 
     @Autowired

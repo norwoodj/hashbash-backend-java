@@ -2,12 +2,12 @@
 export default class PagedListState {
     constructor() {
         this.loading = true;
-        this.pageStartOffset = 0;
-        this.pageSizeLimit = 5;
+        this.pageNumber = 0;
+        this.pageSize = 10;
         this.pageSizeOptions = [5, 10, 15, 25, 50];
+        this.sortKey = null;
         this.pages = 0;
         this.objects = [];
-        this.objectCount = 0;
     }
 
     updateForObjects(objects) {
@@ -16,19 +16,13 @@ export default class PagedListState {
     }
 
     updateForObjectCount(objectCount) {
-        this.objectCount = objectCount;
-        this.pages = Math.ceil(objectCount / this.pageSizeLimit);
+        this.pages = Math.ceil(objectCount / this.pageSize);
     }
 
-    handlePageChange(page) {
-        this.pageStartOffset = page * this.pageSizeLimit;
-        this.loading = true;
-    }
-
-    handlePageSizeChange(pageSize, page) {
-        this.pageStartOffset = page * pageSize;
-        this.pageSizeLimit = pageSize;
-        this.pages = Math.ceil(this.objectCount / pageSize);
+    handleFetchData(pageNumber, pageSize, sortKey) {
+        this.pageNumber = pageNumber;
+        this.pageSize = pageSize;
+        this.sortKey = sortKey;
         this.loading = true;
     }
 }

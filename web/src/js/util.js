@@ -12,4 +12,9 @@ function getErrorMessage(errorResponse) {
     }
 }
 
-export {getErrorMessage};
+function getQueryParam(parameter) {
+    let match = new RegExp("[?&]" + parameter + "=([^&]*)").exec(window.location.search);
+    return match && decodeURIComponent(match[1].replace(/\+/g, " "));
+}
+
+export {getErrorMessage, getQueryParam};

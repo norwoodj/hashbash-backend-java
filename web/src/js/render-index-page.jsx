@@ -18,11 +18,11 @@ $(() => {
             <SideDrawer pageName={APP_NAME} menuCategories={MENU_CATEGORIES}/>
             <AppBar appName={APP_NAME}/>
             <div id="content-wrapper">
-                <div className="mui--appbar-height"></div>
+                <div className="mui--appbar-height"/>
                 <Container className="main-container">
                     <Panel>
                         <h2>Welcome to Hashbash</h2>
-                        <div className="mui-divider"></div>
+                        <div className="mui-divider"/>
                         <br/>
                         <p>
                             This is a web-based rainbow table generator and searcher. It is deployed on a raspberry pi cluster
@@ -55,7 +55,7 @@ $(() => {
                     </Panel>
                 </Container>
             </div>
-            <div className="footer-height"></div>
+            <div className="footer-height mui--hidden-md mui--hidden-lg mui--hidden-xl"/>
             <Footer/>
         </div>,
         document.getElementById("content-root")

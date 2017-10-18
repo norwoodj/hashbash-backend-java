@@ -35,7 +35,7 @@ public class RainbowChainGenerateProcessor implements ItemProcessor<String, Rain
                 rainbowTable.getChainLength()
         );
 
-        rainbowChain.setRainbowTable(rainbowTable);
+        rainbowChain.setRainbowTableId(rainbowTable.getId());
         return rainbowChain;
     }
 }

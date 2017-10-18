@@ -39,21 +39,22 @@ export default class EntityList extends React.Component {
     }
 
     retrieveEntities() {
-        this.doRetrieveEntities(this.state.pagedListState.pageStartOffset, this.state.pagedListState.pageSizeLimit).then(entities => {
-            console.log(entities);
+        this.doRetrieveEntities().then(entities => {
             this.pagedListState.updateForObjects(entities);
             this.setState(this.pagedListState);
         });
     }
 
-    handlePageChange(page) {
-        this.pagedListState.handlePageChange(page);
-        this.setState(this.pagedListState, () => this.retrieveEntities());
-    }
-
-    handlePageSizeChange(pageSize, page) {
-        this.pagedListState.handlePageSizeChange(pageSize, page);
-        this.setState(this.pagedListState, () => this.retrieveEntities());
+    fetchData(state) {
+        let sortKey = state.sorted.length ? state.sorted[0] : null;
+        this.pagedListState.handleFetchData(state.page, state.pageSize, sortKey);
+        this.setState(
+            {pagedListState: this.pagedListState},
+            () => {
+                this.retrieveEntities();
+                this.retrieveEntityCount();
+            }
+        );
     }
 
     render() {
@@ -61,14 +62,12 @@ export default class EntityList extends React.Component {
             <ReactTable
                 manual
                 columns={this.getEntityTableColumns()}
-                sortable={false}
                 loading={this.state.pagedListState.loading}
-                defaultPageSize={this.state.pagedListState.pageSizeLimit}
+                defaultPageSize={this.state.pagedListState.pageSize}
                 pageSizeOptions={this.state.pagedListState.pageSizeOptions}
                 pages={this.state.pagedListState.pages}
                 data={this.state.pagedListState.objects}
-                onPageChange={this.handlePageChange.bind(this)}
-                onPageSizeChange={this.handlePageSizeChange.bind(this)}
+                onFetchData={this.fetchData.bind(this)}
             />
         );
     }

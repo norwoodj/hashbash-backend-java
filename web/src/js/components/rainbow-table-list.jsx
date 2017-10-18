@@ -6,7 +6,11 @@ import ProgressBar from "./progress-bar";
 
 export default class RainbowTableList extends EntityList {
     doRetrieveEntities() {
-        return this.props.rainbowTableService.getRainbowTables(this.pagedListState.pageStartOffset, this.pagedListState.pageSizeLimit);
+        return this.props.rainbowTableService.getRainbowTables(
+            this.state.pagedListState.pageNumber,
+            this.state.pagedListState.pageSize,
+            this.state.pagedListState.sortKey
+        );
     }
 
     doRetrieveEntityCount() {
@@ -23,16 +27,14 @@ export default class RainbowTableList extends EntityList {
 
     getEntityTableColumns() {
         return [
-            {Header: "ID", Cell: row => row.original.id},
-            {Header: "Name", Cell: row => row.original.name},
-            {Header: "Status", Cell: row => row.original.status},
+            {Header: "Name", Cell: row => <a href={`/search-rainbow-table.html?id=${row.original.id}`}>{row.original.name}</a>},
+            {Header: "Status", accessor: "status"},
             {Header: "Progress", Cell: row => this.getProgressBar(row.original)},
-            {Header: "Chains Generated", Cell: row => row.original.chainsGenerated},
-            {Header: "Num Chains", Cell: row => row.original.numChains},
-            {Header: "Chain Length", Cell: row => row.original.chainLength},
-            {Header: "Password Length", Cell: row => row.original.passwordLength},
-            {Header: "Character Set", Cell: row => row.original.characterSet},
-            {Header: "Hash Function", Cell: row => row.original.hashFunction}
+            {Header: "Num Chains", accessor: "numChains"},
+            {Header: "Chain Length", accessor: "chainLength"},
+            {Header: "Hash Function", accessor: "hashFunction"},
+            {Header: "Password Length", accessor: "passwordLength"},
+            {Header: "Character Set", accessor: "characterSet"},
         ];
     }
 }

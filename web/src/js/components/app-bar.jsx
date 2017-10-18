@@ -12,7 +12,7 @@ export default class AppBar extends React.Component {
     render() {
         return (
             <header id="header">
-                <Appbar className="mui--appbar-line-height color-change">
+                <Appbar className="mui--appbar-line-height skin-element color-change">
                     <Container fluid={true}>
                         <table width="100%"><tbody><tr>
                             <td>

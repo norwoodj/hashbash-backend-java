@@ -23,7 +23,10 @@ export default class RainbowTablePage extends React.Component {
     }
 
     componentDidMount() {
-        this.setState({rainbowTableService: new RainbowTableService(this.props.httpService, this.handleError.bind(this))});
+        this.setState({
+            rainbowTableService: new RainbowTableService(this.props.httpService, this.handleError.bind(this)),
+            error: this.props.error
+        });
     }
 
     handleError(error) {
@@ -40,10 +43,10 @@ export default class RainbowTablePage extends React.Component {
                 <ErrorElement error={this.state.error}/>
                 <h2>Rainbow Tables</h2>
 
-                <div className="mui-divider"></div>
+                <div className="mui-divider"/>
                 <RainbowTableList rainbowTableService={this.state.rainbowTableService} refreshRateSeconds={5}/>
 
-                <a href="/generate-table.html">
+                <a href="/generate-rainbow-table.html">
                     <Button className="button color-change" variant="fab">+</Button>
                 </a>
             </Panel>
@@ -53,4 +56,5 @@ export default class RainbowTablePage extends React.Component {
 
 RainbowTablePage.propTypes = {
     httpService: PropTypes.func.isRequired,
+    error: PropTypes.string
 };

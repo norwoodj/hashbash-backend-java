@@ -1,218 +1,96 @@
 package com.johnmalcolmnorwood.hashbash.api.controller;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Throwables;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.hash.HashCode;
 import com.johnmalcolmnorwood.hashbash.api.model.GenerateRainbowTableRequest;
 import com.johnmalcolmnorwood.hashbash.api.model.SearchResponse;
+import com.johnmalcolmnorwood.hashbash.api.service.ApiRainbowTableService;
 import com.johnmalcolmnorwood.hashbash.model.HashFunctionName;
 import com.johnmalcolmnorwood.hashbash.model.RainbowTable;
-import com.johnmalcolmnorwood.hashbash.rainbow.function.HashFunctions;
-import com.johnmalcolmnorwood.hashbash.rainbow.function.ReductionFunctionFamilies;
-import com.johnmalcolmnorwood.hashbash.rainbow.function.ReductionFunctionFamily;
-import com.johnmalcolmnorwood.hashbash.rainbow.service.RainbowChainGeneratorService;
-import com.johnmalcolmnorwood.hashbash.rainbow.service.RainbowTableSearchService;
-import com.johnmalcolmnorwood.hashbash.repository.RainbowChainRepository;
-import com.johnmalcolmnorwood.hashbash.repository.RainbowTableRepository;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobParameter;
-import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.core.JobParametersInvalidException;
-import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
-import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
-import org.springframework.batch.core.repository.JobRestartException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.annotation.Resource;
-import java.net.URI;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 
 
 @RestController
 @RequestMapping("/api/rainbow-table")
 public class RainbowTableController {
 
-    @Value("${hashbash.rainbow.default.chainLength}")
-    private Integer defaultChainLength;
-
-    @Value("${hashbash.rainbow.default.charset}")
-    private String defaultCharset;
-
-    @Value("${hashbash.rainbow.default.hashFunction}")
-    private HashFunctionName defaultHashFunctionName;
-
-    @Value("${hashbash.rainbow.default.numChains}")
-    private Integer defaultNumChains;
-
-    @Value("${hashbash.rainbow.default.passwordLength}")
-    private Integer defaultPasswordLength;
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(RainbowTableController.class);
 
     @Autowired
-    private RainbowChainRepository rainbowChainRepository;
+    private ApiRainbowTableService apiRainbowTableService;
 
-    @Autowired
-    private RainbowTableRepository rainbowTableRepository;
-
-
-    @Resource(name = "org.springframework.core.launch.JobLauncher-async")
-    private JobLauncher jobLauncher;
-
-    @Resource(name = "org.springframework.batch.core.Job-generate")
-    private Job rainbowTableGenerateJob;
-
-
-    @RequestMapping(value = "/hash-functions")
-    public List<HashFunctionName> getHashFunctions() {
-        return Arrays.asList(HashFunctionName.values());
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public String handleDuplicate(
+            DataIntegrityViolationException ex,
+            HttpServletRequest req,
+            RedirectAttributes redirectAttributes
+    ) {
+        String message = String.format("Failed to create rainbow table: %s", ex.getMessage());
+        redirectAttributes.addAttribute("error", message);
+        return "redirect:/generate-rainbow-table.html";
     }
 
     @RequestMapping
-    public List<RainbowTable> getAll() {
-        return rainbowTableRepository.findAll();
-    }
-
-    @RequestMapping(value = "/count")
-    public ResponseEntity<Map<String, Long>> count() {
-        return ResponseEntity.ok(ImmutableMap.of("rainbowTableCount", rainbowTableRepository.count()));
-    }
-
-    @RequestMapping(value = "/{rainbowTableId}", method = RequestMethod.GET)
-    public ResponseEntity<RainbowTable> get(@PathVariable short rainbowTableId) {
-        RainbowTable rainbowTable = rainbowTableRepository.findOne(rainbowTableId);
-        if (rainbowTable == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        return ResponseEntity.ok(rainbowTable);
-    }
-
-    @RequestMapping(value = "/{rainbowTableId}", method = RequestMethod.DELETE)
-    public ResponseEntity<Void> delete(@PathVariable short rainbowTableId) {
-        if (rainbowTableRepository.findOne(rainbowTableId) == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        CompletableFuture.runAsync(() -> rainbowTableRepository.delete(rainbowTableId));
-        URI rainbowTableUri = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/api/rainbow-table/{id}")
-                .buildAndExpand(rainbowTableId)
-                .toUri();
-
-        return ResponseEntity.noContent()
-                .location(rainbowTableUri)
-                .build();
-    }
-
-    private void startGenerateTableJob(RainbowTable rainbowTable) {
-        try {
-            JobParameters jobParameters = new JobParameters(ImmutableMap.of("rainbowTableId", new JobParameter(Long.valueOf(rainbowTable.getId()))));
-            jobLauncher.run(rainbowTableGenerateJob, jobParameters);
-        } catch (JobInstanceAlreadyCompleteException | JobExecutionAlreadyRunningException | JobParametersInvalidException | JobRestartException e) {
-            Throwables.propagate(e);
-        }
-    }
-
-    private RainbowTable handleGenerateRainbowTable(GenerateRainbowTableRequest generateRainbowTableRequest) {
-        RainbowTable rainbowTable = createRainbowTable(generateRainbowTableRequest);
-        startGenerateTableJob(rainbowTable);
-        return rainbowTable;
+    public List<RainbowTable> getAll(
+            @RequestParam(value = "sortOrder", defaultValue = "DESC") Sort.Direction sortOrder,
+            @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+            @RequestParam(value = "sortKey", defaultValue = "") String sortKey
+    ) {
+        return apiRainbowTableService.getAll(pageNumber, pageSize, sortKey, sortOrder);
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Void> generateJson(@RequestBody GenerateRainbowTableRequest generateRainbowTableRequest) {
-        RainbowTable rainbowTable = handleGenerateRainbowTable(generateRainbowTableRequest);
-        URI rainbowTableUri = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("{id}")
-                .buildAndExpand(rainbowTable.getId())
-                .toUri();
-
-        return ResponseEntity.created(rainbowTableUri).build();
+        return apiRainbowTableService.generateRainbowTableLocation(generateRainbowTableRequest);
     }
 
     @RequestMapping(method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
-    public ResponseEntity<Void> generateForm(GenerateRainbowTableRequest generateRainbowTableRequest) {
-        RainbowTable rainbowTable = handleGenerateRainbowTable(generateRainbowTableRequest);
-        URI rainbowTableUri = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("{id}")
-                .buildAndExpand(rainbowTable.getId())
-                .toUri();
+    public String generateForm(
+            GenerateRainbowTableRequest generateRainbowTableRequest,
+            RedirectAttributes redirectAttributes
+    ) {
+        return apiRainbowTableService.generateRainbowTableRedirect(generateRainbowTableRequest, redirectAttributes);
+    }
 
-        return ResponseEntity.created(rainbowTableUri).build();
+    @RequestMapping(value = "/{rainbowTableId}")
+    public ResponseEntity<RainbowTable> get(@PathVariable short rainbowTableId) {
+        return apiRainbowTableService.getForId(rainbowTableId);
+    }
+
+    @RequestMapping(value = "/{rainbowTableId}", method = RequestMethod.DELETE)
+    public ResponseEntity<Void> delete(@PathVariable short rainbowTableId) {
+        return apiRainbowTableService.deleteRainbowTable(rainbowTableId);
     }
 
     @RequestMapping("/{rainbowTableId}/search")
-    public ResponseEntity<SearchResponse> search(
-            @PathVariable short rainbowTableId,
-            @RequestParam String hash
-    ) {
-        RainbowTable rainbowTable = rainbowTableRepository.findOne(rainbowTableId);
-        if (rainbowTable == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        ReductionFunctionFamily reductionFunctionFamily = ReductionFunctionFamilies.defaultReductionFunctionFamily(
-                rainbowTable.getPasswordLength(),
-                rainbowTable.getCharacterSet()
-        );
-
-        RainbowChainGeneratorService rainbowChainGeneratorService = new RainbowChainGeneratorService(
-                HashFunctions.getHashFunctionByName(rainbowTable.getHashFunction()),
-                reductionFunctionFamily
-        );
-
-        RainbowTableSearchService rainbowTableSearchService = new RainbowTableSearchService(
-                rainbowChainGeneratorService,
-                rainbowChainRepository,
-                rainbowTableId,
-                rainbowTable.getChainLength()
-        );
-
-        String password = rainbowTableSearchService.reverseHash(HashCode.fromString(hash));
-        SearchResponse searchResponse = SearchResponse.builder()
-                .hash(hash)
-                .password(password)
-                .build();
-
-        if (password == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        return ResponseEntity.ok(searchResponse);
+    public ResponseEntity<SearchResponse> search(@PathVariable short rainbowTableId, @RequestParam String hash) {
+        return apiRainbowTableService.search(rainbowTableId, hash);
     }
 
-    private RainbowTable createRainbowTable(GenerateRainbowTableRequest generateRainbowTableRequest) {
-        int rainbowChainLength = MoreObjects.firstNonNull(generateRainbowTableRequest.getChainLength(), defaultChainLength);
-        String rainbowCharset = MoreObjects.firstNonNull(generateRainbowTableRequest.getCharset(), defaultCharset);
-        HashFunctionName rainbowHashFunction = MoreObjects.firstNonNull(generateRainbowTableRequest.getHashFunction(), defaultHashFunctionName);
-        int rainbowNumChains = MoreObjects.firstNonNull(generateRainbowTableRequest.getNumChains(), defaultNumChains);
-        int rainbowPasswordLength = MoreObjects.firstNonNull(generateRainbowTableRequest.getPasswordLength(), defaultPasswordLength);
+    @RequestMapping(value = "/count")
+    public Map<String, Long> count() {
+        return apiRainbowTableService.getCount();
+    }
 
-        RainbowTable rainbowTable = RainbowTable.builder()
-                .name(generateRainbowTableRequest.getName())
-                .chainLength(rainbowChainLength)
-                .characterSet(rainbowCharset)
-                .hashFunction(rainbowHashFunction)
-                .numChains(rainbowNumChains)
-                .passwordLength(rainbowPasswordLength)
-                .build();
-
-        return rainbowTableRepository.save(rainbowTable);
+    @RequestMapping(value = "/hash-functions")
+    public List<HashFunctionName> getHashFunctions() {
+        return Arrays.asList(HashFunctionName.values());
     }
 }

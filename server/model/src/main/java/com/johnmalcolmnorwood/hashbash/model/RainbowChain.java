@@ -27,9 +27,7 @@ public class RainbowChain implements Comparable<RainbowChain> {
 
     private String startPlaintext;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "rainbowTableId")
-    private RainbowTable rainbowTable;
+    private short rainbowTableId;
 
     @Override
     public int compareTo(RainbowChain other) {

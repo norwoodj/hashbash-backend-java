@@ -16,7 +16,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.4.0.RELEASE</version>
+        <version>1.5.8.RELEASE</version>
         <relativePath/>
     </parent>
 
@@ -33,7 +33,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <org.springframework.boot.version>1.4.0.RELEASE</org.springframework.boot.version>
+        <org.springframework.boot.version>1.5.8.RELEASE</org.springframework.boot.version>
         <com.fasterxml.jackson.core.version>2.8.1</com.fasterxml.jackson.core.version>
         <start-class>com.johnmalcolmnorwood.hashbash.webapp.HashbashApplication</start-class>
     </properties>
@@ -63,6 +63,11 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-actuator</artifactId>
+                <version>${org.springframework.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-devtools</artifactId>
                 <version>${org.springframework.boot.version}</version>
             </dependency>
             <dependency>
