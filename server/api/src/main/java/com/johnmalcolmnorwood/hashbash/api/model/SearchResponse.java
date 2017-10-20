@@ -1,5 +1,6 @@
 package com.johnmalcolmnorwood.hashbash.api.model;
 
+import com.johnmalcolmnorwood.hashbash.model.RainbowTableSearchStatus;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,5 +10,6 @@ import lombok.Setter;
 @Builder
 public class SearchResponse {
     private String hash;
-    private String password;
+    private long searchId;
+    private RainbowTableSearchStatus status;
 }

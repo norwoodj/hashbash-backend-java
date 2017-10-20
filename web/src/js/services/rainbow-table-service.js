@@ -23,6 +23,17 @@ export default class RainbowTableService {
         });
     }
 
+    getRainbowTableById(rainbowTableId) {
+        return new Promise(resolve => {
+            this.http.ajax({
+                type: "GET",
+                url: `/api/rainbow-table/${rainbowTableId}`,
+                success: rainbowTable => resolve(rainbowTable),
+                error: this.errorHandler
+            });
+        });
+    }
+
     getRainbowTableCount() {
         return new Promise(resolve => {
             this.http.ajax({

@@ -36,8 +36,12 @@ public class RainbowTable {
     @Column(name = "passwordlength")
     private int passwordLength;
 
+    @Column(name = "finalchaincount")
+    private long finalChainCount;
+
     @Column(name = "characterset")
     private String characterSet;
+
 
     @Column(name = "batchexecutionid")
     @Getter(onMethod = @__(@JsonIgnore))
@@ -62,11 +66,19 @@ public class RainbowTable {
 
     @JsonGetter
     public int getChainsGenerated() {
+        if (batchStepExecution == null) {
+            return 0;
+        }
+
         return batchStepExecution.getWriteCount();
     }
 
     @JsonGetter
     public String getStatus() {
+        if (batchStepExecution == null) {
+            return "QUEUED";
+        }
+
         return batchStepExecution.getStatus();
     }
 }

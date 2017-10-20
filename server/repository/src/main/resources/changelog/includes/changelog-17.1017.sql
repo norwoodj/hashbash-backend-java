@@ -111,6 +111,7 @@ CREATE TABLE `rainbow_table` (
   `passwordLength`   SMALLINT     NOT NULL,
   `characterSet`     VARCHAR(256) NOT NULL,
   `hashFunction`     VARCHAR(16)  NOT NULL,
+  `finalChainCount`  BIGINT       NOT NULL DEFAULT 0,
   `batchExecutionId` BIGINT,
   `created`          DATETIME     NOT NULL,
   `lastUpdated`      TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -120,23 +121,36 @@ CREATE TABLE `rainbow_table` (
   INDEX (`numChains`),
   INDEX (`chainLength`),
   INDEX (`passwordLength`),
-  INDEX (`hashFunction`)
+  INDEX (`hashFunction`),
+  INDEX (`finalChainCount`)
 );
 
 CREATE TABLE `rainbow_chain` (
-  `startPlaintext` VARCHAR(16)  NOT NULL,
+  `startPlaintext` VARCHAR(32)  NOT NULL,
   `endHash`        VARCHAR(128) NOT NULL,
   `rainbowTableId` SMALLINT     NOT NULL,
-  PRIMARY KEY (`endHash`, `rainbowTableId`),
-  FOREIGN KEY (`rainbowTableId`) REFERENCES `rainbow_table` (`id`)
-  ON DELETE CASCADE
+  PRIMARY KEY (`rainbowTableId`, `endHash`),
+  FOREIGN KEY (`rainbowTableId`) REFERENCES `rainbow_table` (`id`) ON DELETE CASCADE
 );
 
 --changeset jnorwood:HB-1
 CREATE TABLE `rainbow_table_unique_password` (
-  `password`       VARCHAR(16)  NOT NULL,
   `rainbowTableId` SMALLINT     NOT NULL,
-  PRIMARY KEY (`password`, `rainbowTableId`),
-  FOREIGN KEY (`rainbowTableId`) REFERENCES `rainbow_table` (`id`)
-  ON DELETE CASCADE
+  `password`       VARCHAR(32)  NOT NULL,
+  PRIMARY KEY (`rainbowTableId`, `password`),
+  FOREIGN KEY (`rainbowTableId`) REFERENCES `rainbow_table` (`id`) ON DELETE CASCADE
+);
+
+--changeset jnorwood:HB-2
+CREATE TABLE `rainbow_table_search` (
+  `id`             BIGINT       NOT NULL AUTO_INCREMENT,
+  `rainbowTableId` SMALLINT     NOT NULL,
+  `hash`           VARCHAR(128) NOT NULL,
+  `status`         VARCHAR(16)  NOT NULL,
+  `password`       VARCHAR(32),
+  `created`        DATETIME     NOT NULL,
+  `lastUpdated`    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`rainbowTableId`) REFERENCES `rainbow_table` (`id`) ON DELETE CASCADE,
+  UNIQUE INDEX (`rainbowTableId`, `hash`)
 );

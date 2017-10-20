@@ -5,9 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 @SpringBootApplication(scanBasePackages = "com.johnmalcolmnorwood.hashbash")
-public class HashbashApplication {
+public class HashbashWebappApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(HashbashApplication.class, args);
+        SpringApplication.run(HashbashWebappApplication.class, args);
     }
 }

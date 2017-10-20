@@ -50,10 +50,7 @@ export default class EntityList extends React.Component {
         this.pagedListState.handleFetchData(state.page, state.pageSize, sortKey);
         this.setState(
             {pagedListState: this.pagedListState},
-            () => {
-                this.retrieveEntities();
-                this.retrieveEntityCount();
-            }
+            this.retrieveEntities.bind(this)
         );
     }
 

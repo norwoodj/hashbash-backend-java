@@ -13,6 +13,15 @@
     <name>hashbash</name>
     <description>Rainbow Table Generator and Searcher</description>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <spring-boot.version>1.5.8.RELEASE</spring-boot.version>
+        <spring-cloud.version>Dalston.SR4</spring-cloud.version>
+        <com.fasterxml.jackson.core.version>2.8.1</com.fasterxml.jackson.core.version>
+    </properties>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -22,53 +31,52 @@
 
     <modules>
         <module>api</module>
+        <module>engine</module>
         <module>job</module>
         <module>model</module>
+        <module>mq</module>
+        <module>producer</module>
         <module>rainbow</module>
         <module>repository</module>
         <module>webapp</module>
     </modules>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
-        <org.springframework.boot.version>1.5.8.RELEASE</org.springframework.boot.version>
-        <com.fasterxml.jackson.core.version>2.8.1</com.fasterxml.jackson.core.version>
-        <start-class>com.johnmalcolmnorwood.hashbash.webapp.HashbashApplication</start-class>
-    </properties>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter</artifactId>
-                <version>${org.springframework.boot.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-data-jpa</artifactId>
-                <version>${org.springframework.boot.version}</version>
+                <artifactId>spring-boot-starter-actuator</artifactId>
+                <version>${spring-boot.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-batch</artifactId>
-                <version>${org.springframework.boot.version}</version>
+                <version>${spring-boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-jpa</artifactId>
+                <version>${spring-boot.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-web</artifactId>
-                <version>${org.springframework.boot.version}</version>
+                <version>${spring-boot.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-actuator</artifactId>
-                <version>${org.springframework.boot.version}</version>
+                <artifactId>spring-boot-starter-thymeleaf</artifactId>
+                <version>${spring-boot.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-devtools</artifactId>
-                <version>${org.springframework.boot.version}</version>
+                <version>${spring-boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-stream-rabbit</artifactId>
+                <version>1.3.0.RELEASE</version>
             </dependency>
             <dependency>
                 <groupId>org.liquibase</groupId>
@@ -109,7 +117,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-test</artifactId>
-                <version>${org.springframework.boot.version}</version>
+                <version>${spring-boot.version}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
@@ -124,5 +132,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

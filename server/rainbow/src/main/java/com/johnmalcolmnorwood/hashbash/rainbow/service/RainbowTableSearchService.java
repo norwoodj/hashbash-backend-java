@@ -11,9 +11,6 @@ import lombok.Setter;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
-/**
- *
- */
 public class RainbowTableSearchService {
     private final RainbowChainGeneratorService rainbowChainGeneratorService;
     private final RainbowChainRepository rainbowChainRepository;

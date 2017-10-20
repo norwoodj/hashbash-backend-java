@@ -7,9 +7,16 @@ services:
   mysql:
     image: mysql:5.5
     environment:
-      - MYSQL_ROOT_PASSWORD=root
+      MYSQL_ROOT_PASSWORD: root
     ports:
       - 3306:3306
+
+  rabbitmq:
+    image: rabbitmq:3.5-management
+    ports:
+      - 5672:5672
+      - 15672:15672
+      - 55672:55672
 
   webpack_builder:
     image: hashbash-webpack_builder:current

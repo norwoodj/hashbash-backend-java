@@ -40,4 +40,3 @@ services:
     image: hashbash-server:current
     environment:
       - SPRING_PROFILES_ACTIVE=LCL,DCK,OVR
-

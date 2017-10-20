@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RainbowChainRepository extends JpaRepository<RainbowChain, String> {
+    long countByRainbowTableId(short rainbowTableId);
 
     RainbowChain findByEndHashAndRainbowTableId(String endHash, short rainbowTableId);
 }

@@ -5,6 +5,7 @@ import com.johnmalcolmnorwood.hashbash.api.model.SearchResponse;
 import com.johnmalcolmnorwood.hashbash.api.service.ApiRainbowTableService;
 import com.johnmalcolmnorwood.hashbash.model.HashFunctionName;
 import com.johnmalcolmnorwood.hashbash.model.RainbowTable;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,14 +38,16 @@ public class RainbowTableController {
     private ApiRainbowTableService apiRainbowTableService;
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public String handleDuplicate(
+    public ModelAndView handleDuplicate(
             DataIntegrityViolationException ex,
             HttpServletRequest req,
             RedirectAttributes redirectAttributes
     ) {
         String message = String.format("Failed to create rainbow table: %s", ex.getMessage());
-        redirectAttributes.addAttribute("error", message);
-        return "redirect:/generate-rainbow-table.html";
+        ModelAndView redirect = new ModelAndView("redirect:/generate-rainbow-table");
+        redirect.getModelMap().addAttribute("error", message);
+
+        return redirect;
     }
 
     @RequestMapping
@@ -53,7 +57,8 @@ public class RainbowTableController {
             @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
             @RequestParam(value = "sortKey", defaultValue = "") String sortKey
     ) {
-        return apiRainbowTableService.getAll(pageNumber, pageSize, sortKey, sortOrder);
+        List<RainbowTable> ret = apiRainbowTableService.getAll(pageNumber, pageSize, sortKey, sortOrder);
+        return ret;
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -62,11 +67,8 @@ public class RainbowTableController {
     }
 
     @RequestMapping(method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
-    public String generateForm(
-            GenerateRainbowTableRequest generateRainbowTableRequest,
-            RedirectAttributes redirectAttributes
-    ) {
-        return apiRainbowTableService.generateRainbowTableRedirect(generateRainbowTableRequest, redirectAttributes);
+    public ModelAndView generateForm(GenerateRainbowTableRequest generateRainbowTableRequest) {
+        return apiRainbowTableService.generateRainbowTableRedirect(generateRainbowTableRequest);
     }
 
     @RequestMapping(value = "/{rainbowTableId}")

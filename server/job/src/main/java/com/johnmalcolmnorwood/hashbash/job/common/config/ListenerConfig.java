@@ -2,6 +2,7 @@ package com.johnmalcolmnorwood.hashbash.job.common.config;
 
 import com.johnmalcolmnorwood.hashbash.job.common.utils.RainbowTableWrapper;
 import com.johnmalcolmnorwood.hashbash.job.common.listener.RainbowTableProgressListener;
+import com.johnmalcolmnorwood.hashbash.repository.RainbowChainRepository;
 import com.johnmalcolmnorwood.hashbash.repository.RainbowTableRepository;
 import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.core.configuration.annotation.StepScope;
@@ -16,6 +17,9 @@ public class ListenerConfig {
     private RainbowTableRepository rainbowTableRepository;
 
     @Autowired
+    private RainbowChainRepository rainbowChainRepository;
+
+    @Autowired
     private RainbowTableWrapper generateJobRainbowTableWrapper;
 
     @Bean(name = "org.springframework.batch.core.StepExecutionListener-rainbowTable")
@@ -23,7 +27,8 @@ public class ListenerConfig {
     public StepExecutionListener rainbowProgressListener() {
         return new RainbowTableProgressListener(
                 generateJobRainbowTableWrapper.getRainbowTable(),
-                rainbowTableRepository
+                rainbowTableRepository,
+                rainbowChainRepository
         );
     }
 }

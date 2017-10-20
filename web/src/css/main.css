@@ -37,6 +37,11 @@ buttons {
     height: 100%;
 }
 
+.content-block {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
 
 #sidedrawer {
     position: fixed;

@@ -1,40 +1,23 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Panel from "muicss/lib/react/panel";
-import RainbowTableService from "../services/rainbow-table-service";
 import ErrorElement from "../components/error-element";
-import {getErrorMessage} from "../util";
+import DefaultRainbowTablePage from "./default-rainbow-table-page";
 
 
-export default class GenerateRainbowTableForm extends React.Component {
+export default class GenerateRainbowTableForm extends DefaultRainbowTablePage {
     constructor() {
         super();
-        this.state = {
-            hashFunctions: [],
-            rainbowTableService: null,
-            error: null
-        };
+        Object.assign(this.state, {hashFunctions: []});
     }
 
-    componentDidMount() {
-        this.setState({
-            rainbowTableService: new RainbowTableService(this.props.httpService, this.handleError.bind(this)),
-            error: this.props.error ? this.props.error : null
-        }, () => this.state.rainbowTableService.getSupportedHashFunctions().then(
-                hashFunctions => this.setState({hashFunctions: hashFunctions})
-            )
+    retrieveData() {
+        this.state.rainbowTableService.getSupportedHashFunctions().then(
+            hashFunctions => this.setState({hashFunctions: hashFunctions})
         );
     }
 
-    handleError(error) {
-        this.setState({error: getErrorMessage(error)});
-    }
-
-    render() {
-        if (this.state.rainbowTableService === null) {
-            return null;
-        }
-
+    renderWithRainbowTableService() {
         return (
             <Panel>
                 <ErrorElement error={this.state.error}/>

@@ -10,11 +10,12 @@ import RainbowTablePage from "./components/rainbow-table-page";
 
 import {setupSideDrawerTransition} from "./side-drawer-transition";
 import {MENU_CATEGORIES, APP_NAME} from "./constants";
-import {getQueryParam} from "./util";
 
 
 $(() => {
-    let error = getQueryParam("error");
+    let error = document.getElementById("error-text")
+        ? document.getElementById("error-text").getAttribute("data-error")
+        : null;
 
     ReactDOM.render(
         <div id="react-root">

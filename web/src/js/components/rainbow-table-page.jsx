@@ -5,39 +5,11 @@ import Button from "muicss/lib/react/button";
 
 import RainbowTableList from "./rainbow-table-list";
 import ErrorElement from "./error-element";
-
-import RainbowTableService from "../services/rainbow-table-service";
-import {getErrorMessage} from "../util";
+import DefaultRainbowTablePage from "./default-rainbow-table-page";
 
 
-export default class RainbowTablePage extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            rainbowTableService: null,
-            playerUuid: null,
-            playerName: "",
-            error: null,
-            games: []
-        };
-    }
-
-    componentDidMount() {
-        this.setState({
-            rainbowTableService: new RainbowTableService(this.props.httpService, this.handleError.bind(this)),
-            error: this.props.error
-        });
-    }
-
-    handleError(error) {
-        this.setState({error: getErrorMessage(error)});
-    }
-
-    render() {
-        if (this.state.rainbowTableService === null) {
-            return null;
-        }
-
+export default class RainbowTablePage extends DefaultRainbowTablePage {
+    renderWithRainbowTableService() {
         return (
             <Panel>
                 <ErrorElement error={this.state.error}/>
@@ -46,7 +18,7 @@ export default class RainbowTablePage extends React.Component {
                 <div className="mui-divider"/>
                 <RainbowTableList rainbowTableService={this.state.rainbowTableService} refreshRateSeconds={5}/>
 
-                <a href="/generate-rainbow-table.html">
+                <a href="/generate-rainbow-table">
                     <Button className="button color-change" variant="fab">+</Button>
                 </a>
             </Panel>

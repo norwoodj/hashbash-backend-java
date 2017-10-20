@@ -1,4 +1,4 @@
-package com.johnmalcolmnorwood.hashbash.webapp;
+package com.johnmalcolmnorwood.hashbash.job;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableMap;
@@ -110,7 +110,7 @@ public class RainbowTableUniquePasswordJobRunner implements CommandLineRunner {
 
     public static void main(String... args) {
         new SpringApplicationBuilder()
-                .sources(RainbowTableUniquePasswordJobRunner.class, HashbashApplication.class)
+                .sources(RainbowTableUniquePasswordJobRunner.class)
                 .web(false)
                 .run(args);
     }

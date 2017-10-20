@@ -1,10 +1,24 @@
 import React from "react";
 import PropTypes from "prop-types";
-import EntityList from "./entity-list";
+import DynamicListEntityTable from "./dynamic-list-entity-table";
 import ProgressBar from "./progress-bar";
 
 
-export default class RainbowTableList extends EntityList {
+export default class RainbowTableList extends DynamicListEntityTable {
+    static getProgressBar(rainbowTable) {
+        return (
+            <ProgressBar
+                full={rainbowTable.status === "COMPLETED"}
+                numerator={rainbowTable.chainsGenerated}
+                denominator={rainbowTable.numChains}
+            />
+        );
+    }
+
+    static getRainbowTableLink(rainbowTable) {
+        return <a href={`/search-rainbow-table?rainbowTableId=${rainbowTable.id}`}>{rainbowTable.name}</a>;
+    }
+
     doRetrieveEntities() {
         return this.props.rainbowTableService.getRainbowTables(
             this.state.pagedListState.pageNumber,
@@ -17,24 +31,16 @@ export default class RainbowTableList extends EntityList {
         return this.props.rainbowTableService.getRainbowTableCount();
     }
 
-    getProgressBar(rainbowTable) {
-        return <ProgressBar
-            full={rainbowTable.status === "COMPLETED"}
-            numerator={rainbowTable.chainsGenerated}
-            denominator={rainbowTable.numChains}
-        />;
-    }
-
     getEntityTableColumns() {
         return [
-            {Header: "Name", Cell: row => <a href={`/search-rainbow-table.html?id=${row.original.id}`}>{row.original.name}</a>},
-            {Header: "Status", accessor: "status"},
-            {Header: "Progress", Cell: row => this.getProgressBar(row.original)},
+            {Header: "Name", accessor: "name", Cell: row => RainbowTableList.getRainbowTableLink(row.original)},
+            {Header: "Status", accessor: "status", sortable: false},
+            {Header: "Progress", Cell: row => RainbowTableList.getProgressBar(row.original), sortable: false},
             {Header: "Num Chains", accessor: "numChains"},
             {Header: "Chain Length", accessor: "chainLength"},
             {Header: "Hash Function", accessor: "hashFunction"},
             {Header: "Password Length", accessor: "passwordLength"},
-            {Header: "Character Set", accessor: "characterSet"},
+            {Header: "Character Set", accessor: "characterSet", sortable: false},
         ];
     }
 }

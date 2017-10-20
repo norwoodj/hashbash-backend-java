@@ -49,8 +49,8 @@ $(() => {
                             What you can do from here:
                         </p>
                         <ul>
-                            <li><a href="/generate-rainbow-table.html">Generate a new Rainbow Table</a></li>
-                            <li><a href="/rainbow-tables.html">View Existing Rainbow Tables</a></li>
+                            <li><a href="/generate-rainbow-table">Generate a new Rainbow Table</a></li>
+                            <li><a href="/rainbow-tables">View Existing Rainbow Tables</a></li>
                         </ul>
                     </Panel>
                 </Container>

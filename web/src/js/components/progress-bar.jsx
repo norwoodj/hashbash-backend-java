@@ -4,13 +4,15 @@ import PropTypes from "prop-types";
 
 export default class ProgressBar extends React.Component {
     render() {
-        let progress = this.props.full
-            ? "100%"
-            : `${Math.ceil(this.props.numerator / this.props.denominator * 100)}%`;
+        let {full, numerator, denominator} = this.props;
+
+        let progress = full ? 100 : numerator / denominator * 100;
+        let roundedProgress = Math.floor(progress);
+        let progressPercent = `${roundedProgress}%`;
 
         return (
             <div className="progress-bar-outer">
-                <div className="progress-bar-inner color-change" style={{width: progress}}>{progress}</div>
+                <div className="progress-bar-inner color-change" style={{width: progressPercent}}>{progressPercent}</div>
             </div>
         );
     }
@@ -19,5 +21,5 @@ export default class ProgressBar extends React.Component {
 ProgressBar.propTypes = {
     full: PropTypes.bool,
     numerator: PropTypes.number.isRequired,
-    denominator: PropTypes.number.isRequired
+    denominator: PropTypes.number.isRequired,
 };

@@ -13,6 +13,10 @@ import {MENU_CATEGORIES, APP_NAME} from "./constants";
 
 
 $(() => {
+    let error = document.getElementById("error-text")
+        ? document.getElementById("error-text").getAttribute("data-error")
+        : null;
+
     ReactDOM.render(
         <div id="react-root">
             <SideDrawer pageName={APP_NAME} menuCategories={MENU_CATEGORIES}/>
@@ -20,7 +24,7 @@ $(() => {
             <div id="content-wrapper">
                 <div className="mui--appbar-height"/>
                 <Container className="main-container">
-                    <GenerateRainbowTableForm httpService={$}/>
+                    <GenerateRainbowTableForm httpService={$} error={error}/>
                 </Container>
             </div>
             <div className="footer-height mui--hidden-md mui--hidden-lg mui--hidden-xl"/>

@@ -11,10 +11,4 @@ function getErrorMessage(errorResponse) {
         return "Unknown error occurred, check the console for details";
     }
 }
-
-function getQueryParam(parameter) {
-    let match = new RegExp("[?&]" + parameter + "=([^&]*)").exec(window.location.search);
-    return match && decodeURIComponent(match[1].replace(/\+/g, " "));
-}
-
-export {getErrorMessage, getQueryParam};
+export {getErrorMessage};
