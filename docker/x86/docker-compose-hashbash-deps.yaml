@@ -12,7 +12,7 @@ services:
       - 3306:3306
 
   rabbitmq:
-    image: rabbitmq:3.5-management
+    image: rabbitmq:3.6-management-alpine
     ports:
       - 5672:5672
       - 15672:15672

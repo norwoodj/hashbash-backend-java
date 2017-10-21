@@ -1,6 +1,7 @@
 package com.johnmalcolmnorwood.hashbash.api.service;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Sets;
 import com.johnmalcolmnorwood.hashbash.api.model.GenerateRainbowTableRequest;
 import com.johnmalcolmnorwood.hashbash.api.model.SearchResponse;
 import com.johnmalcolmnorwood.hashbash.api.utils.EntityResponseUtils;
@@ -11,7 +12,6 @@ import com.johnmalcolmnorwood.hashbash.model.RainbowTableSearchStatus;
 import com.johnmalcolmnorwood.hashbash.mq.message.RainbowTableGenerateRequestMessage;
 import com.johnmalcolmnorwood.hashbash.mq.message.RainbowTableSearchRequestMessage;
 import com.johnmalcolmnorwood.hashbash.producer.HashbashMqPublishingService;
-import com.johnmalcolmnorwood.hashbash.repository.RainbowChainRepository;
 import com.johnmalcolmnorwood.hashbash.repository.RainbowTableRepository;
 import com.johnmalcolmnorwood.hashbash.repository.RainbowTableSearchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,9 +46,6 @@ public class ApiRainbowTableService {
 
     @Value("${hashbash.rainbow.default.passwordLength}")
     private Integer defaultPasswordLength;
-
-    @Autowired
-    private RainbowChainRepository rainbowChainRepository;
 
     @Autowired
     private RainbowTableRepository rainbowTableRepository;
@@ -166,5 +163,27 @@ public class ApiRainbowTableService {
                 .build();
 
         return ResponseEntity.accepted().body(searchResponse);
+    }
+
+    public List<RainbowTableSearch> getSearchesForRainbowTable(
+            short rainbowTableId,
+            int pageNumber,
+            int pageSize,
+            String sortKey,
+            Sort.Direction sortOrder,
+            boolean showNotFound
+    ) {
+        String defaultedSortKey = StringUtils.isEmpty(sortKey) ? "id" : sortKey;
+        Pageable pageRequest = new PageRequest(pageNumber, pageSize, new Sort(sortOrder, defaultedSortKey));
+
+        if (showNotFound) {
+            return rainbowTableSearchRepository.getAllByRainbowTableId(rainbowTableId, pageRequest);
+        }
+
+        return rainbowTableSearchRepository.getAllByRainbowTableIdAndStatusIn(
+                rainbowTableId,
+                Sets.newHashSet(RainbowTableSearchStatus.QUEUED, RainbowTableSearchStatus.STARTED, RainbowTableSearchStatus.FOUND),
+                pageRequest
+        );
     }
 }

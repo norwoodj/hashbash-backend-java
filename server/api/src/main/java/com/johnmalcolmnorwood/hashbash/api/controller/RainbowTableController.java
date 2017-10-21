@@ -5,6 +5,7 @@ import com.johnmalcolmnorwood.hashbash.api.model.SearchResponse;
 import com.johnmalcolmnorwood.hashbash.api.service.ApiRainbowTableService;
 import com.johnmalcolmnorwood.hashbash.model.HashFunctionName;
 import com.johnmalcolmnorwood.hashbash.model.RainbowTable;
+import com.johnmalcolmnorwood.hashbash.model.RainbowTableSearch;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,13 +53,12 @@ public class RainbowTableController {
 
     @RequestMapping
     public List<RainbowTable> getAll(
-            @RequestParam(value = "sortOrder", defaultValue = "DESC") Sort.Direction sortOrder,
             @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
             @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-            @RequestParam(value = "sortKey", defaultValue = "") String sortKey
+            @RequestParam(value = "sortKey", defaultValue = "") String sortKey,
+            @RequestParam(value = "sortOrder", defaultValue = "DESC") Sort.Direction sortOrder
     ) {
-        List<RainbowTable> ret = apiRainbowTableService.getAll(pageNumber, pageSize, sortKey, sortOrder);
-        return ret;
+        return apiRainbowTableService.getAll(pageNumber, pageSize, sortKey, sortOrder);
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -82,6 +82,25 @@ public class RainbowTableController {
     }
 
     @RequestMapping("/{rainbowTableId}/search")
+    public List<RainbowTableSearch> getSearchesForRainbowTable(
+            @PathVariable short rainbowTableId,
+            @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+            @RequestParam(value = "sortKey", defaultValue = "") String sortKey,
+            @RequestParam(value = "sortOrder", defaultValue = "DESC") Sort.Direction sortOrder,
+            @RequestParam(value = "showNotFound", defaultValue = "false") boolean showNotFound
+    ) {
+        return apiRainbowTableService.getSearchesForRainbowTable(
+                rainbowTableId,
+                pageNumber,
+                pageSize,
+                sortKey,
+                sortOrder,
+                showNotFound
+        );
+    }
+
+    @RequestMapping(value = "/{rainbowTableId}/search", method = RequestMethod.POST)
     public ResponseEntity<SearchResponse> search(@PathVariable short rainbowTableId, @RequestParam String hash) {
         return apiRainbowTableService.search(rainbowTableId, hash);
     }

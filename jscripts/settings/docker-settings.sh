@@ -27,6 +27,7 @@ readonly _X86_NGINX_IMAGE="nginx"
 
 readonly HASHBASH_IMAGE=$(is_running_on_raspberry_pi && echo "${_RPI_HASHBASH_IMAGE}" || echo "${_X86_HASHBASH_IMAGE}")
 readonly NGINX_IMAGE=$(is_running_on_raspberry_pi && echo "${_RPI_NGINX_IMAGE}" || echo "${_X86_NGINX_IMAGE}")
+readonly UTILITIES_IMAGE="utilities"
 readonly WEBPACK_BUILDER_IMAGE="webpack_builder"
 
 readonly _DOCKER_CONFIG=$(cat <<EOF
@@ -34,6 +35,7 @@ readonly _DOCKER_CONFIG=$(cat <<EOF
     "buildImages": [
         "${HASHBASH_IMAGE}",
         "${NGINX_IMAGE}"
+        $(is_running_on_raspberry_pi || echo ", \"${UTILITIES_IMAGE}\"")
         $(is_running_on_raspberry_pi || echo ", \"${WEBPACK_BUILDER_IMAGE}\"")
     ],
     "deployImages": [
@@ -95,9 +97,9 @@ function get_additional_docker_build_args {
 }
 
 function _get_maven_version {
-    grep -A2 '<groupId>com.johnmalcolmnorwood.hashbash</groupId>' server/pom.xml \
-        | grep 'version' \
-        | sed 's|.*<version>\(.*\)</version>|\1|'
+    grep -A2 "<groupId>com.johnmalcolmnorwood.hashbash</groupId>" server/pom.xml \
+        | grep "version" \
+        | sed "s|.*<version>\(.*\)</version>|\1|"
 }
 
 function get_image_version {

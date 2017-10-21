@@ -1,0 +1,13 @@
+FROM python:3.6-alpine
+MAINTAINER John Norwood <norwood.john.m@gmail.com>
+
+COPY hashbash-utilities/requirements.txt .
+RUN pip install -r requirements.txt
+
+ARG APP_DIR=/var/lib/johnmalcolmnorwood/hashbash/utilities
+WORKDIR ${APP_DIR}
+
+COPY hashbash-utilities/hashbash_utilities ./hashbash_utilities
+RUN cd hashbash_utilities && pip install .
+
+COPY hashbash-utilities/config ./config

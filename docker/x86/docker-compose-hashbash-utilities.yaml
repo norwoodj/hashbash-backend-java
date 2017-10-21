@@ -1,0 +1,5 @@
+version: "3"
+
+services:
+  console_script:
+    image: hashbash-utilities:current

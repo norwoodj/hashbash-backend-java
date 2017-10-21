@@ -4,7 +4,7 @@ import DynamicListEntityTable from "./dynamic-list-entity-table";
 import ProgressBar from "./progress-bar";
 
 
-export default class RainbowTableList extends DynamicListEntityTable {
+export default class RainbowTableListTable extends DynamicListEntityTable {
     static getProgressBar(rainbowTable) {
         return (
             <ProgressBar
@@ -33,9 +33,9 @@ export default class RainbowTableList extends DynamicListEntityTable {
 
     getEntityTableColumns() {
         return [
-            {Header: "Name", accessor: "name", Cell: row => RainbowTableList.getRainbowTableLink(row.original)},
+            {Header: "Name", accessor: "name", Cell: row => RainbowTableListTable.getRainbowTableLink(row.original)},
             {Header: "Status", accessor: "status", sortable: false},
-            {Header: "Progress", Cell: row => RainbowTableList.getProgressBar(row.original), sortable: false},
+            {Header: "Progress", Cell: row => RainbowTableListTable.getProgressBar(row.original), sortable: false},
             {Header: "Num Chains", accessor: "numChains"},
             {Header: "Chain Length", accessor: "chainLength"},
             {Header: "Hash Function", accessor: "hashFunction"},
@@ -45,7 +45,7 @@ export default class RainbowTableList extends DynamicListEntityTable {
     }
 }
 
-RainbowTableList.propTypes = {
+RainbowTableListTable.propTypes = {
     rainbowTableService: PropTypes.object.isRequired,
     refreshRateSeconds: PropTypes.number
 };

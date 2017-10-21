@@ -5,18 +5,18 @@ export default class RainbowTableService {
         this.errorHandler = errorHandler;
     }
 
-    static getRainbowTableListQueryString(offset, limit, sortKey) {
+    static getListQueryString(pageNumber, limit, sortKey) {
         return [
-            `?pageNumber=${offset / limit}&pageSize=${limit}`,
+            `?pageNumber=${pageNumber / limit}&pageSize=${limit}`,
             sortKey !== null ? `&sortKey=${sortKey.id}&sortOrder=${sortKey.desc ? "DESC" : "ASC"}` : ""
         ].join("");
     }
 
-    getRainbowTables(offset, limit, sortKey) {
+    getRainbowTables(pageNumber, limit, sortKey) {
         return new Promise(resolve => {
             this.http.ajax({
                 type: "GET",
-                url: `/api/rainbow-table${RainbowTableService.getRainbowTableListQueryString(offset, limit, sortKey)}`,
+                url: `/api/rainbow-table${RainbowTableService.getListQueryString(pageNumber, limit, sortKey)}`,
                 success: rainbowTables => resolve(rainbowTables),
                 error: this.errorHandler
             });
@@ -29,6 +29,17 @@ export default class RainbowTableService {
                 type: "GET",
                 url: `/api/rainbow-table/${rainbowTableId}`,
                 success: rainbowTable => resolve(rainbowTable),
+                error: this.errorHandler
+            });
+        });
+    }
+
+    getRainbowTableSearches(rainbowTableId, pageNumber, limit, sortKey) {
+        return new Promise(resolve => {
+            this.http.ajax({
+                type: "GET",
+                url: `/api/rainbow-table/${rainbowTableId}/search${RainbowTableService.getListQueryString(pageNumber, limit, sortKey)}`,
+                success: rainbowTables => resolve(rainbowTables),
                 error: this.errorHandler
             });
         });

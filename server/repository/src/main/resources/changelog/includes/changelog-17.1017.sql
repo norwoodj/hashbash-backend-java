@@ -152,5 +152,7 @@ CREATE TABLE `rainbow_table_search` (
   `lastUpdated`    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   FOREIGN KEY (`rainbowTableId`) REFERENCES `rainbow_table` (`id`) ON DELETE CASCADE,
-  UNIQUE INDEX (`rainbowTableId`, `hash`)
+  UNIQUE INDEX (`rainbowTableId`, `hash`),
+  INDEX (`rainbowTableId`, `status`),
+  INDEX (`rainbowTableId`, `password`)
 );

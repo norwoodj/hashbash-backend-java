@@ -5,7 +5,15 @@ import ProgressBar from "./progress-bar";
 
 
 export default class RainbowTableEfficiencyTable extends SinglePageStaticListEntityTable {
-    static getProgressBar(rainbowTable) {
+    static getNumPossiblePasswords(rainbowTable) {
+        return Math.pow(rainbowTable.characterSet.length, rainbowTable.passwordLength);
+    }
+
+    static getMaxContainedPasswords(rainbowTable) {
+        return rainbowTable.finalChainCount * rainbowTable.chainLength;
+    }
+
+    static getEfficiencyProgressBar(rainbowTable) {
         return (
             <ProgressBar
                 numerator={rainbowTable.finalChainCount}
@@ -15,11 +23,27 @@ export default class RainbowTableEfficiencyTable extends SinglePageStaticListEnt
         );
     }
 
+    static getKeySpaceProgressBar(rainbowTable) {
+        let numPossiblePassword = RainbowTableEfficiencyTable.getNumPossiblePasswords(rainbowTable);
+        let maxContainedPassword = RainbowTableEfficiencyTable.getMaxContainedPasswords(rainbowTable);
+
+        return (
+            <ProgressBar
+                numerator={maxContainedPassword}
+                denominator={numPossiblePassword}
+                roundUp={false}
+            />
+        );
+    }
+
     getEntityTableColumns() {
         return [
             {Header: "Num Chains", accessor: "numChains"},
-            {Header: "ChainsGenerated", accessor: "finalChainCount"},
-            {Header: "Efficiency", Cell: row => RainbowTableEfficiencyTable.getProgressBar(row.original), sortable: false},
+            {Header: "Final Chains Generated", accessor: "finalChainCount"},
+            {Header: "Generate Efficiency", Cell: row => RainbowTableEfficiencyTable.getEfficiencyProgressBar(row.original), sortable: false},
+            {Header: "Possible Passwords", Cell: row => RainbowTableEfficiencyTable.getNumPossiblePasswords(row.original), sortable: false},
+            {Header: "Passwords in Table", Cell: row => RainbowTableEfficiencyTable.getMaxContainedPasswords(row.original), sortable: false},
+            {Header: "Key Space Coverage", Cell: row => RainbowTableEfficiencyTable.getKeySpaceProgressBar(row.original), sortable: false}
         ];
     }
 }

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import Panel from "muicss/lib/react/panel";
 import Button from "muicss/lib/react/button";
 
-import RainbowTableList from "./rainbow-table-list";
+import RainbowTableListTable from "./rainbow-table-list-table";
 import ErrorElement from "./error-element";
 import DefaultRainbowTablePage from "./default-rainbow-table-page";
 
@@ -16,7 +16,7 @@ export default class RainbowTablePage extends DefaultRainbowTablePage {
                 <h2>Rainbow Tables</h2>
 
                 <div className="mui-divider"/>
-                <RainbowTableList rainbowTableService={this.state.rainbowTableService} refreshRateSeconds={5}/>
+                <RainbowTableListTable rainbowTableService={this.state.rainbowTableService} refreshRateSeconds={5}/>
 
                 <a href="/generate-rainbow-table">
                     <Button className="button color-change" variant="fab">+</Button>

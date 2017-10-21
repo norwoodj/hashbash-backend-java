@@ -10,6 +10,7 @@ source ${SCRIPT_DIR}/utilities/docker-utilities.sh
 # Run Local Configuration
 ##
 : ${DAEMON:="false"}
+: ${NO_EXTRA_HOST:="false"}
 
 
 function print_run_local_applications_usage_list {
@@ -22,14 +23,16 @@ function get_applications_to_run_locally {
 
 function print_additional_options_usage_list {
     echo "  --daemon, -d                 Run the service as daemon"
+    echo "  --no-extra-host, -n          Don't add the extra host argument that enables nginx to pass requests to locally running hashbash"
 }
 
 function handle_additional_options {
     local option=${1}
 
     case ${option} in
-        -d | --daemon) DAEMON="true" ;;
-        -*)            return 1 ;;
+        -d | --daemon)        DAEMON="true" ;;
+        -n | --no-extra-host) NO_EXTRA_HOST="true" ;;
+        -*)                   return 1 ;;
     esac
 }
 
@@ -64,6 +67,10 @@ function pre_run_local_hook {
     # Only care about assigning the extra IP for localhost if we're running the dependencies image and we need the
     # nginx docker container to be able to reach our java server running on localhost
     if [[ "${app}" != "${HASHBASH_DEPENDENCIES}" ]]; then
+        return
+    fi
+
+    if [[ "${NO_EXTRA_HOST}" == "true" ]]; then
         return
     fi
 
