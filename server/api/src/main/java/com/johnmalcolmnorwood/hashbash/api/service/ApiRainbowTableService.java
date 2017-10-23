@@ -14,6 +14,7 @@ import com.johnmalcolmnorwood.hashbash.mq.message.RainbowTableSearchRequestMessa
 import com.johnmalcolmnorwood.hashbash.producer.HashbashMqPublishingService;
 import com.johnmalcolmnorwood.hashbash.repository.RainbowTableRepository;
 import com.johnmalcolmnorwood.hashbash.repository.RainbowTableSearchRepository;
+import com.johnmalcolmnorwood.hashbash.repository.model.RainbowTableSearchResults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +29,8 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class ApiRainbowTableService {
@@ -171,19 +174,53 @@ public class ApiRainbowTableService {
             int pageSize,
             String sortKey,
             Sort.Direction sortOrder,
-            boolean showNotFound
+            boolean includeNotFound
     ) {
         String defaultedSortKey = StringUtils.isEmpty(sortKey) ? "id" : sortKey;
         Pageable pageRequest = new PageRequest(pageNumber, pageSize, new Sort(sortOrder, defaultedSortKey));
 
-        if (showNotFound) {
+        if (includeNotFound) {
             return rainbowTableSearchRepository.getAllByRainbowTableId(rainbowTableId, pageRequest);
         }
 
-        return rainbowTableSearchRepository.getAllByRainbowTableIdAndStatusIn(
+        return rainbowTableSearchRepository.getAllByRainbowTableIdAndStatusNot(
                 rainbowTableId,
-                Sets.newHashSet(RainbowTableSearchStatus.QUEUED, RainbowTableSearchStatus.STARTED, RainbowTableSearchStatus.FOUND),
+                RainbowTableSearchStatus.NOT_FOUND,
                 pageRequest
         );
+    }
+
+    public long getSearchCountForRainbowTable(short rainbowTableId, boolean includeNotFound) {
+        if (includeNotFound) {
+            return rainbowTableSearchRepository.countByRainbowTableId(rainbowTableId);
+        }
+
+        return rainbowTableSearchRepository.countByRainbowTableIdAndStatusNot(
+                rainbowTableId,
+                RainbowTableSearchStatus.NOT_FOUND
+        );
+    }
+
+    public Map<String, Long> getSearchResultsForRainbowTable(short rainbowTableId) {
+        List<RainbowTableSearchResults> searchCountByStatus = rainbowTableSearchRepository.searchCountsByStatus(rainbowTableId);
+
+        long totalSearches = searchCountByStatus.stream()
+                .map(RainbowTableSearchResults::getCount)
+                .collect(Collectors.summingLong(Long::valueOf));
+
+        long foundSearches = searchCountByStatus.stream()
+                .filter(s -> s.getSearchStatus().equals(RainbowTableSearchStatus.FOUND))
+                .findFirst()
+                .map(RainbowTableSearchResults::getCount)
+                .orElse(0L);
+
+        return ImmutableMap.of(
+                "totalSearches", totalSearches,
+                "foundSearches", foundSearches
+        );
+    }
+
+    public RainbowTableSearch getSearchForId(long rainbowTableSearchId) {
+        return rainbowTableSearchRepository.findOne(rainbowTableSearchId);
     }
 }

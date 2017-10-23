@@ -54,10 +54,15 @@ export default class EntityList extends React.Component {
         );
     }
 
+    getRowPropsForEntity() {
+        return {};
+    }
+
     render() {
         return (
             <ReactTable
                 manual
+                getTrProps={(state, rowInfo) => rowInfo ? this.getRowPropsForEntity(rowInfo.original) : {}}
                 columns={this.getEntityTableColumns()}
                 loading={this.state.pagedListState.loading}
                 defaultPageSize={this.state.pagedListState.pageSize}

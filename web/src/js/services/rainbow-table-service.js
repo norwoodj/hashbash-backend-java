@@ -7,10 +7,18 @@ export default class RainbowTableService {
 
     static getListQueryString(pageNumber, limit, sortKey) {
         return [
-            `?pageNumber=${pageNumber / limit}&pageSize=${limit}`,
+            `?pageNumber=${pageNumber}&pageSize=${limit}`,
             sortKey !== null ? `&sortKey=${sortKey.id}&sortOrder=${sortKey.desc ? "DESC" : "ASC"}` : ""
         ].join("");
     }
+
+    static getSearchListQueryString(pageNumber, limit, sortKey, includeNotFound) {
+        return [
+            RainbowTableService.getListQueryString(pageNumber, limit, sortKey),
+            `&includeNotFound=${includeNotFound}`
+        ].join("");
+    }
+
 
     getRainbowTables(pageNumber, limit, sortKey) {
         return new Promise(resolve => {
@@ -34,12 +42,36 @@ export default class RainbowTableService {
         });
     }
 
-    getRainbowTableSearches(rainbowTableId, pageNumber, limit, sortKey) {
+    getRainbowTableSearches(rainbowTableId, pageNumber, limit, sortKey, includeNotFound) {
+        let queryString = RainbowTableService.getSearchListQueryString(pageNumber, limit, sortKey, includeNotFound);
+
         return new Promise(resolve => {
             this.http.ajax({
                 type: "GET",
-                url: `/api/rainbow-table/${rainbowTableId}/search${RainbowTableService.getListQueryString(pageNumber, limit, sortKey)}`,
+                url: `/api/rainbow-table/${rainbowTableId}/search${queryString}`,
                 success: rainbowTables => resolve(rainbowTables),
+                error: this.errorHandler
+            });
+        });
+    }
+
+    getRainbowTableSearchCount(rainbowTableId, includeNotFound) {
+        return new Promise(resolve => {
+            this.http.ajax({
+                type: "GET",
+                url: `/api/rainbow-table/${rainbowTableId}/search/count?includeNotFound=${includeNotFound}`,
+                success: res => resolve(res.searchCount),
+                error: this.errorHandler
+            });
+        });
+    }
+
+    getRainbowTableSearchResultsById(rainbowTableId) {
+        return new Promise(resolve => {
+            this.http.ajax({
+                type: "GET",
+                url: `/api/rainbow-table/${rainbowTableId}/searchResults`,
+                success: searchResults => resolve(searchResults),
                 error: this.errorHandler
             });
         });

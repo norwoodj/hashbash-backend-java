@@ -1,5 +1,6 @@
 package com.johnmalcolmnorwood.hashbash.api.controller;
 
+import com.google.common.collect.ImmutableMap;
 import com.johnmalcolmnorwood.hashbash.api.model.GenerateRainbowTableRequest;
 import com.johnmalcolmnorwood.hashbash.api.model.SearchResponse;
 import com.johnmalcolmnorwood.hashbash.api.service.ApiRainbowTableService;
@@ -51,6 +52,16 @@ public class RainbowTableController {
         return redirect;
     }
 
+    @RequestMapping(value = "/count")
+    public Map<String, Long> count() {
+        return apiRainbowTableService.getCount();
+    }
+
+    @RequestMapping(value = "/hash-functions")
+    public List<HashFunctionName> getHashFunctions() {
+        return Arrays.asList(HashFunctionName.values());
+    }
+
     @RequestMapping
     public List<RainbowTable> getAll(
             @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
@@ -88,7 +99,7 @@ public class RainbowTableController {
             @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
             @RequestParam(value = "sortKey", defaultValue = "") String sortKey,
             @RequestParam(value = "sortOrder", defaultValue = "DESC") Sort.Direction sortOrder,
-            @RequestParam(value = "showNotFound", defaultValue = "false") boolean showNotFound
+            @RequestParam(value = "includeNotFound", defaultValue = "false") boolean includeNotFound
     ) {
         return apiRainbowTableService.getSearchesForRainbowTable(
                 rainbowTableId,
@@ -96,8 +107,25 @@ public class RainbowTableController {
                 pageSize,
                 sortKey,
                 sortOrder,
-                showNotFound
+                includeNotFound
         );
+    }
+
+    @RequestMapping("/{rainbowTableId}/search/count")
+    public Map<String, Long> getSearchCountForRainbowTable(
+            @PathVariable short rainbowTableId,
+            @RequestParam(value = "includeNotFound", defaultValue = "false") boolean includeNotFound
+    ) {
+        long count = apiRainbowTableService.getSearchCountForRainbowTable(rainbowTableId, includeNotFound);
+        return ImmutableMap.of("searchCount", count);
+    }
+
+    @RequestMapping("/{rainbowTableId}/searchResults")
+    public Map<String, Long> getSearchResultsForRainbowTable(
+            @PathVariable short rainbowTableId,
+            @RequestParam(value = "includeNotFound", defaultValue = "false") boolean includeNotFound
+    ) {
+        return apiRainbowTableService.getSearchResultsForRainbowTable(rainbowTableId);
     }
 
     @RequestMapping(value = "/{rainbowTableId}/search", method = RequestMethod.POST)
@@ -105,13 +133,8 @@ public class RainbowTableController {
         return apiRainbowTableService.search(rainbowTableId, hash);
     }
 
-    @RequestMapping(value = "/count")
-    public Map<String, Long> count() {
-        return apiRainbowTableService.getCount();
-    }
-
-    @RequestMapping(value = "/hash-functions")
-    public List<HashFunctionName> getHashFunctions() {
-        return Arrays.asList(HashFunctionName.values());
+    @RequestMapping("/search/{searchId}")
+    public RainbowTableSearch getSearchesForRainbowTable(@PathVariable long searchId) {
+        return apiRainbowTableService.getSearchForId(searchId);
     }
 }

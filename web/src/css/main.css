@@ -42,6 +42,19 @@ buttons {
     padding-bottom: 15px;
 }
 
+.search-started {
+    background: orange;
+}
+
+.search-not-found {
+    background: red;
+    color: white;
+}
+
+.search-found {
+    background: green;
+    color: white;
+}
 
 #sidedrawer {
     position: fixed;

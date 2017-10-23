@@ -6,7 +6,7 @@ import Container from "muicss/lib/react/container";
 import AppBar from "./components/app-bar";
 import SideDrawer from "./components/side-drawer";
 import Footer from "./components/footer";
-import SearchRainbowTablesPage from "./components/search-rainbow-table-page";
+import SearchRainbowTablesPage from "./components/rainbow-table-search-page";
 
 import {setupSideDrawerTransition} from "./side-drawer-transition";
 import {MENU_CATEGORIES, APP_NAME} from "./constants";
@@ -18,7 +18,6 @@ $(() => {
         : null;
 
     let rainbowTableId = document.getElementById("rainbow-table-id").getAttribute("data-id");
-    console.log(rainbowTableId);
 
     ReactDOM.render(
         <div id="react-root">
@@ -30,7 +29,7 @@ $(() => {
                     <SearchRainbowTablesPage error={error} httpService={$} rainbowTableId={rainbowTableId}/>
                 </Container>
             </div>
-            <div className="footer-height mui--hidden-md mui--hidden-lg mui--hidden-xl"/>
+            <div className="footer-height"/>
             <Footer/>
         </div>,
         document.getElementById("content-root")

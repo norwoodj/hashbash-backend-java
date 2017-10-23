@@ -18,7 +18,6 @@ export default class RainbowTableEfficiencyTable extends SinglePageStaticListEnt
             <ProgressBar
                 numerator={rainbowTable.finalChainCount}
                 denominator={rainbowTable.numChains}
-                roundUp={false}
             />
         );
     }
@@ -31,7 +30,6 @@ export default class RainbowTableEfficiencyTable extends SinglePageStaticListEnt
             <ProgressBar
                 numerator={maxContainedPassword}
                 denominator={numPossiblePassword}
-                roundUp={false}
             />
         );
     }
