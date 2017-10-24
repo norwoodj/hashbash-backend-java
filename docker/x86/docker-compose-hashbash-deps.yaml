@@ -41,6 +41,6 @@ services:
       - ../../etc/nginx:/etc/nginx/local:ro
       - frontend-public-volume:/var/lib/johnmalcolmnorwood/hashbash/dist:ro
     extra_hosts:
-      - hashbash:${HASHBASH_HOST_IP_ADDRESS}
+      - hashbash_server:${HASHBASH_HOST_IP_ADDRESS}
     ports:
       - 80:80

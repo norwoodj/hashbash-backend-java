@@ -10,7 +10,6 @@ mysql:
     persistentVolumeStorageCapacity: 4Gi
     persistentVolumeNfsServer: rp3-smi-kbw-nfs-000
     persistentVolumeNfsPath: /nfs/hashbash
-
     persistentVolumeClaimStorageRequest: 4Gi
 
 ##
@@ -23,12 +22,20 @@ web_service:
     serviceName: hashbash-web-service
 
 ##
-# Hashbash settings
+# Hashbash server settings
 ##
 deploymentName: hashbash-web-deployment
 deploymentReplicas: 2
-hashbashImage: jnorwood/hashbash-rpi_web
+hashbashImage: jnorwood/hashbash-rpi_server
+hashbashNginxImage: jnorwood/hashbash-rpi_nginx
 hashbashHealthCheckEndpoint: /health
 hashbashProbeInitialDelaySeconds: 300
 hashbashProbePeriodSeconds: 300
 hashbashProbeTimeoutSeconds: 10
+
+##
+# Hashbash consumer settings
+##
+consumerDeploymentName: hashbash-consumers
+consumerDeploymentReplicas: 1
+hashbashConsumersImage: jnorwood/hashbash-rpi_consumers

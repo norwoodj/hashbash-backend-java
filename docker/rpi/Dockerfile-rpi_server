@@ -1,6 +1,6 @@
-FROM hashbash-maven_build:current
+FROM hashbash-rpi_maven_build:current
 
-FROM java:8-jre
+FROM jnorwood/rpi-java:1.8
 MAINTAINER John Norwood <norwood.john.m@gmail.com>
 
 ARG VERSION

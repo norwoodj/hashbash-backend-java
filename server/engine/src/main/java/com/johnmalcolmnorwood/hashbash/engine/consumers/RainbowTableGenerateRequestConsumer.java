@@ -65,7 +65,7 @@ public class RainbowTableGenerateRequestConsumer {
     }
 
     @StreamListener(value = Queues.RAINBOW_TABLE_GENERATE_REQUESTS)
-    public void rainbowTableSearchRequest(RainbowTableActionRequestMessage rainbowTableActionRequestMessage) {
+    public void rainbowTableGenerateRequest(RainbowTableActionRequestMessage rainbowTableActionRequestMessage) {
         LOGGER.info(
                 "Received Rainbow Table Generate Request: for rainbow table {}",
                 rainbowTableActionRequestMessage.getRainbowTableId()

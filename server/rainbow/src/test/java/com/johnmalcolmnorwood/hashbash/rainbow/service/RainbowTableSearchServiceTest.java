@@ -24,6 +24,7 @@ import org.omg.PortableInterceptor.NON_EXISTENT;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -80,7 +81,8 @@ public class RainbowTableSearchServiceTest {
                 generatorService,
                 rainbowChainRepository,
                 rainbowTableId,
-                5
+                5,
+                ForkJoinPool.commonPool()
         );
 
         HashCode endingHash = testHashFunction.apply("4");
@@ -98,7 +100,8 @@ public class RainbowTableSearchServiceTest {
                 generatorService,
                 rainbowChainRepository,
                 rainbowTableId,
-                6
+                6,
+                ForkJoinPool.commonPool()
         );
 
         HashCode endingHash = testHashFunction.apply("5");

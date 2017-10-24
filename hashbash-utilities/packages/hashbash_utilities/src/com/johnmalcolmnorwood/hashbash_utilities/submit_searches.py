@@ -56,13 +56,18 @@ def poll_until_all_done(hashbash_server, search_ids):
 @click.option("-h", "--hashbash", default="https://hashbash.johnmalcolmnorwood.com")
 @click.option("-c", "--charset", default="abcdefghijklmnopqrstuvwxyz")
 @click.option("-l", "--length", default=8)
+@click.option("--poll/--no-poll", default=True)
 @click.argument("rainbow_table_id", type=int)
 @click.argument("num_strings", type=int)
-def search_for_strings(hashbash, charset, length, rainbow_table_id, num_strings):
+def search_for_strings(hashbash, charset, length, poll, rainbow_table_id, num_strings):
     LOGGER.info(f"Submitting {num_strings} random strings of length {length} to hashbash server {hashbash}")
 
     random_strings = ("".join(random.choice(charset) for _ in range(length)) for i in range(num_strings))
     search_ids = {submit_search(s, hashbash, rainbow_table_id) for s in random_strings}
+
+    if not poll:
+        LOGGER.info(f"--no-poll passed, not polling until searches complete")
+        return
 
     poll_until_all_done(hashbash, search_ids)
 

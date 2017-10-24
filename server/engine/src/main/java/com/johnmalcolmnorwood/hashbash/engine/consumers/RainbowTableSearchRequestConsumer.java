@@ -20,9 +20,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 
+import javax.annotation.Resource;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
+import java.util.concurrent.ForkJoinPool;
 
 
 @EnableBinding(TaskExchange.class)
@@ -37,6 +39,9 @@ public class RainbowTableSearchRequestConsumer {
 
     @Autowired
     private RainbowTableSearchRepository rainbowTableSearchRepository;
+
+    @Resource(name = "java.util.concurrent.ForkJoinPool-rainbowTableSearch")
+    private ForkJoinPool rainbowTableSearchThreadPool;
 
     private String search(RainbowTable rainbowTable, String hash) {
         ReductionFunctionFamily reductionFunctionFamily = ReductionFunctionFamilies.defaultReductionFunctionFamily(
@@ -53,7 +58,8 @@ public class RainbowTableSearchRequestConsumer {
                 rainbowChainGeneratorService,
                 rainbowChainRepository,
                 rainbowTable.getId(),
-                rainbowTable.getChainLength()
+                rainbowTable.getChainLength(),
+                rainbowTableSearchThreadPool
         );
 
         return rainbowTableSearchService.reverseHash(HashCode.fromString(hash));
@@ -92,6 +98,8 @@ public class RainbowTableSearchRequestConsumer {
                 Date.from(ZonedDateTime.now(ZoneId.of("UTC")).toInstant())
         );
 
-        LOGGER.info("Found password for hash {}? {}", rainbowTableSearchRequestMessage.getHash(), result);
+        if (result != null) {
+            LOGGER.info("Found password for hash {} => {}", rainbowTableSearchRequestMessage.getHash(), result);
+        }
     }
 }

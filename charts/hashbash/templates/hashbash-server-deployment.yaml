@@ -17,7 +17,7 @@ spec:
 {{- end }}
     spec:
       containers:
-        - name: hashbash-web
+        - name: hashbash-server
           image: {{ .Values.hashbashImage }}:{{ .Chart.Version }}
           imagePullPolicy: Always
           livenessProbe:
@@ -27,9 +27,6 @@ spec:
             httpGet:
               port: http
               path: {{ .Values.hashbashHealthCheckEndpoint }}
-          ports:
-            - name: http
-              containerPort: 8080
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: RPI
@@ -38,3 +35,14 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.mysql.mysqlRootPasswordSecretName }}
                   key: {{ .Values.mysql.mysqlRootPasswordSecretKey }}
+
+        - name: hashbash-nginx
+          image: {{ .Values.hashbashNginxImage }}:{{ .Chart.Version }}
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 80
+          hostAliases:
+            - ip: 127.0.0.1
+              hostnames:
+                - hashbash_server

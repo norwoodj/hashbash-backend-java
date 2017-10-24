@@ -4,7 +4,9 @@ FROM java:8-jre
 MAINTAINER John Norwood <norwood.john.m@gmail.com>
 
 ARG VERSION
+ARG MODULE=engine
+
 WORKDIR /var/lib/johnmalcolmnorwood/hashbash
-COPY --from=0 /opt/build/engine/target/hashbash-engine-${VERSION}.jar /var/lib/johnmalcolmnorwood/hashbash/hashbash-engine.jar
+COPY --from=0 /opt/build/${MODULE}/target/hashbash-${MODULE}-${VERSION}.jar /var/lib/johnmalcolmnorwood/hashbash/hashbash-${MODULE}.jar
 
 ENTRYPOINT ["java", "-jar", "hashbash-engine.jar"]
