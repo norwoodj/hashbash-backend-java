@@ -29,6 +29,7 @@ export default class RainbowTableSearchTable extends DynamicListEntityTable {
             {Header: "Status", accessor: "status"},
             {Header: "Hash", accessor: "hash"},
             {Header: "Password", accessor: "password"},
+            {Header: "Search Time", Cell: row => row.original.searchTime ? `${row.original.searchTime}s` : "N/A", sortable: false},
         ];
     }
 

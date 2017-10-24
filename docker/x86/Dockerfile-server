@@ -1,9 +1,4 @@
-FROM maven:3.5-alpine
-
-WORKDIR /opt/build
-COPY server /opt/build
-RUN ["mvn", "clean", "package"]
-
+FROM hashbash-maven_build:current
 
 FROM java:8-jre
 MAINTAINER John Norwood <norwood.john.m@gmail.com>

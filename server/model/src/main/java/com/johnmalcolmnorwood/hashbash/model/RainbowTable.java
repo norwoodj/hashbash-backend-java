@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 
@@ -61,7 +63,7 @@ public class RainbowTable {
 
     @PrePersist
     public void setCreated() {
-        created = new Date();
+        created = Date.from(ZonedDateTime.now(ZoneId.of("UTC")).toInstant());
     }
 
     @JsonGetter

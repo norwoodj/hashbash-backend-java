@@ -11,6 +11,13 @@ services:
     ports:
       - 3306:3306
 
+  rabbitmq:
+    image: rabbitmq:3.6-management-alpine
+    ports:
+      - 5672:5672
+      - 15672:15672
+      - 55672:55672
+
   webpack_builder:
     image: hashbash-webpack_builder:current
     entrypoint:
@@ -38,5 +45,10 @@ services:
 
   hashbash:
     image: hashbash-server:current
+    environment:
+      - SPRING_PROFILES_ACTIVE=LCL,DCK,OVR
+
+  hashbash_consumers:
+    image: hashbash-consumers:current
     environment:
       - SPRING_PROFILES_ACTIVE=LCL,DCK,OVR

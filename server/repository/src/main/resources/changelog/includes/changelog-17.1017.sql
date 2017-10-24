@@ -143,13 +143,15 @@ CREATE TABLE `rainbow_table_unique_password` (
 
 --changeset jnorwood:HB-2
 CREATE TABLE `rainbow_table_search` (
-  `id`             BIGINT       NOT NULL AUTO_INCREMENT,
-  `rainbowTableId` SMALLINT     NOT NULL,
-  `hash`           VARCHAR(128) NOT NULL,
-  `status`         VARCHAR(16)  NOT NULL,
-  `password`       VARCHAR(32),
-  `created`        DATETIME     NOT NULL,
-  `lastUpdated`    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `id`               BIGINT       NOT NULL AUTO_INCREMENT,
+  `rainbowTableId`   SMALLINT     NOT NULL,
+  `hash`             VARCHAR(128) NOT NULL,
+  `status`           VARCHAR(16)  NOT NULL,
+  `password`         VARCHAR(32),
+  `searchStarted`    DATETIME,
+  `searchCompleted`  DATETIME,
+  `created`          DATETIME      NOT NULL,
+  `lastUpdated`      TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   FOREIGN KEY (`rainbowTableId`) REFERENCES `rainbow_table` (`id`) ON DELETE CASCADE,
   UNIQUE INDEX (`rainbowTableId`, `hash`),

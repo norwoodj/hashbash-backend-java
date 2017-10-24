@@ -6,9 +6,12 @@ import org.springframework.messaging.SubscribableChannel;
 
 
 public interface TaskExchange {
-    @Input(Queues.RAINBOW_TABLE_SEARCH_REQUESTS)
-    SubscribableChannel searchRainbowTable();
+    @Input(Queues.RAINBOW_TABLE_DELETE_REQUESTS)
+    SubscribableChannel deleteRainbowTable();
 
     @Input(Queues.RAINBOW_TABLE_GENERATE_REQUESTS)
     SubscribableChannel generateRainbowTable();
+
+    @Input(Queues.RAINBOW_TABLE_SEARCH_REQUESTS)
+    SubscribableChannel searchRainbowTable();
 }

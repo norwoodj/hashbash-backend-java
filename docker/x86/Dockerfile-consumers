@@ -1,0 +1,10 @@
+FROM hashbash-maven_build:current
+
+FROM java:8-jre
+MAINTAINER John Norwood <norwood.john.m@gmail.com>
+
+ARG VERSION
+WORKDIR /var/lib/johnmalcolmnorwood/hashbash
+COPY --from=0 /opt/build/engine/target/hashbash-engine-${VERSION}.jar /var/lib/johnmalcolmnorwood/hashbash/hashbash-engine.jar
+
+ENTRYPOINT ["java", "-jar", "hashbash-engine.jar"]

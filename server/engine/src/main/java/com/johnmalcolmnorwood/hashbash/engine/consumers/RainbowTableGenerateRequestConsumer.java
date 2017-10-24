@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.johnmalcolmnorwood.hashbash.engine.exchanges.TaskExchange;
 import com.johnmalcolmnorwood.hashbash.model.RainbowTable;
 import com.johnmalcolmnorwood.hashbash.mq.Queues;
-import com.johnmalcolmnorwood.hashbash.mq.message.RainbowTableGenerateRequestMessage;
+import com.johnmalcolmnorwood.hashbash.mq.message.RainbowTableActionRequestMessage;
 import com.johnmalcolmnorwood.hashbash.repository.RainbowTableRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,19 +58,19 @@ public class RainbowTableGenerateRequestConsumer {
         return rainbowTable;
     }
 
-    private RainbowTable handleGenerateRainbowTable(RainbowTableGenerateRequestMessage generateRainbowTableRequestMessage) {
+    private RainbowTable handleGenerateRainbowTable(RainbowTableActionRequestMessage generateRainbowTableRequestMessage) {
         RainbowTable rainbowTable = retrieveRainbowTable(generateRainbowTableRequestMessage.getRainbowTableId());
         runGenerateTableJob(rainbowTable);
         return rainbowTable;
     }
 
     @StreamListener(value = Queues.RAINBOW_TABLE_GENERATE_REQUESTS)
-    public void rainbowTableSearchRequest(RainbowTableGenerateRequestMessage rainbowTableGenerateRequestMessage) {
+    public void rainbowTableSearchRequest(RainbowTableActionRequestMessage rainbowTableActionRequestMessage) {
         LOGGER.info(
                 "Received Rainbow Table Generate Request: for rainbow table {}",
-                rainbowTableGenerateRequestMessage.getRainbowTableId()
+                rainbowTableActionRequestMessage.getRainbowTableId()
         );
 
-        handleGenerateRainbowTable(rainbowTableGenerateRequestMessage);
+        handleGenerateRainbowTable(rainbowTableActionRequestMessage);
     }
 }

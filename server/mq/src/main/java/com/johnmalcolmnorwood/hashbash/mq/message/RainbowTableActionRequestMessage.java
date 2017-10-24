@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RainbowTableGenerateRequestMessage {
+public class RainbowTableActionRequestMessage {
     private short rainbowTableId;
 }

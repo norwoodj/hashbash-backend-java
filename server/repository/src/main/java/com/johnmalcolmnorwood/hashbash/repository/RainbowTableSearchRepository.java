@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -35,12 +36,30 @@ public interface RainbowTableSearchRepository extends PagingAndSortingRepository
     )
     List<RainbowTableSearchResults> searchCountsByStatus(@Param("rainbowTableId") short rainbowTableId);
 
-    @Query("UPDATE RainbowTableSearch s SET s.password = :password, s.status = :status WHERE s.id = :id")
+    @Query(
+            "UPDATE RainbowTableSearch s " +
+            "SET s.status = :status, s.searchStarted = :searchStarted " +
+            "WHERE s.id = :id"
+    )
     @Modifying
     @Transactional
-    void updatePasswordAndStatusById(
+    void updateStatusAndSearchStartedById(
             @Param("id") long id,
+            @Param("status") RainbowTableSearchStatus status,
+            @Param("searchStarted") Date searchStarted
+    );
+
+    @Query(
+            "UPDATE RainbowTableSearch s " +
+            "SET s.status = :status, s.password = :password, s.searchCompleted = :searchCompleted " +
+            "WHERE s.id = :id"
+    )
+    @Modifying
+    @Transactional
+    void updateStatusAndPasswordSearchCompletedById(
+            @Param("id") long id,
+            @Param("status") RainbowTableSearchStatus status,
             @Param("password") String password,
-            @Param("status") RainbowTableSearchStatus status
+            @Param("searchCompleted") Date searchCompleted
     );
 }

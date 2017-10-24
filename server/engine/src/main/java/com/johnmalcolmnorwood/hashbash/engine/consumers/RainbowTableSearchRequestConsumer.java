@@ -20,6 +20,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Date;
+
 
 @EnableBinding(TaskExchange.class)
 public class RainbowTableSearchRequestConsumer {
@@ -63,20 +67,31 @@ public class RainbowTableSearchRequestConsumer {
                 rainbowTableSearchRequestMessage.getRainbowTableId()
         );
 
-        rainbowTableSearchRepository.updatePasswordAndStatusById(rainbowTableSearchRequestMessage.getSearchId(), null, RainbowTableSearchStatus.STARTED);
+        rainbowTableSearchRepository.updateStatusAndSearchStartedById(
+                rainbowTableSearchRequestMessage.getSearchId(),
+                RainbowTableSearchStatus.STARTED,
+                Date.from(ZonedDateTime.now(ZoneId.of("UTC")).toInstant())
+        );
 
         RainbowTable rainbowTable = rainbowTableRepository.findOne(rainbowTableSearchRequestMessage.getRainbowTableId());
 
         if (rainbowTable == null) {
+            LOGGER.warn("Rainbow Table with ID {} does not exist", rainbowTableSearchRequestMessage.getRainbowTableId());
             throw new RuntimeException("Rainbow Table with that ID doesn't exist");
         }
 
         String result = search(rainbowTable, rainbowTableSearchRequestMessage.getHash());
-        RainbowTableSearchStatus status = result == null
+        RainbowTableSearchStatus status = (result == null)
                 ? RainbowTableSearchStatus.NOT_FOUND
                 : RainbowTableSearchStatus.FOUND;
 
-        rainbowTableSearchRepository.updatePasswordAndStatusById(rainbowTableSearchRequestMessage.getSearchId(), result, status);
+        rainbowTableSearchRepository.updateStatusAndPasswordSearchCompletedById(
+                rainbowTableSearchRequestMessage.getSearchId(),
+                status,
+                result,
+                Date.from(ZonedDateTime.now(ZoneId.of("UTC")).toInstant())
+        );
+
         LOGGER.info("Found password for hash {}? {}", rainbowTableSearchRequestMessage.getHash(), result);
     }
 }

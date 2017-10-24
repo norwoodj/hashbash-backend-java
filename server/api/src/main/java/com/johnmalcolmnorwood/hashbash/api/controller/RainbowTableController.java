@@ -121,10 +121,7 @@ public class RainbowTableController {
     }
 
     @RequestMapping("/{rainbowTableId}/searchResults")
-    public Map<String, Long> getSearchResultsForRainbowTable(
-            @PathVariable short rainbowTableId,
-            @RequestParam(value = "includeNotFound", defaultValue = "false") boolean includeNotFound
-    ) {
+    public Map<String, Long> getSearchResultsForRainbowTable(@PathVariable short rainbowTableId) {
         return apiRainbowTableService.getSearchResultsForRainbowTable(rainbowTableId);
     }
 

@@ -1,7 +1,6 @@
 package com.johnmalcolmnorwood.hashbash.api.service;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Sets;
 import com.johnmalcolmnorwood.hashbash.api.model.GenerateRainbowTableRequest;
 import com.johnmalcolmnorwood.hashbash.api.model.SearchResponse;
 import com.johnmalcolmnorwood.hashbash.api.utils.EntityResponseUtils;
@@ -9,7 +8,7 @@ import com.johnmalcolmnorwood.hashbash.model.HashFunctionName;
 import com.johnmalcolmnorwood.hashbash.model.RainbowTable;
 import com.johnmalcolmnorwood.hashbash.model.RainbowTableSearch;
 import com.johnmalcolmnorwood.hashbash.model.RainbowTableSearchStatus;
-import com.johnmalcolmnorwood.hashbash.mq.message.RainbowTableGenerateRequestMessage;
+import com.johnmalcolmnorwood.hashbash.mq.message.RainbowTableActionRequestMessage;
 import com.johnmalcolmnorwood.hashbash.mq.message.RainbowTableSearchRequestMessage;
 import com.johnmalcolmnorwood.hashbash.producer.HashbashMqPublishingService;
 import com.johnmalcolmnorwood.hashbash.repository.RainbowTableRepository;
@@ -29,7 +28,6 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -83,7 +81,11 @@ public class ApiRainbowTableService {
             return ResponseEntity.notFound().build();
         }
 
-        CompletableFuture.runAsync(() -> rainbowTableRepository.delete(rainbowTableId));
+        RainbowTableActionRequestMessage deleteRequest = RainbowTableActionRequestMessage.builder()
+                .rainbowTableId(rainbowTableId)
+                .build();
+
+        hashbashMqPublishingService.sendRainbowTableDeleteRequestMessage(deleteRequest);
         return EntityResponseUtils.getResponseForDeleteEntity();
     }
 
@@ -107,11 +109,11 @@ public class ApiRainbowTableService {
     }
 
     private void requestRainbowTableGenerate(RainbowTable rainbowTable) {
-        RainbowTableGenerateRequestMessage rainbowTableGenerateRequestMessage = RainbowTableGenerateRequestMessage.builder()
+        RainbowTableActionRequestMessage rainbowTableActionRequestMessage = RainbowTableActionRequestMessage.builder()
                 .rainbowTableId(rainbowTable.getId())
                 .build();
 
-        hashbashMqPublishingService.sendRainbowTableGenerateRequestMessage(rainbowTableGenerateRequestMessage);
+        hashbashMqPublishingService.sendRainbowTableGenerateRequestMessage(rainbowTableActionRequestMessage);
     }
 
     public ResponseEntity<Void> generateRainbowTableLocation(GenerateRainbowTableRequest generateRainbowTableRequest) {
