@@ -23,6 +23,14 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: RPI
+              hashbash-nginx
+            - name: SPRING_RABBITMQ_USERNAME
+              value: mqadmin
+            - name: SPRING_RABBITMQ_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.rabbitmq.rabbitmqAdminSecretName }}
+                  key: {{ .Values.rabbitmq.rabbitmqAdminPasswordSecretKey }}
             - name: HASHBASH_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
