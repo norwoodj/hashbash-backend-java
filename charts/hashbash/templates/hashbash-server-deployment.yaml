@@ -25,7 +25,7 @@ spec:
             periodSeconds: {{ .Values.hashbashProbePeriodSeconds }}
             timeoutSeconds: {{ .Values.hashbashProbeTimeoutSeconds }}
             httpGet:
-              port: http
+              port: 8080
               path: {{ .Values.hashbashHealthCheckEndpoint }}
           env:
             - name: SPRING_PROFILES_ACTIVE

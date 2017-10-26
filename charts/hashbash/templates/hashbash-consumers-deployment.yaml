@@ -28,4 +28,3 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.mysql.mysqlRootPasswordSecretName }}
                   key: {{ .Values.mysql.mysqlRootPasswordSecretKey }}
-

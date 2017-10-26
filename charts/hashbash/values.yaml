@@ -47,6 +47,9 @@ hashbashProbeTimeoutSeconds: 10
 ##
 # Hashbash consumer settings
 ##
+hashbashConsumersImage: jnorwood/hashbash-rpi_consumers
 consumerDeploymentName: hashbash-consumers
 consumerDeploymentReplicas: 1
-hashbashConsumersImage: jnorwood/hashbash-rpi_consumers
+consumerDeploymentLabels:
+  - key: role
+    value: rabbitmq-consumers
