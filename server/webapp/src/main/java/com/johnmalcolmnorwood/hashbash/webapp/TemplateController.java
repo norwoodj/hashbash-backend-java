@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.thymeleaf.util.StringUtils;
 
-import static com.sun.org.apache.xalan.internal.xsltc.compiler.sym.error;
-
 
 @Controller
 public class TemplateController {
