@@ -43,7 +43,7 @@ services:
     ports:
       - 80:80
 
-  hashbash_server:
+  hashbash-server:
     image: hashbash-server:current
     environment:
       - SPRING_PROFILES_ACTIVE=LCL,DCK,OVR

@@ -16,6 +16,10 @@ spec:
         {{ .key }}: {{ .value }}
 {{- end }}
     spec:
+      hostAliases:
+        - ip: 127.0.0.1
+          hostnames:
+            - hashbash-server
       containers:
         - name: hashbash-server
           image: {{ .Values.hashbashImage }}:{{ .Chart.Version }}
@@ -42,7 +46,3 @@ spec:
           ports:
             - name: http
               containerPort: 80
-          hostAliases:
-            - ip: 127.0.0.1
-              hostnames:
-                - hashbash_server

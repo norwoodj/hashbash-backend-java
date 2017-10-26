@@ -19,7 +19,7 @@ mysql:
 rabbitmq:
   web_service:
     ingressName: rabbitmq-admin
-    ingressHostname: rabbitmq.hashbash.johnmalcolmnorwood.com
+    ingressHostname: rabbit.hashbash.johnmalcolmnorwood.com
     ingressServicePort: rabbitmq-admin
 
 
