@@ -14,8 +14,3 @@ function print_additional_options_usage_list {
 function handle_additional_options {
     use_additional_options_helpers <(echo 'handle_job_options') ${@}
 }
-
-function get_additional_docker_build_args_for_image {
-    local image=${1}
-    echo "--build-arg VERSION=$(get_image_version "${image}")"
-}

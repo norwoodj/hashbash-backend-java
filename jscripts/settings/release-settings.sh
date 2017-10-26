@@ -49,7 +49,7 @@ function get_next_dev_version {
 }
 
 function get_versioned_files {
-    echo charts/hashbash/Chart.yaml pom.xml */pom.xml
+    echo charts/hashbash/Chart.yaml server/pom.xml server/*/pom.xml
 }
 
 function get_release_version_commit_message {

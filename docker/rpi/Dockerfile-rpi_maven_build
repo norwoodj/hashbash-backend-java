@@ -1,0 +1,5 @@
+FROM naata/rpi-oracle-java-8-mvn
+
+WORKDIR /opt/build
+COPY server /opt/build
+RUN ["mvn", "clean", "package"]

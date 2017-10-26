@@ -1,0 +1,35 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: {{ .Values.consumerDeploymentName }}
+  labels:
+{{- range .Values.consumerDeploymentLabels }}
+    {{ .key }}: {{ .value }}
+{{- end }}
+
+spec:
+  replicas: {{ .Values.consumerDeploymentReplicas }}
+  template:
+    metadata:
+      labels:
+{{- range .Values.consumerDeploymentLabels }}
+        {{ .key }}: {{ .value }}
+{{- end }}
+    spec:
+      containers:
+        - name: hashbash-consumers
+          image: {{ .Values.hashbashConsumersImage }}:{{ .Chart.Version }}
+          imagePullPolicy: Always
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: RPI
+            - name: SPRING_RABBITMQ_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.rabbitmq.rabbitmqAdminSecretName }}
+                  key: {{ .Values.rabbitmq.rabbitmqAdminPasswordSecretKey }}
+            - name: HASHBASH_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.mysql.mysqlRootPasswordSecretName }}
+                  key: {{ .Values.mysql.mysqlRootPasswordSecretKey }}

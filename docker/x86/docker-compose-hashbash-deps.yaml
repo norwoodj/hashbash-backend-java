@@ -1,0 +1,46 @@
+version: "3"
+
+volumes:
+  frontend-public-volume:
+
+services:
+  mysql:
+    image: mysql:5.5
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 3306:3306
+
+  rabbitmq:
+    image: rabbitmq:3.6-management-alpine
+    ports:
+      - 5672:5672
+      - 15672:15672
+      - 55672:55672
+
+  webpack_builder:
+    image: hashbash-webpack_builder:current
+    entrypoint:
+      - webpack
+      - --watch
+      - --devtool
+      - source-map
+    volumes:
+      - ../../web/src:/var/lib/johnmalcolmnorwood/hashbash/src:ro
+      - frontend-public-volume:/var/lib/johnmalcolmnorwood/hashbash/dist
+
+  nginx:
+    image: hashbash-nginx:current
+    entrypoint:
+      - nginx
+      - -c
+      - /etc/nginx/local/nginx.conf
+      - -g
+      - daemon off;
+    volumes:
+      - ../../etc/nginx:/etc/nginx/local:ro
+      - frontend-public-volume:/var/lib/johnmalcolmnorwood/hashbash/dist:ro
+    extra_hosts:
+      - hashbash-server:${HASHBASH_HOST_IP_ADDRESS}
+    ports:
+      - 80:80

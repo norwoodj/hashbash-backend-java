@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  console_script:
+    image: hashbash-utilities:current
+    environment:
+      JCONFIGURE_CONFIG_DIRECTORIES: /var/lib/johnmalcolmnorwood/hashbash-utilities/config
+    volumes:
+      - ../../hashbash-utilities/packages/hashbash_utilities/src/com/johnmalcolmnorwood/hashbash_utilities:/usr/local/lib/python3.6/site-packages/com/johnmalcolmnorwood/hashbash_utilities:ro
+      - ../../hashbash-utilities/config:/var/lib/johnmalcolmnorwood/hashbash-utilities/config:ro

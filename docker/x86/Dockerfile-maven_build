@@ -1,0 +1,5 @@
+FROM maven:3.5-alpine
+
+WORKDIR /opt/build
+COPY server /opt/build
+RUN ["mvn", "clean", "package"]

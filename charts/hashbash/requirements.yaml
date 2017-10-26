@@ -2,6 +2,9 @@ dependencies:
   - name: mysql
     version: "17.0907"
     repository: https://norwoodj.github.io/jchart-repository
+  - name: rabbitmq
+    version: "17.1026"
+    repository: https://norwoodj.github.io/jchart-repository
   - name: web_service
     version: "17.0905"
     repository: https://norwoodj.github.io/jchart-repository

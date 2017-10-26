@@ -1,9 +1,10 @@
 application-OVR.properties
 .idea/
 *.iml
-*/target/
 *.tgz
 jscripts/*.sh
 jscripts/utilities/*.sh
 requirements.lock
 _version.json
+node_modules/
+target/

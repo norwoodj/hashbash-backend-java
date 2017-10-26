@@ -1,0 +1,35 @@
+{
+  "name": "hashbash",
+  "version": "17.0913.0-dev",
+  "description": "Hashbash web rainbow table",
+  "repository": "https://github.com/norwoodj/hashbash",
+  "dependencies": {
+    "jquery": "^3.2.1",
+    "muicss": "^0.9.27",
+    "prop-types": "^15.6.0",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-table": "^6.6.0",
+    "timeago.js": "^3.0.2"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-react": "^6.11.1",
+    "compression-webpack-plugin": "^1.0.1",
+    "copy-webpack-plugin": "^4.1.0",
+    "eslint": "^4.8.0",
+    "eslint-loader": "^1.9.0",
+    "eslint-plugin-react": "^6.1.2",
+    "node-libs-browser": "^1.0.0",
+    "webpack": "^3.7.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack-dev-server",
+    "build": "webpack -p --progress"
+  },
+  "author": "John Norwood",
+  "license": "ISC"
+}
