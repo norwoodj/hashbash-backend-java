@@ -20,6 +20,7 @@ spec:
         - ip: 127.0.0.1
           hostnames:
             - hashbash-server
+
       containers:
         - name: hashbash-server
           image: {{ .Values.hashbashImage }}:{{ .Chart.Version }}
