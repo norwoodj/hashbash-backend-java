@@ -24,7 +24,6 @@ module.exports = {
         new CopyWebpackPlugin([
             {from: "src/_version.json"},
             {from: "src/css", to: "css/"},
-            {from: "src/img", to: "img/"},
             {from: "node_modules/react-table/react-table.css", to: "css/"}
         ]),
         new CompressionPlugin({deleteOriginalAssets: true})
