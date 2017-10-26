@@ -3,20 +3,10 @@ import PropTypes from "prop-types";
 import Panel from "muicss/lib/react/panel";
 import ErrorElement from "../components/error-element";
 import DefaultRainbowTablePage from "./default-rainbow-table-page";
+import {HashFunction} from "../util";
 
 
 export default class GenerateRainbowTableForm extends DefaultRainbowTablePage {
-    constructor() {
-        super();
-        Object.assign(this.state, {hashFunctions: []});
-    }
-
-    retrieveData() {
-        this.state.rainbowTableService.getSupportedHashFunctions().then(
-            hashFunctions => this.setState({hashFunctions: hashFunctions})
-        );
-    }
-
     renderWithRainbowTableService() {
         return (
             <Panel>
@@ -29,7 +19,7 @@ export default class GenerateRainbowTableForm extends DefaultRainbowTablePage {
                     </div>
                     <div className="mui-select">
                         <select id="hash-function-select" name="hashFunction">
-                            {this.state.hashFunctions.map(f => <option key={f}>{f}</option>)}
+                            {HashFunction.all().map(f => <option key={f}>{f}</option>)}
                         </select>
                         <label>Hash Function</label>
                     </div>

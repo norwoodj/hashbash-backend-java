@@ -19,6 +19,16 @@ export default class RainbowTableService {
         ].join("");
     }
 
+    submitSearchRequest(rainbowTableId, hash) {
+        return new Promise(resolve => {
+            this.http.ajax({
+                type: "POST",
+                url: `/api/rainbow-table/${rainbowTableId}/search?hash=${hash}`,
+                success: searchResponse => resolve(searchResponse),
+                error: this.errorHandler
+            });
+        });
+    }
 
     getRainbowTables(pageNumber, limit, sortKey) {
         return new Promise(resolve => {

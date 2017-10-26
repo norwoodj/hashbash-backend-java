@@ -12,6 +12,17 @@ mysql:
     persistentVolumeNfsPath: /nfs/hashbash
     persistentVolumeClaimStorageRequest: 4Gi
 
+
+##
+# RabbitMQ settings
+##
+rabbitmq:
+  web_service:
+    ingressName: rabbitmq-admin
+    ingressHostname: rabbitmq.hashbash.johnmalcolmnorwood.com
+    ingressServicePort: rabbitmq-admin
+
+
 ##
 # Web Service settings
 ##

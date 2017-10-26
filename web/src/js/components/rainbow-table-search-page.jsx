@@ -5,6 +5,7 @@ import Panel from "muicss/lib/react/panel";
 import RainbowTableDetailTable from "./rainbow-table-detail-table";
 import RainbowTableEfficiencyTable from "./rainbow-table-efficiency-table";
 import RainbowTableSearchResultsTable from "./rainbow-table-search-results-table";
+import RainbowTableSearchForm from "./rainbow-table-search-form";
 import RainbowTableSearchTable from "./rainbow-table-search-table";
 import ErrorElement from "./error-element";
 import DefaultRainbowTablePage from "./default-rainbow-table-page";
@@ -63,6 +64,13 @@ export default class SearchRainbowTablePage extends DefaultRainbowTablePage {
                         rainbowTableService={this.state.rainbowTableService}
                         rainbowTableId={this.props.rainbowTableId}
                         refreshRateSeconds={5}
+                    />
+                </div>
+                <div className="content-block">
+                    <h4>New Rainbow Table Search</h4>
+                    <RainbowTableSearchForm
+                        rainbowTable={this.state.rainbowTable}
+                        rainbowTableService={this.state.rainbowTableService}
                     />
                 </div>
             </Panel>

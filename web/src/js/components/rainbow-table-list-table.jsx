@@ -37,6 +37,7 @@ export default class RainbowTableListTable extends DynamicListEntityTable {
             {Header: "Status", accessor: "status", sortable: false},
             {Header: "Progress", Cell: row => RainbowTableListTable.getProgressBar(row.original), sortable: false},
             {Header: "Num Chains", accessor: "numChains"},
+            {Header: "Chains Generated", accessor: "chainsGenerated", sortable: false},
             {Header: "Chain Length", accessor: "chainLength"},
             {Header: "Hash Function", accessor: "hashFunction"},
             {Header: "Password Length", accessor: "passwordLength"},

@@ -7,9 +7,6 @@ import com.johnmalcolmnorwood.hashbash.api.service.ApiRainbowTableService;
 import com.johnmalcolmnorwood.hashbash.model.HashFunctionName;
 import com.johnmalcolmnorwood.hashbash.model.RainbowTable;
 import com.johnmalcolmnorwood.hashbash.model.RainbowTableSearch;
-import com.sun.org.apache.xpath.internal.operations.Mod;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
@@ -34,8 +31,6 @@ import java.util.Map;
 @RequestMapping("/api/rainbow-table")
 public class RainbowTableController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RainbowTableController.class);
-
     @Autowired
     private ApiRainbowTableService apiRainbowTableService;
 
@@ -55,11 +50,6 @@ public class RainbowTableController {
     @RequestMapping(value = "/count")
     public Map<String, Long> count() {
         return apiRainbowTableService.getCount();
-    }
-
-    @RequestMapping(value = "/hash-functions")
-    public List<HashFunctionName> getHashFunctions() {
-        return Arrays.asList(HashFunctionName.values());
     }
 
     @RequestMapping
@@ -126,7 +116,7 @@ public class RainbowTableController {
     }
 
     @RequestMapping(value = "/{rainbowTableId}/search", method = RequestMethod.POST)
-    public ResponseEntity<SearchResponse> search(@PathVariable short rainbowTableId, @RequestParam String hash) {
+    public ResponseEntity<SearchResponse> searchJson(@PathVariable short rainbowTableId, @RequestParam String hash) {
         return apiRainbowTableService.search(rainbowTableId, hash);
     }
 
