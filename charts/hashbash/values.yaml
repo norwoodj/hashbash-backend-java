@@ -2,6 +2,7 @@
 # User Role Settings
 ##
 user_roles:
+  clusterAdmins: []
   namespaceAdmins:
     - veintitres-admin
   namespaceEditors:
