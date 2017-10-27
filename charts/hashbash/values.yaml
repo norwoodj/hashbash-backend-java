@@ -1,3 +1,14 @@
+##
+# User Role Settings
+##
+user_roles:
+  clusterAdmins: []
+  namespaceAdmins:
+    - veintitres-admin
+  namespaceEditors:
+    - veintitres-editor
+  namespaceViewers:
+    - veintitres-viewer
 
 ##
 # MySQL settings
@@ -12,7 +23,6 @@ mysql:
     persistentVolumeNfsPath: /nfs/hashbash
     persistentVolumeClaimStorageRequest: 4Gi
 
-
 ##
 # RabbitMQ settings
 ##
@@ -21,7 +31,6 @@ rabbitmq:
     ingressName: rabbitmq-admin
     ingressHostname: rabbit.hashbash.johnmalcolmnorwood.com
     ingressServicePort: rabbitmq-admin
-
 
 ##
 # Web Service settings

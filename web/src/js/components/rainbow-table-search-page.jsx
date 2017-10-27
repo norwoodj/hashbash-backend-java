@@ -21,7 +21,7 @@ export default class SearchRainbowTablePage extends DefaultRainbowTablePage {
         this.state.rainbowTableService.getRainbowTableById(this.props.rainbowTableId).then(rainbowTable => {
             this.setState({rainbowTable: rainbowTable});
 
-            if (rainbowTable.status !== "COMPLETED") {
+            if (rainbowTable.status === "STARTED" || rainbowTable.status === "QUEUED") {
                 setTimeout(this.retrieveData.bind(this), 5000);
             } else {
                 this.state.rainbowTableService.getRainbowTableSearchResultsById(this.props.rainbowTableId).then(searchResults => {
