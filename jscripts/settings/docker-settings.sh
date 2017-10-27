@@ -5,6 +5,7 @@
 source ${SCRIPT_DIR}/settings/common.sh
 source ${SCRIPT_DIR}/utilities/rpi-utilities.sh
 source ${SCRIPT_DIR}/utilities/version-file-utilities.sh
+source ${SCRIPT_DIR}/utilities/job-utilities.sh
 
 ##
 # Environment variables that control how images are named/deployed/built etc.
@@ -58,6 +59,18 @@ readonly _DOCKER_CONFIG=$(cat <<EOF
 }
 EOF
 )
+
+
+##
+# Command line setup
+##
+function print_additional_options_usage_list {
+    print_job_options_usage_list
+}
+
+function handle_additional_options {
+    use_additional_options_helpers <(echo 'handle_job_options') ${@}
+}
 
 
 ##
