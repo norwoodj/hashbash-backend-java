@@ -17,7 +17,7 @@ export default class RainbowTableEfficiencyTable extends SinglePageStaticListEnt
         return (
             <ProgressBar
                 numerator={rainbowTable.finalChainCount}
-                denominator={rainbowTable.numChains}
+                denominator={rainbowTable.chainsGenerated}
             />
         );
     }
@@ -36,8 +36,8 @@ export default class RainbowTableEfficiencyTable extends SinglePageStaticListEnt
 
     getEntityTableColumns() {
         return [
-            {Header: "Num Chains", accessor: "numChains"},
-            {Header: "Final Chains Generated", accessor: "finalChainCount"},
+            {Header: "Chains Generated", accessor: "chainsGenerated"},
+            {Header: "Unique Chains Generated", accessor: "finalChainCount"},
             {Header: "Generate Efficiency", Cell: row => RainbowTableEfficiencyTable.getEfficiencyProgressBar(row.original), sortable: false},
             {Header: "Possible Passwords", Cell: row => RainbowTableEfficiencyTable.getNumPossiblePasswords(row.original), sortable: false},
             {Header: "Passwords in Table", Cell: row => RainbowTableEfficiencyTable.getMaxContainedPasswords(row.original), sortable: false},

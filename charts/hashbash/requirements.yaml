@@ -8,3 +8,6 @@ dependencies:
   - name: web_service
     version: "17.0905"
     repository: https://norwoodj.github.io/jchart-repository
+  - name: user_roles
+    version: "17.1028"
+    repository: https://norwoodj.github.io/jchart-repository
