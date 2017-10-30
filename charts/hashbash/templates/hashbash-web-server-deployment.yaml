@@ -1,14 +1,14 @@
 kind: Deployment
 apiVersion: extensions/v1beta1
 metadata:
-  name: {{ .Values.deploymentName }}
+  name: {{ .Values.webServerDeploymentName }}
   labels:
 {{- range .Values.web_service.simple_service.deploymentLabels }}
     {{ .key }}: {{ .value }}
 {{- end }}
 
 spec:
-  replicas: {{ .Values.deploymentReplicas }}
+  replicas: {{ .Values.webServerDeploymentReplicas }}
   template:
     metadata:
       labels:
@@ -23,15 +23,16 @@ spec:
 
       containers:
         - name: hashbash-server
-          image: {{ .Values.hashbashImage }}:{{ .Chart.Version }}
+          image: {{ .Values.hashbashWebServerImage }}:{{ .Chart.Version }}
           imagePullPolicy: Always
-          livenessProbe:
-            initialDelaySeconds: {{ .Values.hashbashProbeInitialDelaySeconds }}
-            periodSeconds: {{ .Values.hashbashProbePeriodSeconds }}
-            timeoutSeconds: {{ .Values.hashbashProbeTimeoutSeconds }}
+          livenessProbe: &probe
+            initialDelaySeconds: {{ .Values.hashbashWebServerProbeInitialDelaySeconds }}
+            periodSeconds: {{ .Values.hashbashWebServerProbePeriodSeconds }}
+            timeoutSeconds: {{ .Values.hashbashWebServerProbeTimeoutSeconds }}
             httpGet:
               port: 8080
               path: {{ .Values.hashbashHealthCheckEndpoint }}
+          readinessProbe: *probe
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: RPI

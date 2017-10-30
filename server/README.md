@@ -11,4 +11,3 @@ Uses technologies:
 * [spring batch](http://projects.spring.io/spring-batch/)
 * [spring ws](http://projects.spring.io/spring-ws/)
 * [spring thymeleaf](http://www.thymeleaf.org/doc/tutorials/3.0/thymeleafspring.html)
-* [spring thymeleaf](http://www.thymeleaf.org/doc/tutorials/3.0/thymeleafspring.html)
