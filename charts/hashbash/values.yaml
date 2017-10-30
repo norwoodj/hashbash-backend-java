@@ -44,7 +44,7 @@ web_service:
 ##
 # Hashbash server settings
 ##
-webServerDeploymentName: hashbash-web-deployment
+webServerDeploymentName: hashbash-web-server
 webServerDeploymentReplicas: 1
 hashbashWebServerImage: jnorwood/hashbash-rpi_server
 hashbashNginxImage: jnorwood/hashbash-rpi_nginx
