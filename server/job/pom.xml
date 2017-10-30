@@ -8,7 +8,7 @@
     <parent>
         <groupId>com.johnmalcolmnorwood.hashbash</groupId>
         <artifactId>hashbash</artifactId>
-        <version>17.1028-dev</version>
+        <version>17.1030</version>
     </parent>
 
     <artifactId>hashbash-job</artifactId>
