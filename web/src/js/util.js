@@ -12,6 +12,12 @@ function getErrorMessage(errorResponse) {
     }
 }
 
+function toTitleCase(input) {
+    return input.split("_")
+        .map(str => str.charAt(0).toUpperCase() + str.substring(1).toLowerCase())
+        .join(" ");
+}
+
 let HashFunction  = {
     MD5: "MD5",
     SHA1: "SHA1",
@@ -51,4 +57,4 @@ function is_hash(hashFunction, supposedHash) {
     return REGEX_MAP.get(hashFunction).test(supposedHash);
 }
 
-export {getErrorMessage, HashFunction, is_hash};
+export {getErrorMessage, toTitleCase, HashFunction, is_hash};

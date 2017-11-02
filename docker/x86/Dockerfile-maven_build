@@ -1,4 +1,4 @@
-FROM maven:3.5-alpine
+FROM maven:3.5.0-jdk-8-alpine
 
 WORKDIR /opt/build
 COPY server /opt/build

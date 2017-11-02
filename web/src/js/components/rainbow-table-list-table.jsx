@@ -2,13 +2,15 @@ import React from "react";
 import PropTypes from "prop-types";
 import DynamicListEntityTable from "./dynamic-list-entity-table";
 import ProgressBar from "./progress-bar";
+import {JobStatus} from "../constants";
+import {toTitleCase} from "../util";
 
 
 export default class RainbowTableListTable extends DynamicListEntityTable {
     static getProgressBar(rainbowTable) {
         return (
             <ProgressBar
-                full={rainbowTable.status === "COMPLETED"}
+                full={rainbowTable.status === JobStatus.COMPLETED}
                 numerator={rainbowTable.chainsGenerated}
                 denominator={rainbowTable.numChains}
             />
@@ -31,10 +33,20 @@ export default class RainbowTableListTable extends DynamicListEntityTable {
         return this.props.rainbowTableService.getRainbowTableCount();
     }
 
+    getRowPropsForEntity(entity) {
+        if (entity.status === JobStatus.FAILED) {
+            return {className: "entity-failed"};
+        } else if (entity.status === JobStatus.COMPLETED) {
+            return {};
+        } else {
+            return {className: `entity-${entity.status.toLowerCase()}`};
+        }
+    }
+
     getEntityTableColumns() {
         return [
             {Header: "Name", accessor: "name", Cell: row => RainbowTableListTable.getRainbowTableLink(row.original)},
-            {Header: "Status", accessor: "status", sortable: false},
+            {Header: "Status", Cell: row => toTitleCase(row.original.status), sortable: false},
             {Header: "Progress", Cell: row => RainbowTableListTable.getProgressBar(row.original), sortable: false},
             {Header: "Num Chains", accessor: "numChains"},
             {Header: "Chains Generated", accessor: "chainsGenerated", sortable: false},

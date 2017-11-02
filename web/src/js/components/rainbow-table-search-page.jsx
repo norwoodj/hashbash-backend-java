@@ -9,6 +9,7 @@ import RainbowTableSearchForm from "./rainbow-table-search-form";
 import RainbowTableSearchTable from "./rainbow-table-search-table";
 import ErrorElement from "./error-element";
 import DefaultRainbowTablePage from "./default-rainbow-table-page";
+import {JobStatus} from "../constants";
 
 
 export default class SearchRainbowTablePage extends DefaultRainbowTablePage {
@@ -21,7 +22,7 @@ export default class SearchRainbowTablePage extends DefaultRainbowTablePage {
         this.state.rainbowTableService.getRainbowTableById(this.props.rainbowTableId).then(rainbowTable => {
             this.setState({rainbowTable: rainbowTable});
 
-            if (rainbowTable.status === "STARTED" || rainbowTable.status === "QUEUED") {
+            if (rainbowTable.status === JobStatus.STARTED || rainbowTable.status === JobStatus.QUEUED) {
                 setTimeout(this.retrieveData.bind(this), 5000);
             } else {
                 this.state.rainbowTableService.getRainbowTableSearchResultsById(this.props.rainbowTableId).then(searchResults => {
@@ -34,7 +35,11 @@ export default class SearchRainbowTablePage extends DefaultRainbowTablePage {
 
     renderWithRainbowTableService() {
         if (this.state.rainbowTable === null) {
-            return null;
+            return (
+                <Panel>
+                    <ErrorElement error={this.state.error}/>
+                </Panel>
+            );
         }
 
         return (

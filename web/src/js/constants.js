@@ -12,7 +12,23 @@ let MENU_CATEGORIES = [
 
 let APP_NAME = "Hashbash";
 
+let JobStatus = {
+    QUEUED: "QUEUED",
+    STARTED: "STARTED",
+    COMPLETED: "COMPLETED",
+    FAILED: "FAILED"
+};
+
+let SearchResult = {
+    QUEUED: "QUEUED",
+    STARTED: "STARTED",
+    FOUND: "FOUND",
+    NOT_FOUND: "NOT_FOUND"
+};
+
 export {
     MENU_CATEGORIES,
-    APP_NAME
+    APP_NAME,
+    JobStatus,
+    SearchResult
 };

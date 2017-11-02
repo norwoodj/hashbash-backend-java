@@ -45,8 +45,8 @@ public class TemplateController {
             Model model,
             @RequestParam(value = "rainbowTableId", defaultValue = "-1") short rainbowTableId
     ) {
-        if (rainbowTableId < 1) {
-            ModelAndView redirect = new ModelAndView("redirect:/rainbow-tables");
+        if (rainbowTableId < 0) {
+            ModelAndView redirect = new ModelAndView("redirect:rainbow-tables");
             redirect.getModelMap().addAttribute(
                     "error",
                     "'rainbowTableId' query parameter must be provided to /search-rainbow-tables page"

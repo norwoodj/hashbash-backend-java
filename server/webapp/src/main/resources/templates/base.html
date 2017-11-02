@@ -17,6 +17,7 @@
 
 <body>
     <div th:fragment="default-body-content">
+        <div id="error-text" th:if="${error}" th:attr="data-error = ${error}"/>
         <div id="content-root"/>
     </div>
 </body>

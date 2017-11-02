@@ -13,7 +13,6 @@
 <body>
     <div th:remove="tag" th:include="base :: default-body-content"/>
     <div id="rainbow-table-id" th:attr="data-id = ${rainbowTableId}"/>
-    <div id="error-text" th:if="${error}" th:attr="data-error = ${error}"/>
 </body>
 
 </html>
