@@ -42,17 +42,20 @@ buttons {
     padding-bottom: 15px;
 }
 
-.search-started {
+.entity-started {
     background: orange;
 }
+.entity-queued {
+    background: grey;
+}
 
-.search-not-found {
-    background: red;
+.entity-success {
+    background: green;
     color: white;
 }
 
-.search-found {
-    background: green;
+.entity-failed {
+    background: red;
     color: white;
 }
 
