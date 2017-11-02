@@ -34,7 +34,11 @@ export default class SearchRainbowTablePage extends DefaultRainbowTablePage {
 
     renderWithRainbowTableService() {
         if (this.state.rainbowTable === null) {
-            return null;
+            return (
+                <Panel>
+                    <ErrorElement error={this.state.error}/>
+                </Panel>
+            );
         }
 
         return (
