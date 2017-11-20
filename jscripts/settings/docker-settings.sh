@@ -62,18 +62,6 @@ EOF
 
 
 ##
-# Command line setup
-##
-function print_additional_options_usage_list {
-    print_job_options_usage_list
-}
-
-function handle_additional_options {
-    use_additional_options_helpers <(echo 'handle_job_options') ${@}
-}
-
-
-##
 # Settings for which images should be built/deployed by these scripts, as well as how to build and deploy them
 ##
 function print_build_images_usage_list {
