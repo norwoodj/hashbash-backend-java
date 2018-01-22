@@ -72,7 +72,7 @@ def poll_until_all_done(hashbash_server, search_ids):
 
 
 @click.command()
-@click.option("-h", "--hashbash", help="Specify the Hashbash Server to call (Default: https://hashbash.johnmalcolmnorwood.com)", default="https://hashbash.johnmalcolmnorwood.com")
+@click.option("-h", "--hashbash", help="Specify the Hashbash Server to call (Default: https://hashbash.jmn23.com)", default="https://hashbash.jmn23.com")
 @click.option("--poll/--no-poll", help="Specify whether to poll until all submitted searches have completed (Default: false)", default=False)
 @click.argument("rainbow_table_id", type=int)
 @click.argument("num_strings", type=int)
