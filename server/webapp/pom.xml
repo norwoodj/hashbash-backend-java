@@ -8,7 +8,7 @@
     <parent>
         <groupId>com.johnmalcolmnorwood.hashbash</groupId>
         <artifactId>hashbash</artifactId>
-        <version>18.0121</version>
+        <version>18.0123-dev</version>
     </parent>
 
     <artifactId>hashbash-webapp</artifactId>
