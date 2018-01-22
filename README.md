@@ -1,6 +1,6 @@
 Hash Bash
 ============
-From the Hashbash [homepage](https://hashbash.johnmalcolmnorwood.com):
+From the Hashbash [homepage](https://hashbash.jmn23.com):
 
 ```
 This is a web-based rainbow table generator and searcher. It is deployed on a raspberry pi cluster
@@ -8,7 +8,7 @@ running kubernetes. Visit my github to view the salt-stack configuration, build 
 docker images I've built to deploy this and other projects on this platform.
 
 You can see this particular project at https://github.com/norwoodj/hashbash
-You might also visit my other project https://stupidchess.johnmalcolmnorwood.com
+You might also visit my other project https://stupidchess.jmn23.com
 
 A rainbow table is a data structure that supports the space and time efficient reversal of
 cryptographic hash functions. For details on how this works visit this article
@@ -39,7 +39,7 @@ This project leverages docker and docker-compose to build and run the applicatio
 installation of minimal requirements, and with great developer ease. The same docker images that are built
 to do this can beg deployed to a remote docker image repository as well and there is helm configuration to
 deploy these images to a kubernetes cluster. This is how I deploy this project to
-https://hashbash.johnmalcolmnorwood.com
+https://hashbash.jmn23.com
 
 All of this makes heavy use of other projects that I have written:
 

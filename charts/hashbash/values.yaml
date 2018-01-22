@@ -29,7 +29,7 @@ mysql:
 rabbitmq:
   web_service:
     ingressName: rabbitmq-admin
-    ingressHostname: rabbit.hashbash.johnmalcolmnorwood.com
+    ingressHostname: rabbit.hashbash.jmn23.com
     ingressServicePort: rabbitmq-admin
 
 ##
@@ -37,7 +37,7 @@ rabbitmq:
 ##
 web_service:
   ingressName: hashbash-ingress
-  ingressHostname: hashbash.johnmalcolmnorwood.com
+  ingressHostname: hashbash.jmn23.com
   simple_service:
     serviceName: hashbash-web-service
 
@@ -58,7 +58,7 @@ hashbashWebServerProbeTimeoutSeconds: 10
 ##
 hashbashConsumersImage: jnorwood/hashbash-rpi_consumers
 consumerDeploymentName: hashbash-consumers
-consumerDeploymentReplicas: 1
+consumerDeploymentReplicas: 0
 consumerDeploymentLabels:
   - key: role
     value: rabbitmq-consumers

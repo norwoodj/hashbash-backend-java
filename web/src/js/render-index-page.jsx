@@ -33,7 +33,7 @@ $(() => {
                             You can see this particular project <a href="https://github.com/norwoodj/hashbash">here</a>.
                         </p>
                         <p>
-                            You might also visit my other project <a href="https://stupidchess.johnmalcolmnorwood.com">Stupid Chess</a>.
+                            You might also visit my other project <a href="https://stupidchess.jmn23.com">Stupid Chess</a>.
                         </p>
                         <h3>Implementation</h3>
                         <p>
