@@ -53,3 +53,9 @@ spec:
           ports:
             - name: http
               containerPort: 80
+
+      resources:
+        requests:
+          memory: {{ .Values.hashbashWebServerMemory }}
+        limits:
+          memory: {{ .Values.hashbashWebServerMemory }}

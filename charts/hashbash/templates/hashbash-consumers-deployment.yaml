@@ -33,3 +33,9 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.mysql.mysqlRootPasswordSecretName }}
                   key: {{ .Values.mysql.mysqlRootPasswordSecretKey }}
+
+      resources:
+        requests:
+          memory: {{ .Values.hashbashConsumersMemory }}
+        limits:
+          memory: {{ .Values.hashbashConsumersMemory }}
