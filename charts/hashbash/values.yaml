@@ -61,7 +61,7 @@ hashbashWebServerProbeTimeoutSeconds: 10
 hashbashConsumersImage: jnorwood/hashbash-rpi_consumers
 hashbashConsumersMemory: 192Mi
 consumerDeploymentName: hashbash-consumers
-consumerDeploymentReplicas: 0
+consumerDeploymentReplicas: 1
 consumerDeploymentLabels:
   - key: role
     value: rabbitmq-consumers
