@@ -1,6 +1,6 @@
 name: hashbash
 description: The hashbash helm chart
-version: "18.0129-dev"
+version: "18.0128"
 tillerVersion: >2
 maintainers:
   - email: norwood.john.m@gmail.com
