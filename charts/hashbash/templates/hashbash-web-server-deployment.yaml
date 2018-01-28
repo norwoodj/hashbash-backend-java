@@ -46,6 +46,11 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.mysql.mysqlRootPasswordSecretName }}
                   key: {{ .Values.mysql.mysqlRootPasswordSecretKey }}
+          resources:
+            requests:
+              memory: {{ .Values.hashbashWebServerMemory }}
+            limits:
+              memory: {{ .Values.hashbashWebServerMemory }}
 
         - name: hashbash-nginx
           image: {{ .Values.hashbashNginxImage }}:{{ .Chart.Version }}
@@ -53,3 +58,8 @@ spec:
           ports:
             - name: http
               containerPort: 80
+          resources:
+            requests:
+              memory: {{ .Values.hashbashWebNginxMemory }}
+            limits:
+              memory: {{ .Values.hashbashWebNginxMemory }}
