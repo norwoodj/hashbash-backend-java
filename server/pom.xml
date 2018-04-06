@@ -7,7 +7,7 @@
 
     <groupId>com.johnmalcolmnorwood.hashbash</groupId>
     <artifactId>hashbash</artifactId>
-    <version>18.0405</version>
+    <version>18.0407-dev</version>
     <packaging>pom</packaging>
 
     <name>hashbash</name>
