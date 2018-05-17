@@ -62,6 +62,4 @@ hashbashConsumersImage: jnorwood/hashbash-rpi_consumers
 hashbashConsumersMemory: 192Mi
 consumerDeploymentName: hashbash-consumers
 consumerDeploymentReplicas: 1
-consumerDeploymentLabels:
-  - key: role
-    value: rabbitmq-consumers
+consumerDeploymentLabels: {role: rabbitmq-consumers}
