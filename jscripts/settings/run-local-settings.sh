@@ -38,8 +38,7 @@ function handle_additional_options {
 
 function get_local_docker_compose_path_for_app {
     local app=${1}
-    local folder_name=$(is_running_on_raspberry_pi && echo "rpi" || echo "x86")
-    echo "docker/${folder_name}/docker-compose-${app}.yaml"
+    echo "docker/docker-compose-${app}.yaml"
 }
 
 

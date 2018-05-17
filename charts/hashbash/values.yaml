@@ -46,10 +46,10 @@ web_service:
 ##
 webServerDeploymentName: hashbash-web-server
 webServerDeploymentReplicas: 1
-hashbashWebServerImage: jnorwood/hashbash-rpi_server
+hashbashWebServerImage: jnorwood/hashbash-server
 hashbashWebServerMemory: 192Mi
 hashbashWebNginxMemory: 16Mi
-hashbashNginxImage: jnorwood/hashbash-rpi_nginx
+hashbashNginxImage: jnorwood/hashbash-nginx
 hashbashHealthCheckEndpoint: /health
 hashbashWebServerProbeInitialDelaySeconds: 360
 hashbashWebServerProbePeriodSeconds: 60
@@ -58,7 +58,7 @@ hashbashWebServerProbeTimeoutSeconds: 10
 ##
 # Hashbash consumer settings
 ##
-hashbashConsumersImage: jnorwood/hashbash-rpi_consumers
+hashbashConsumersImage: jnorwood/hashbash-consumers
 hashbashConsumersMemory: 192Mi
 consumerDeploymentName: hashbash-consumers
 consumerDeploymentReplicas: 1
