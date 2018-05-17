@@ -1,4 +1,4 @@
-FROM node:8.3-alpine
+FROM node:8.11.1-slim
 MAINTAINER John Norwood
 
 RUN npm install -g webpack
