@@ -4,8 +4,6 @@
 FROM node:8.11.1-slim AS artifacts
 MAINTAINER John Norwood <norwood.john.m@gmail.com>
 
-RUN npm install -g webpack
-
 ARG APP_DIR=/var/lib/johnmalcolmnorwood/hashbash
 WORKDIR ${APP_DIR}
 
@@ -17,7 +15,7 @@ COPY web/.eslintrc .
 COPY web/webpack.config.js .
 COPY web/src ./src
 
-RUN webpack -p --progress
+RUN node_modules/webpack/bin/webpack.js -p --progress
 
 
 ##
