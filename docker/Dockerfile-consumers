@@ -1,6 +1,6 @@
 FROM hashbash-maven_build:current AS artifacts
 
-FROM java:8-jre
+FROM openjdk:8u171-jre-slim
 MAINTAINER John Norwood <norwood.john.m@gmail.com>
 
 ARG VERSION
