@@ -3,18 +3,14 @@ apiVersion: extensions/v1beta1
 metadata:
   name: {{ .Values.consumerDeploymentName }}
   labels:
-{{- range .Values.consumerDeploymentLabels }}
-    {{ .key }}: {{ .value }}
-{{- end }}
+{{ toYaml .Values.consumerDeploymentLabels | indent 4 }}
 
 spec:
   replicas: {{ .Values.consumerDeploymentReplicas }}
   template:
     metadata:
       labels:
-{{- range .Values.consumerDeploymentLabels }}
-        {{ .key }}: {{ .value }}
-{{- end }}
+{{ toYaml .Values.consumerDeploymentLabels | indent 8 }}
     spec:
       containers:
         - name: hashbash-consumers

@@ -3,7 +3,6 @@
 [[ -n "${_DOCKER_SETTINGS_SH:+_}" ]] && return || readonly _DOCKER_SETTINGS_SH=1
 
 source ${SCRIPT_DIR}/settings/common.sh
-source ${SCRIPT_DIR}/utilities/rpi-utilities.sh
 source ${SCRIPT_DIR}/utilities/version-file-utilities.sh
 source ${SCRIPT_DIR}/utilities/job-utilities.sh
 
@@ -21,19 +20,10 @@ source ${SCRIPT_DIR}/utilities/job-utilities.sh
 ##
 # List here all of the images built/deployed/used by the project
 ##
-readonly _RPI_MAVEN_BUILD_IMAGE="rpi_maven_build"
-readonly _X86_MAVEN_BUILD_IMAGE="maven_build"
-readonly _RPI_HASHBASH_IMAGE="rpi_server"
-readonly _X86_HASHBASH_IMAGE="server"
-readonly _RPI_HASHBASH_CONSUMERS_IMAGE="rpi_consumers"
-readonly _X86_HASHBASH_CONSUMERS_IMAGE="consumers"
-readonly _RPI_NGINX_IMAGE="rpi_nginx"
-readonly _X86_NGINX_IMAGE="nginx"
-
-readonly MAVEN_BUILD_IMAGE=$(is_running_on_raspberry_pi && echo "${_RPI_MAVEN_BUILD_IMAGE}" || echo "${_X86_MAVEN_BUILD_IMAGE}")
-readonly HASHBASH_IMAGE=$(is_running_on_raspberry_pi && echo "${_RPI_HASHBASH_IMAGE}" || echo "${_X86_HASHBASH_IMAGE}")
-readonly HASHBASH_CONSUMERS_IMAGE=$(is_running_on_raspberry_pi && echo "${_RPI_HASHBASH_CONSUMERS_IMAGE}" || echo "${_X86_HASHBASH_CONSUMERS_IMAGE}")
-readonly NGINX_IMAGE=$(is_running_on_raspberry_pi && echo "${_RPI_NGINX_IMAGE}" || echo "${_X86_NGINX_IMAGE}")
+readonly MAVEN_BUILD_IMAGE="maven_build"
+readonly HASHBASH_IMAGE="server"
+readonly HASHBASH_CONSUMERS_IMAGE="consumers"
+readonly NGINX_IMAGE="nginx"
 readonly UTILITIES_IMAGE="utilities"
 readonly WEBPACK_BUILDER_IMAGE="webpack_builder"
 
@@ -42,10 +32,10 @@ readonly _DOCKER_CONFIG=$(cat <<EOF
     "buildImages": [
         "${MAVEN_BUILD_IMAGE}",
         "${NGINX_IMAGE}",
-        $(is_running_on_raspberry_pi || echo "\"${UTILITIES_IMAGE}\",")
-        $(is_running_on_raspberry_pi || echo "\"${WEBPACK_BUILDER_IMAGE}\",")
         "${HASHBASH_IMAGE}",
-        "${HASHBASH_CONSUMERS_IMAGE}"
+        "${HASHBASH_CONSUMERS_IMAGE}",
+        "${WEBPACK_BUILDER_IMAGE}",
+        "${UTILITIES_IMAGE}"
     ],
     "deployImages": [
         "${HASHBASH_IMAGE}",
@@ -92,8 +82,7 @@ function get_image_name {
 
 function get_dockerfile_path_for_image {
     local image=${1}
-    local folder_name=$(is_running_on_raspberry_pi && echo "rpi" || echo "x86")
-    echo "docker/${folder_name}/Dockerfile-${image}"
+    echo "docker/Dockerfile-${image}"
 }
 
 function get_docker_build_context_path_for_image {

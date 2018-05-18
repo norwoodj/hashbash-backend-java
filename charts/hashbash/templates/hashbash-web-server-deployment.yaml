@@ -3,18 +3,14 @@ apiVersion: extensions/v1beta1
 metadata:
   name: {{ .Values.webServerDeploymentName }}
   labels:
-{{- range .Values.web_service.simple_service.deploymentLabels }}
-    {{ .key }}: {{ .value }}
-{{- end }}
+{{ toYaml .Values.web_service.simple_service.deploymentLabels | indent 4 }}
 
 spec:
   replicas: {{ .Values.webServerDeploymentReplicas }}
   template:
     metadata:
       labels:
-{{- range .Values.web_service.simple_service.deploymentLabels }}
-        {{ .key }}: {{ .value }}
-{{- end }}
+{{ toYaml .Values.web_service.simple_service.deploymentLabels | indent 8 }}
     spec:
       hostAliases:
         - ip: 127.0.0.1

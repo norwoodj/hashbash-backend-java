@@ -1,7 +1,5 @@
-FROM node:8.3-alpine
+FROM node:8.11.1-slim
 MAINTAINER John Norwood
-
-RUN npm install -g webpack
 
 WORKDIR /var/lib/johnmalcolmnorwood/hashbash
 COPY web/package.json .
@@ -11,4 +9,4 @@ COPY web/.babelrc .
 COPY web/.eslintrc .
 COPY web/webpack.config.js .
 
-ENTRYPOINT ["webpack", "-p", "--progress"]
+ENTRYPOINT ["node_modules/webpack/bin/webpack.js", "-p", "--progress"]
