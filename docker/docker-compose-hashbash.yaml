@@ -21,12 +21,12 @@ services:
   webpack_builder:
     image: hashbash-webpack_builder:current
     entrypoint:
-      - webpack
+      - node_modules/webpack/bin/webpack.js
       - --watch
       - --devtool
       - source-map
     volumes:
-      - ../../web/src:/var/lib/johnmalcolmnorwood/hashbash/src:ro
+      - ../web/src:/var/lib/johnmalcolmnorwood/hashbash/src:ro
       - frontend-public-volume:/var/lib/johnmalcolmnorwood/hashbash/dist
 
   nginx:
@@ -38,7 +38,7 @@ services:
       - -g
       - daemon off;
     volumes:
-      - ../../etc/nginx:/etc/nginx/local:ro
+      - ../etc/nginx:/etc/nginx/local:ro
       - frontend-public-volume:/var/lib/johnmalcolmnorwood/hashbash/dist:ro
     ports:
       - 80:80

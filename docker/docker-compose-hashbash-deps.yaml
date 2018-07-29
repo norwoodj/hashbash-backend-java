@@ -26,7 +26,7 @@ services:
       - --devtool
       - source-map
     volumes:
-      - ../../web/src:/var/lib/johnmalcolmnorwood/hashbash/src:ro
+      - ../web/src:/var/lib/johnmalcolmnorwood/hashbash/src:ro
       - frontend-public-volume:/var/lib/johnmalcolmnorwood/hashbash/dist
 
   nginx:
@@ -38,7 +38,7 @@ services:
       - -g
       - daemon off;
     volumes:
-      - ../../etc/nginx:/etc/nginx/local:ro
+      - ../etc/nginx:/etc/nginx/local:ro
       - frontend-public-volume:/var/lib/johnmalcolmnorwood/hashbash/dist:ro
     extra_hosts:
       - hashbash-server:${HASHBASH_HOST_IP_ADDRESS}
