@@ -49,13 +49,13 @@ public class RainbowTableGenerateRequestConsumer {
     }
 
     private RainbowTable retrieveRainbowTable(short rainbowTableId) {
-        RainbowTable rainbowTable = rainbowTableRepository.findOne(rainbowTableId);
+        var rainbowTable = rainbowTableRepository.findById(rainbowTableId);
 
-        if (rainbowTable == null) {
+        if (rainbowTable.isEmpty()) {
             throw new RuntimeException(String.format("No Rainbow Table with id %s", rainbowTableId));
         }
 
-        return rainbowTable;
+        return rainbowTable.get();
     }
 
     private RainbowTable handleGenerateRainbowTable(RainbowTableActionRequestMessage generateRainbowTableRequestMessage) {

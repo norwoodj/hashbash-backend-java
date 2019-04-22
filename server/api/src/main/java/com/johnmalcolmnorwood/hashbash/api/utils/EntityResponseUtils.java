@@ -6,14 +6,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.Objects;
+import java.util.Optional;
 
 public class EntityResponseUtils {
-    public static <T> ResponseEntity<T> getResponseForGetEntity(T object) {
-        if (Objects.isNull(object)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        return ResponseEntity.ok(object);
+    public static <T> ResponseEntity<T> getResponseForGetEntity(Optional<T> object) {
+        return object.map(ResponseEntity::ok)
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     public static ResponseEntity<Void> getResponseForDeleteEntity() {

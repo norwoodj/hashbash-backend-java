@@ -22,10 +22,11 @@ public class RainbowConfig {
     @Bean
     @StepScope
     public RainbowTableWrapper generateJobRainbowTable() {
-        RainbowTable rainbowTable = rainbowTableRepository.findOne(rainbowTableId);
-
-        return RainbowTableWrapper.builder()
-                .rainbowTable(rainbowTable)
-                .build();
+        return rainbowTableRepository.findById(rainbowTableId)
+                .map(rainbowTable -> RainbowTableWrapper.builder()
+                            .rainbowTable(rainbowTable)
+                            .build()
+                )
+                .orElse(null);
     }
 }

@@ -17,6 +17,7 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 
 import javax.annotation.Resource;
@@ -111,7 +112,7 @@ public class RainbowTableUniquePasswordJobRunner implements CommandLineRunner {
     public static void main(String... args) {
         new SpringApplicationBuilder()
                 .sources(RainbowTableUniquePasswordJobRunner.class)
-                .web(false)
+                .web(WebApplicationType.NONE)
                 .run(args);
     }
 }

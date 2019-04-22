@@ -79,14 +79,14 @@ public class RainbowTableSearchRequestConsumer {
                 Date.from(ZonedDateTime.now(ZoneId.of("UTC")).toInstant())
         );
 
-        RainbowTable rainbowTable = rainbowTableRepository.findOne(rainbowTableSearchRequestMessage.getRainbowTableId());
+        var rainbowTable = rainbowTableRepository.findById(rainbowTableSearchRequestMessage.getRainbowTableId());
 
-        if (rainbowTable == null) {
+        if (rainbowTable.isEmpty()) {
             LOGGER.warn("Rainbow Table with ID {} does not exist", rainbowTableSearchRequestMessage.getRainbowTableId());
             throw new RuntimeException("Rainbow Table with that ID doesn't exist");
         }
 
-        String result = search(rainbowTable, rainbowTableSearchRequestMessage.getHash());
+        String result = search(rainbowTable.get(), rainbowTableSearchRequestMessage.getHash());
         RainbowTableSearchStatus status = (result == null)
                 ? RainbowTableSearchStatus.NOT_FOUND
                 : RainbowTableSearchStatus.FOUND;

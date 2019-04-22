@@ -1,4 +1,4 @@
-FROM maven:3.5.3-jdk-8-slim
+FROM maven:3.6-jdk-12
 
 WORKDIR /opt/build
 COPY server /opt/build

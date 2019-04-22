@@ -23,17 +23,17 @@ cd
 git clone https://github.com/norwoodj/jscripts.git .jscripts
 ```
 
-Then to use in a project you'd copy the `_jscripts-ctl.sh` script from this project into yours
+Then to use in a project you'd copy the `_jscripts-ctl` script from this project into yours
 and run:
 ```
-./_jscripts-ctl.sh install
+./_jscripts-ctl install
 ```
 
 _Note_: if you clone this project at a location other than the default, you will have to configure
 that location when running this script:
 
 ```
-./_jscripts-ctl.sh --jscripts /path/to/jscripts install
+./_jscripts-ctl --jscripts /path/to/jscripts install
 ```
 
 This will symlink the scripts and utilities files from the `jscripts` directory in this project

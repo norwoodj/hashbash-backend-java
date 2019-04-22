@@ -5,7 +5,7 @@ volumes:
 
 services:
   mysql:
-    image: mysql:5.5
+    image: mysql:5.7
     environment:
       MYSQL_ROOT_PASSWORD: root
     ports:
@@ -21,7 +21,7 @@ services:
   webpack_builder:
     image: hashbash-webpack_builder:current
     entrypoint:
-      - webpack
+      - node_modules/webpack/bin/webpack.js
       - --watch
       - --devtool
       - source-map

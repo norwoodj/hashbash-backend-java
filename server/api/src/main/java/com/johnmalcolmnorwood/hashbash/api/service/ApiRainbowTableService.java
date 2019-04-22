@@ -69,7 +69,7 @@ public class ApiRainbowTableService {
     }
 
     public ResponseEntity<RainbowTable> getForId(short rainbowTableId) {
-        return EntityResponseUtils.getResponseForGetEntity(rainbowTableRepository.findOne(rainbowTableId));
+        return EntityResponseUtils.getResponseForGetEntity(rainbowTableRepository.findById(rainbowTableId));
     }
 
     public Map<String, Long> getCount() {
@@ -77,11 +77,11 @@ public class ApiRainbowTableService {
     }
 
     public ResponseEntity<Void> deleteRainbowTable(short rainbowTableId) {
-        if (rainbowTableRepository.findOne(rainbowTableId) == null) {
+        if (rainbowTableRepository.findById(rainbowTableId).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
-        RainbowTableActionRequestMessage deleteRequest = RainbowTableActionRequestMessage.builder()
+        var deleteRequest = RainbowTableActionRequestMessage.builder()
                 .rainbowTableId(rainbowTableId)
                 .build();
 
@@ -152,9 +152,9 @@ public class ApiRainbowTableService {
     }
 
     public ResponseEntity<SearchResponse> search(short rainbowTableId, String hash) {
-        RainbowTable rainbowTable = rainbowTableRepository.findOne(rainbowTableId);
+        var rainbowTable = rainbowTableRepository.findById(rainbowTableId);
 
-        if (rainbowTable == null) {
+        if (rainbowTable.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -208,7 +208,8 @@ public class ApiRainbowTableService {
 
         long totalSearches = searchCountByStatus.stream()
                 .map(RainbowTableSearchResults::getCount)
-                .collect(Collectors.summingLong(Long::valueOf));
+                .mapToLong(Long::valueOf)
+                .sum();
 
         long foundSearches = searchCountByStatus.stream()
                 .filter(s -> s.getSearchStatus().equals(RainbowTableSearchStatus.FOUND))
@@ -223,6 +224,7 @@ public class ApiRainbowTableService {
     }
 
     public RainbowTableSearch getSearchForId(long rainbowTableSearchId) {
-        return rainbowTableSearchRepository.findOne(rainbowTableSearchId);
+        return rainbowTableSearchRepository.findById(rainbowTableSearchId)
+                .orElse(null);
     }
 }

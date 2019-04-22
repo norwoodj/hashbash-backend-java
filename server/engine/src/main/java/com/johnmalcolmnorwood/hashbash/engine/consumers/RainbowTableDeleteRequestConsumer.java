@@ -26,7 +26,7 @@ public class RainbowTableDeleteRequestConsumer {
                 rainbowTableDeleteRequestMessage.getRainbowTableId()
         );
 
-        RainbowTable rainbowTable = rainbowTableRepository.findOne(rainbowTableDeleteRequestMessage.getRainbowTableId());
+        var rainbowTable = rainbowTableRepository.findById(rainbowTableDeleteRequestMessage.getRainbowTableId()).orElse(null);
 
         if (rainbowTable == null) {
             LOGGER.warn("No Rainbow Table with ID {}", rainbowTableDeleteRequestMessage.getRainbowTableId());
@@ -34,6 +34,6 @@ public class RainbowTableDeleteRequestConsumer {
         }
 
         LOGGER.info("Deleting Rainbow Table {} and {} chains", rainbowTable.getId(), rainbowTable.getNumChains());
-        rainbowTableRepository.delete(rainbowTable.getId());
+        rainbowTableRepository.delete(rainbowTable);
     }
 }

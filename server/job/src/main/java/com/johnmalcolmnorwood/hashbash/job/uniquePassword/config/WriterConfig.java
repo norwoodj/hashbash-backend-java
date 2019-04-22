@@ -7,7 +7,6 @@ import com.johnmalcolmnorwood.hashbash.job.common.writer.MappingItemWriter;
 import com.johnmalcolmnorwood.hashbash.job.common.writer.SubBatchItemWriter;
 import com.johnmalcolmnorwood.hashbash.model.RainbowTableUniquePassword;
 import com.johnmalcolmnorwood.hashbash.rainbow.model.RainbowChainLink;
-import org.apache.tomcat.jdbc.pool.DataSource;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
@@ -17,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
+import javax.sql.DataSource;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
