@@ -98,6 +98,7 @@ public class ApiRainbowTableService {
 
         RainbowTable rainbowTable = RainbowTable.builder()
                 .name(generateRainbowTableRequest.getName())
+                .status("QUEUED")
                 .chainLength(rainbowChainLength)
                 .characterSet(rainbowCharset)
                 .hashFunction(rainbowHashFunction)

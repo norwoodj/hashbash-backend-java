@@ -27,17 +27,18 @@ public class RainbowTableProgressListener implements StepExecutionListener {
 
     @Override
     public void beforeStep(StepExecution stepExecution) {
-        rainbowTable.setBatchExecutionId(stepExecution.getId());
+        String jobExecutionStatus = stepExecution.getJobExecution()
+                .getStatus()
+                .toString();
+
+        rainbowTable.setStatus(jobExecutionStatus);
         rainbowTableRepository.save(rainbowTable);
     }
 
+    @Override
     public ExitStatus afterStep(StepExecution stepExecution) {
-        rainbowTable.setBatchExecutionId(stepExecution.getId());
-        rainbowTableRepository.save(rainbowTable);
         long chainsGenerated = rainbowChainRepository.countByRainbowTableId(rainbowTable.getId());
-        rainbowTable.setFinalChainCount(chainsGenerated);
-        rainbowTableRepository.save(rainbowTable);
-
+        rainbowTableRepository.setStatusAndFinalChainCountById(rainbowTable.getId(), chainsGenerated, "COMPLETED");
         return stepExecution.getExitStatus();
     }
 }

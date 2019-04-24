@@ -2,9 +2,7 @@ package com.johnmalcolmnorwood.hashbash.job.generate.config;
 
 import com.johnmalcolmnorwood.hashbash.job.generate.processor.RainbowChainGenerateProcessor;
 import com.johnmalcolmnorwood.hashbash.model.RainbowChain;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.Step;
-import org.springframework.batch.core.StepExecutionListener;
+import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.item.ItemReader;
@@ -41,6 +39,9 @@ public class JobConfig {
     @Resource(name = "org.springframework.batch.core.StepExecutionListener-rainbowTable")
     private StepExecutionListener rainbowChainGenerateProgressListener;
 
+    @Resource(name = "org.springframework.batch.core.ChunkListener-rainbowTable")
+    private ChunkListener rainbowChainWriteListener;
+
     @Resource(name = "org.springframework.batch.item.ItemReader-rainbowTable")
     private ItemReader<String> rainbowChainGenerateReader;
 
@@ -59,6 +60,7 @@ public class JobConfig {
                 .reader(rainbowChainGenerateReader)
                 .processor(rainbowChainGenerateProcessor)
                 .writer(rainbowChainGenerateItemWriter)
+                .listener(rainbowChainWriteListener)
                 .taskExecutor(batchTaskExecutor)
                 .throttleLimit(numThreads)
                 .build();

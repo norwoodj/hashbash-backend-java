@@ -11,7 +11,5 @@ import java.util.List;
 public interface RainbowChainRepository extends JpaRepository<RainbowChain, String> {
     long countByRainbowTableId(short rainbowTableId);
 
-    RainbowChain findByEndHashAndRainbowTableId(String endHash, short rainbowTableId);
-
     List<RainbowChain> findByRainbowTableIdAndEndHashIn(short rainbowTableId, List<String> endHashes);
 }

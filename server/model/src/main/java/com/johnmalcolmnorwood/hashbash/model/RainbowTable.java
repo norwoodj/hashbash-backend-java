@@ -1,7 +1,5 @@
 package com.johnmalcolmnorwood.hashbash.model;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,6 +26,7 @@ public class RainbowTable {
     private short id;
 
     private String name;
+    private String status;
 
     @Column(name = "numchains")
     private int numChains;
@@ -38,25 +37,18 @@ public class RainbowTable {
     @Column(name = "passwordlength")
     private int passwordLength;
 
+    @Column(name = "chainsgenerated")
+    private long chainsGenerated;
+
     @Column(name = "finalchaincount")
     private long finalChainCount;
 
     @Column(name = "characterset")
     private String characterSet;
 
-
-    @Column(name = "batchexecutionid")
-    @Getter(onMethod = @__(@JsonIgnore))
-    private Long batchExecutionId;
-
     @Column(name = "hashfunction")
     @Enumerated(EnumType.STRING)
     private HashFunctionName hashFunction;
-
-    @OneToOne
-    @JoinColumn(name = "batchexecutionid", insertable = false, updatable = false)
-    @Getter(onMethod = @__(@JsonIgnore))
-    private BatchStepExecution batchStepExecution;
 
     @Column(name = "created")
     private Date created;
@@ -64,23 +56,5 @@ public class RainbowTable {
     @PrePersist
     public void setCreated() {
         created = Date.from(ZonedDateTime.now(ZoneId.of("UTC")).toInstant());
-    }
-
-    @JsonGetter
-    public int getChainsGenerated() {
-        if (batchStepExecution == null) {
-            return 0;
-        }
-
-        return batchStepExecution.getWriteCount();
-    }
-
-    @JsonGetter
-    public String getStatus() {
-        if (batchStepExecution == null) {
-            return "QUEUED";
-        }
-
-        return batchStepExecution.getStatus();
     }
 }

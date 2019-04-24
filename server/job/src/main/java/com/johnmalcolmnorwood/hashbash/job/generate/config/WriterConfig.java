@@ -2,8 +2,13 @@ package com.johnmalcolmnorwood.hashbash.job.generate.config;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import com.johnmalcolmnorwood.hashbash.job.common.listener.RainbowChainChunkListener;
+import com.johnmalcolmnorwood.hashbash.job.common.utils.RainbowTableWrapper;
 import com.johnmalcolmnorwood.hashbash.job.common.writer.MappingItemWriter;
 import com.johnmalcolmnorwood.hashbash.model.RainbowChain;
+import com.johnmalcolmnorwood.hashbash.repository.RainbowTableRepository;
+import org.springframework.batch.core.ChunkListener;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +40,12 @@ public class WriterConfig {
     @Autowired
     private DataSource hashbashDatasource;
 
+    @Autowired
+    private RainbowTableRepository rainbowTableRepository;
+
+    @Autowired
+    private RainbowTableWrapper generateJobRainbowTableWrapper;
+
 
     private SqlParameterSource itemSqlParameterSourceProvider(RainbowChain rainbowChain) {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
@@ -42,6 +53,15 @@ public class WriterConfig {
                 .forEach(entry -> mapSqlParameterSource.addValue(entry.getKey(), entry.getValue().apply(rainbowChain)));
 
         return mapSqlParameterSource;
+    }
+
+    @Bean(name = "org.springframework.batch.core.ChunkListener-rainbowTable")
+    @StepScope
+    public ChunkListener rainbowChainWriteListener() {
+        return new RainbowChainChunkListener(
+                generateJobRainbowTableWrapper.getRainbowTable(),
+                rainbowTableRepository
+        );
     }
 
     @Bean(name = "org.springframework.batch.item.ItemWriter-jdbcGenerate")
