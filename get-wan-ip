@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+for i in {0..15}; do
+    host_ip_address=$(ifconfig "en${i}" 2> /dev/null | grep "inet " | cut -f2 -d' ')
+
+    if [[ -n "${host_ip_address}" ]]; then
+        echo "${host_ip_address}"
+        exit
+    fi
+done

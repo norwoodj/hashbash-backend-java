@@ -1,9 +1,9 @@
 FROM openjdk:12.0-oracle
 MAINTAINER John Norwood <norwood.john.m@gmail.com>
 
-ARG MODULE=engine
+ARG MODULE=webapp
 
 WORKDIR /var/lib/johnmalcolmnorwood/hashbash
 COPY hashbash-${MODULE}.jar /var/lib/johnmalcolmnorwood/hashbash/hashbash-${MODULE}.jar
 
-ENTRYPOINT ["java", "-jar", "hashbash-engine.jar"]
+ENTRYPOINT ["java", "-jar", "hashbash-webapp.jar"]

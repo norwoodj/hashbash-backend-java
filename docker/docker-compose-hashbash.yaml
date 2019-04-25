@@ -5,7 +5,7 @@ volumes:
 
 services:
   mysql:
-    image: mysql:5.5
+    image: mysql:5.7
     environment:
       - MYSQL_ROOT_PASSWORD=root
     ports:
@@ -18,37 +18,17 @@ services:
       - 15672:15672
       - 55672:55672
 
-  webpack_builder:
-    image: hashbash-webpack_builder:current
-    entrypoint:
-      - node_modules/webpack/bin/webpack.js
-      - --watch
-      - --devtool
-      - source-map
-    volumes:
-      - ../web/src:/var/lib/johnmalcolmnorwood/hashbash/src:ro
-      - frontend-public-volume:/var/lib/johnmalcolmnorwood/hashbash/dist
-
   nginx:
-    image: hashbash-nginx:current
-    entrypoint:
-      - nginx
-      - -c
-      - /etc/nginx/local/nginx.conf
-      - -g
-      - daemon off;
-    volumes:
-      - ../etc/nginx:/etc/nginx/local:ro
-      - frontend-public-volume:/var/lib/johnmalcolmnorwood/hashbash/dist:ro
+    image: jnorwood/hashbash-nginx:release-20190425-1647
     ports:
       - 80:80
 
-  hashbash-server:
-    image: hashbash-server:current
+  hashbash-consumers:
+    image: jnorwood/hashbash-consumers:current
     environment:
       - SPRING_PROFILES_ACTIVE=LCL,DCK,OVR
 
-  hashbash_consumers:
-    image: hashbash-consumers:current
+  hashbash-webapp:
+    image: jnorwood/hashbash-webapp:current
     environment:
       - SPRING_PROFILES_ACTIVE=LCL,DCK,OVR

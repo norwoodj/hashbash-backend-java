@@ -1,3 +1,0 @@
-click==6.7
-jconfigure==17.0917
-requests==2.18.4

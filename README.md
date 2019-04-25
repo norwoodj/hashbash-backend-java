@@ -1,5 +1,5 @@
-Hash Bash
-============
+Hash Bash Backend Java
+======================
 From the Hashbash [homepage](https://hashbash.jmn23.com):
 
 ```
@@ -38,54 +38,37 @@ see this as an indication of my skillset.
 This project leverages docker and docker-compose to build and run the application locally requiring
 installation of minimal requirements, and with great developer ease. The same docker images that are built
 to do this can beg deployed to a remote docker image repository as well and there is helm configuration to
-deploy these images to a kubernetes cluster. This is how I deploy this project to
-https://hashbash.jmn23.com
-
-All of this makes heavy use of other projects that I have written:
-
-* [jscripts](https://github.com/norwoodj/jscripts) - utility bash scripts, build tools, release automation
-* [rpi-salt](https://github.com/norwoodj/rpi-salt) - salt-stack configuration for setting up my raspberry pis
-  as a kubernetes cluster
+deploy these images to a kubernetes cluster.
 
 ### Building and Developing Locally
+
 In order to build, run and develop this project locally you'll need a number of things installed:
 
-* docker - 17.06 or newer
-* docker-compose - 1.16.1 or newer
-* bash - 4.4 or newer
-* git
-* jq
+* docker
+* docker-compose
+* make
 
-After that you must install jscripts locally on your machine, and then in this repo:
+To build the docker images
 ```
-cd
-git clone https://github.com/norwoodj/jscripts.git .jscripts
-cd /path/to/hashbash
-./_jscripts-ctl.sh install
+make
 ```
 
-Once you have the requirements and scripts installed, you can build all of the docker images necessary
-to run locally with:
+To publish the docker images to a docker registry:
 ```
-./jscripts/build-images.sh all
-```
-
-This should build the three images for running locally in parallel.
-
-You can then run with:
-```
-./jscripts/run-local.sh start hashbash
+make push
 ```
 
-This starts the hashbhash application including the consumers, the web server, nginx, and a webpack_builder
-image that watches your frontend assets and rebuilds them in the container when they change locally on disk.
-
-If you want to use an IDE like IntelliJ to run the java applications, both HashbashEngineApplication and 
-HashbashWebApplication, which I would recommend, you can also run only the dependencies in a docker container,
-by running
+To run the application locally in docker:
 ```
-./jscripts/run-local.sh start hashbash-deps
+make run
 ```
 
-The config should be set up to work in an IDE if you configure with `spring.profiles.active=LCL` and this
-app is running.
+To run the application locally in docker _without rebuilding anything_:
+```
+make run-no-build
+```
+
+And finally, to run the application on your host machine, with rabbitmq and mysql in docker:
+```
+make run-deps
+```
