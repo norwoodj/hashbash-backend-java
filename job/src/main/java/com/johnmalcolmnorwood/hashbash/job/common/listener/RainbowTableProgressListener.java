@@ -31,8 +31,7 @@ public class RainbowTableProgressListener implements StepExecutionListener {
                 .getStatus()
                 .toString();
 
-        rainbowTable.setStatus(jobExecutionStatus);
-        rainbowTableRepository.save(rainbowTable);
+        rainbowTableRepository.setStatusAndSearchStartedById(rainbowTable.getId(), jobExecutionStatus);
     }
 
     @Override

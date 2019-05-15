@@ -1,5 +1,6 @@
 package com.johnmalcolmnorwood.hashbash.model;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -50,8 +51,23 @@ public class RainbowTable {
     @Enumerated(EnumType.STRING)
     private HashFunctionName hashFunction;
 
+    @Column(name = "generatestarted")
+    private Date generateStarted;
+
+    @Column(name = "generatecompleted")
+    private Date generateCompleted;
+
     @Column(name = "created")
     private Date created;
+
+    @JsonGetter
+    public Double getGenerationTime() {
+        if (generateCompleted == null) {
+            return null;
+        }
+
+        return (generateCompleted.getTime() - generateStarted.getTime()) / 1000.;
+    }
 
     @PrePersist
     public void setCreated() {

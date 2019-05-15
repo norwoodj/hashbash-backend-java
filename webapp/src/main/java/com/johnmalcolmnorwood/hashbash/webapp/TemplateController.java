@@ -16,6 +16,11 @@ public class TemplateController {
         return "index";
     }
 
+    @RequestMapping("/home")
+    public String homePage() {
+        return indexPage();
+    }
+
     @RequestMapping("/generate-rainbow-table")
     public String generateRainbowTablePage(
             Model model,

@@ -25,7 +25,16 @@ public interface RainbowTableRepository extends PagingAndSortingRepository<Rainb
     @Modifying
     @Query(
             "UPDATE RainbowTable r " +
-            "SET r.finalChainCount = :finalChainCount, r.status = :status " +
+            "SET r.status = :status, r.generateStarted = CURRENT_TIME " +
+            "WHERE r.id = :rainbowTableId"
+    )
+    void setStatusAndSearchStartedById(short rainbowTableId, String status);
+
+    @Transactional
+    @Modifying
+    @Query(
+            "UPDATE RainbowTable r " +
+            "SET r.finalChainCount = :finalChainCount, r.status = :status, r.generateCompleted = CURRENT_TIME " +
             "WHERE r.id = :rainbowTableId"
     )
     void setStatusAndFinalChainCountById(short rainbowTableId, long finalChainCount, String status);
