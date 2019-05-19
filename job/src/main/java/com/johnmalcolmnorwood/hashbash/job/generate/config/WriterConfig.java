@@ -5,8 +5,10 @@ import com.google.common.collect.Lists;
 import com.johnmalcolmnorwood.hashbash.job.common.listener.RainbowChainChunkListener;
 import com.johnmalcolmnorwood.hashbash.job.common.utils.RainbowTableWrapper;
 import com.johnmalcolmnorwood.hashbash.job.common.writer.MappingItemWriter;
+import com.johnmalcolmnorwood.hashbash.job.generate.writer.RainbowChainDatabaseWriter;
 import com.johnmalcolmnorwood.hashbash.model.RainbowChain;
 import com.johnmalcolmnorwood.hashbash.repository.RainbowTableRepository;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.batch.core.ChunkListener;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemWriter;
@@ -46,6 +48,12 @@ public class WriterConfig {
     @Autowired
     private RainbowTableWrapper generateJobRainbowTableWrapper;
 
+    @Autowired
+    private RainbowTableWrapper rainbowTableWrapper;
+
+    @Autowired
+    private MeterRegistry meterRegistry;
+
 
     private SqlParameterSource itemSqlParameterSourceProvider(RainbowChain rainbowChain) {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
@@ -65,8 +73,13 @@ public class WriterConfig {
     }
 
     @Bean(name = "org.springframework.batch.item.ItemWriter-jdbcGenerate")
-    public ItemWriter<RainbowChain> jdbcBatchItemWriter() {
-        JdbcBatchItemWriter<RainbowChain> itemWriter = new JdbcBatchItemWriter<>();
+    @StepScope
+    public ItemWriter<RainbowChain> rainbowChainItemWriter() {
+        var itemWriter = new RainbowChainDatabaseWriter(
+                rainbowTableWrapper,
+                meterRegistry
+        );
+
         itemWriter.setDataSource(hashbashDatasource);
         itemWriter.setSql(RAINBOW_CHAIN_INSERT_SQL);
         itemWriter.setItemSqlParameterSourceProvider(this::itemSqlParameterSourceProvider);
@@ -83,6 +96,6 @@ public class WriterConfig {
             return sortedRainbowChains;
         };
 
-        return new MappingItemWriter<>(rainbowChainSorter, jdbcBatchItemWriter());
+        return new MappingItemWriter<>(rainbowChainSorter, rainbowChainItemWriter());
     }
 }
