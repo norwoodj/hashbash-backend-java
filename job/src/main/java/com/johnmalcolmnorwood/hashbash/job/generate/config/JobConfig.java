@@ -1,6 +1,5 @@
 package com.johnmalcolmnorwood.hashbash.job.generate.config;
 
-import com.johnmalcolmnorwood.hashbash.job.generate.processor.RainbowChainGenerateProcessor;
 import com.johnmalcolmnorwood.hashbash.model.RainbowChain;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -45,10 +44,7 @@ public class JobConfig {
     @Resource(name = "org.springframework.batch.item.ItemReader-rainbowTable")
     private ItemReader<String> rainbowChainGenerateReader;
 
-    @Autowired
-    private RainbowChainGenerateProcessor rainbowChainGenerateProcessor;
-
-    @Resource(name = "org.springframework.batch.item.ItemWriter-generate")
+    @Resource(name = "org.springframework.batch.item.ItemWriter-rainbowChainGenerate")
     private ItemWriter<RainbowChain> rainbowChainGenerateItemWriter;
 
 
@@ -58,7 +54,6 @@ public class JobConfig {
                 .listener(rainbowChainGenerateProgressListener)
                 .<String, RainbowChain>chunk(chunkSize)
                 .reader(rainbowChainGenerateReader)
-                .processor(rainbowChainGenerateProcessor)
                 .writer(rainbowChainGenerateItemWriter)
                 .listener(rainbowChainWriteListener)
                 .taskExecutor(batchTaskExecutor)

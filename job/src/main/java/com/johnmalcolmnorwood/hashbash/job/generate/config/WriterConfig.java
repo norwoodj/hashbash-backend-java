@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 import com.johnmalcolmnorwood.hashbash.job.common.listener.RainbowChainChunkListener;
 import com.johnmalcolmnorwood.hashbash.job.common.utils.RainbowTableWrapper;
 import com.johnmalcolmnorwood.hashbash.job.common.writer.MappingItemWriter;
-import com.johnmalcolmnorwood.hashbash.job.generate.writer.RainbowChainDatabaseWriter;
+import com.johnmalcolmnorwood.hashbash.job.generate.writer.RainbowChainGeneratingItemWriter;
 import com.johnmalcolmnorwood.hashbash.model.RainbowChain;
 import com.johnmalcolmnorwood.hashbash.repository.RainbowTableRepository;
 import io.micrometer.core.instrument.MeterRegistry;
@@ -14,6 +14,7 @@ import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -38,6 +39,9 @@ public class WriterConfig {
             "endHash", RainbowChain::getEndHash,
             "rainbowTableId", RainbowChain::getRainbowTableId
     );
+
+    @Value("${job.generate.batchSize}")
+    private int chunkSize;
 
     @Autowired
     private DataSource hashbashDatasource;
@@ -74,18 +78,26 @@ public class WriterConfig {
 
     @Bean(name = "org.springframework.batch.item.ItemWriter-jdbcGenerate")
     @StepScope
-    public ItemWriter<RainbowChain> rainbowChainItemWriter() {
-        var itemWriter = new RainbowChainDatabaseWriter(
+    public ItemWriter<RainbowChain> rainbowChainBatchItemWriter() {
+        var batchItemWriter = new JdbcBatchItemWriter<RainbowChain>();
+        batchItemWriter.setDataSource(hashbashDatasource);
+        batchItemWriter.setSql(RAINBOW_CHAIN_INSERT_SQL);
+        batchItemWriter.setItemSqlParameterSourceProvider(this::itemSqlParameterSourceProvider);
+        batchItemWriter.setAssertUpdates(false);
+
+        return batchItemWriter;
+    }
+
+
+    @Bean(name = "org.springframework.batch.item.ItemWriter-rainbowChainGenerate")
+    @StepScope
+    public ItemWriter<String> rainbowChainGeneratingItemWriter() {
+        return new RainbowChainGeneratingItemWriter(
+                rainbowChainBatchItemWriter(),
                 rainbowTableWrapper,
-                meterRegistry
+                meterRegistry,
+                chunkSize
         );
-
-        itemWriter.setDataSource(hashbashDatasource);
-        itemWriter.setSql(RAINBOW_CHAIN_INSERT_SQL);
-        itemWriter.setItemSqlParameterSourceProvider(this::itemSqlParameterSourceProvider);
-        itemWriter.setAssertUpdates(false);
-
-        return itemWriter;
     }
 
     @Bean(name = "org.springframework.batch.item.ItemWriter-generate")
@@ -96,6 +108,6 @@ public class WriterConfig {
             return sortedRainbowChains;
         };
 
-        return new MappingItemWriter<>(rainbowChainSorter, rainbowChainItemWriter());
+        return new MappingItemWriter<>(rainbowChainSorter, rainbowChainBatchItemWriter());
     }
 }

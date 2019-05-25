@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 public class MeterRegistryConfig {
     @Bean
     public MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
-        return registry -> registry.config().commonTags("language", "java");
+        return MeterRegistry::config;
     }
 
     @Bean
