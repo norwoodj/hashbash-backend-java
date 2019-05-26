@@ -8,7 +8,7 @@ services:
   mysql:
     image: mysql:5.7
     environment:
-      - MYSQL_ROOT_PASSWORD=root
+      MYSQL_ROOT_PASSWORD: root
     ports:
       - 3306:3306
     volumes:
@@ -29,9 +29,17 @@ services:
   hashbash-consumers:
     image: jnorwood/hashbash-consumers:current
     environment:
-      - SPRING_PROFILES_ACTIVE=LCL,DCK,OVR
+      SPRING_PROFILES_ACTIVE: LCL,OVR
+      HASHBASH_DATABASE_HOST: mysql
+      SPRING_RABBITMQ_HOST: rabbitmq
+    ports:
+      - 8082:8082
 
   hashbash-webapp:
     image: jnorwood/hashbash-webapp:current
     environment:
-      - SPRING_PROFILES_ACTIVE=LCL,DCK,OVR
+      SPRING_PROFILES_ACTIVE: LCL,OVR
+      HASHBASH_DATABASE_HOST: mysql
+      SPRING_RABBITMQ_HOST: rabbitmq
+    ports:
+      - 8081:8081

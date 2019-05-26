@@ -43,9 +43,15 @@ run-no-build:
 run: all
 	docker-compose -f docker/docker-compose-hashbash.yaml up
 
+.PHONY: clear-data
+clear-data:
+	docker-compose -f docker/docker-compose-hashbash.yaml down
+	docker volume rm hashbash-data
+	docker volume create hashbash-data
+
 .PHONY: clean
 clean:
-	rm -f version.txt
+	rm -f version.txt version-poms
 	git checkout pom.xml */pom.xml
 	rm -f pom.xml.versionsBackup */pom.xml.versionsBackup
 	rm -f *.jar
