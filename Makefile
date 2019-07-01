@@ -5,13 +5,13 @@ DOCKER_REPOSITORY=jnorwood
 .PHONY: all
 all: consumers webapp
 
-.PHONY: consumers
 consumers: hashbash-engine.jar
 	docker build --tag $(DOCKER_REPOSITORY)/hashbash-consumers:current --file docker/Dockerfile-consumers .
+	touch consumers
 
-.PHONY: webapp
 webapp: hashbash-webapp.jar
 	docker build --tag $(DOCKER_REPOSITORY)/hashbash-webapp:current --file docker/Dockerfile-webapp .
+	touch webapp
 
 hashbash-engine.jar hashbash-webapp.jar: version-poms
 	docker run --rm -it -v ${HOME}/.m2:/root/.m2 -v ${PWD}:/opt/build -w /opt/build $(MAVEN_IMAGE) mvn clean verify
@@ -32,16 +32,16 @@ push: all
 	docker push $(DOCKER_REPOSITORY)/hashbash-webapp:$(shell cat version.txt)
 
 .PHONY: run-deps
-run-deps:
+run-deps: volume
 	HASHBASH_HOST_IP_ADDRESS=$(shell ./get-wan-ip) docker-compose -f docker/docker-compose-hashbash-deps.yaml up
 
-.PHONY: run-no-build
-run-no-build:
+.PHONY: run
+run: all volume
 	docker-compose -f docker/docker-compose-hashbash.yaml up
 
-.PHONY: run
-run: all
-	docker-compose -f docker/docker-compose-hashbash.yaml up
+volume:
+	docker volume create --name=hashbash-data
+	touch volume
 
 .PHONY: clean
 clean:

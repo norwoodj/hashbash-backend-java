@@ -12,3 +12,6 @@ node_modules/
 target/
 version.txt
 version-poms
+consumers
+volume
+webapp
