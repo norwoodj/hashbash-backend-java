@@ -18,7 +18,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>12</java.version>
         <spring-boot.version>2.1.4.RELEASE</spring-boot.version>
-        <com.fasterxml.jackson.core.version>2.9.8</com.fasterxml.jackson.core.version>
+        <com.fasterxml.jackson.core.version>2.12.7.1</com.fasterxml.jackson.core.version>
         <io.micrometer.version>1.1.4</io.micrometer.version>
     </properties>
 
